@@ -1,7 +1,10 @@
 package ru.geebrains.starfighter.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geebrains.starfighter.base.BaseScreen;
@@ -10,6 +13,7 @@ public class MenuScreen extends BaseScreen {
 
     private Texture backgroundMain;
     private Texture playerShip;
+    private boolean isShipFlipped = false;
 
     private final int spaceShipWidth = 200;
     private final int spaceShipHeight = 100;
@@ -20,18 +24,24 @@ public class MenuScreen extends BaseScreen {
     private Vector2 shipSpeed;
     private Vector2 touch;
 
-    private final float SHIP_MAXSPEED = 15.0f;
-    private final float SHIP_ACCEL = 0.75f;
+    private final float SHIP_MAXSPEED = 20.0f;
+    private final float SHIP_ACCEL = 0.5f;
+
+    private BitmapFont font2;
 
     @Override
     public void show() {
         super.show();
-        backgroundMain = new Texture("background.jpg");
+        backgroundMain = new Texture("backgroundGame.jpg");
         playerShip = new Texture("playerSpaceship.png");
         touch = new Vector2();
         shipSpeed = new Vector2();
         destinationCoordinates = new Vector2((Gdx.graphics.getWidth() - spaceShipWidth) / 2.0f, (Gdx.graphics.getHeight() - spaceShipHeight) / 2.0f);
         shipCoordinates = new Vector2(destinationCoordinates.x, destinationCoordinates.y);
+
+        font2 = new BitmapFont();
+        font2.setColor(Color.GREEN);
+
     }
 
     @Override
@@ -41,7 +51,18 @@ public class MenuScreen extends BaseScreen {
 
         batch.begin();
         batch.draw(backgroundMain, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.draw(playerShip, shipCoordinates.x, shipCoordinates.y , spaceShipWidth, spaceShipHeight);
+        font2.draw(batch, String.format("Curr: X=%s, Y=%s", shipCoordinates.x, shipCoordinates.y), 10, 20);
+        font2.draw(batch, String.format("Dest: X=%s, Y=%s", destinationCoordinates.x, destinationCoordinates.y), 10, 35);
+        Sprite sprite = new Sprite(playerShip);
+
+        if (destinationCoordinates.x > shipCoordinates.x) {
+            isShipFlipped = true;
+        } else if (destinationCoordinates.x < shipCoordinates.x) {
+            isShipFlipped = false;
+        }
+        sprite.flip(isShipFlipped, false);
+
+        batch.draw(sprite, shipCoordinates.x, shipCoordinates.y , spaceShipWidth, spaceShipHeight);
         batch.end();
     }
 
@@ -65,14 +86,15 @@ public class MenuScreen extends BaseScreen {
 
             Vector2 distance = destinationCoordinates.cpy().sub(shipCoordinates);
             Vector2 direction = distance.cpy().nor();
-            Vector2 move = new Vector2();
 
-            if (distance.len() <= 10.0f) {
+
+            if (distance.len() <= 20.0f) {
                 shipCoordinates.set(destinationCoordinates);
                 return;
             }
 
             if (distance.len() >= 50) {
+
 
                 if (shipSpeed.x < SHIP_MAXSPEED ) {
                     shipSpeed.x = shipSpeed.x + SHIP_ACCEL;
@@ -83,16 +105,16 @@ public class MenuScreen extends BaseScreen {
                 }
 
             } else {
-                if (shipSpeed.x > SHIP_ACCEL + 1.0f) {
+                if (shipSpeed.x >= SHIP_ACCEL + 1.0f) {
                     shipSpeed.x -= SHIP_ACCEL;
                 } else shipSpeed.x = 1.0f;
 
-                if (shipSpeed.y > SHIP_ACCEL + 1.0f) {
+                if (shipSpeed.y >= SHIP_ACCEL + 1.0f) {
                     shipSpeed.y -= SHIP_ACCEL;
                 } else shipSpeed.y = 1.0f;
             }
 
-            move.set(direction.x * shipSpeed.x, direction.y * shipSpeed.y);
+            Vector2 move = new Vector2(direction.x * shipSpeed.x, direction.y * shipSpeed.y);
             shipCoordinates.add(move);
         }
     }
