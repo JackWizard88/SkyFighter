@@ -24,8 +24,9 @@ public class MenuScreen extends BaseScreen {
     private Vector2 shipSpeed;
     private Vector2 touch;
 
-    private final float SHIP_MAXSPEED = 20.0f;
-    private final float SHIP_ACCEL = 0.5f;
+    private final float SHIP_MAXSPEED = 50.0f;
+    private final float SHIP_MINSPEED = 1.0f;
+    private final float SHIP_ACCEL = 0.25f;
 
     private BitmapFont font2;
 
@@ -87,14 +88,12 @@ public class MenuScreen extends BaseScreen {
             Vector2 distance = destinationCoordinates.cpy().sub(shipCoordinates);
             Vector2 direction = distance.cpy().nor();
 
-
-            if (distance.len() <= 20.0f) {
+            if (distance.len() <= SHIP_MINSPEED) {
                 shipCoordinates.set(destinationCoordinates);
                 return;
             }
 
-            if (distance.len() >= 50) {
-
+            if (distance.len() > shipSpeed.len()) {
 
                 if (shipSpeed.x < SHIP_MAXSPEED ) {
                     shipSpeed.x = shipSpeed.x + SHIP_ACCEL;
@@ -105,13 +104,15 @@ public class MenuScreen extends BaseScreen {
                 }
 
             } else {
-                if (shipSpeed.x >= SHIP_ACCEL + 1.0f) {
-                    shipSpeed.x -= SHIP_ACCEL;
-                } else shipSpeed.x = 1.0f;
 
-                if (shipSpeed.y >= SHIP_ACCEL + 1.0f) {
+                if (shipSpeed.x > SHIP_MAXSPEED) {
+                    shipSpeed.x -= SHIP_ACCEL;
+                } else shipSpeed.x = SHIP_MINSPEED;
+
+                if (shipSpeed.y > SHIP_MAXSPEED) {
                     shipSpeed.y -= SHIP_ACCEL;
-                } else shipSpeed.y = 1.0f;
+                } else shipSpeed.y = SHIP_MINSPEED;
+
             }
 
             Vector2 move = new Vector2(direction.x * shipSpeed.x, direction.y * shipSpeed.y);
