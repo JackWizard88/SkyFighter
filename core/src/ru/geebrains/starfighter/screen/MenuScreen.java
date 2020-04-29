@@ -23,6 +23,7 @@ public class MenuScreen extends BaseScreen {
     private Vector2 destinationCoordinates;
     private Vector2 shipSpeed;
     private Vector2 touch;
+    private Vector2 distance;
 
     private final float SHIP_MAXSPEED = 50.0f;
     private final float SHIP_MINSPEED = 1.0f;
@@ -78,45 +79,47 @@ public class MenuScreen extends BaseScreen {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         touch.set(screenX , Gdx.graphics.getHeight() - screenY);
         destinationCoordinates = touch.sub(shipCenter);
+        shipSpeed.set(0, 0);
         return false;
     }
 
     private void calculateShipCoordinates() {
 
-        if (shipCoordinates != destinationCoordinates) {
+            if (shipCoordinates != destinationCoordinates) {
 
-            Vector2 distance = destinationCoordinates.cpy().sub(shipCoordinates);
-            Vector2 direction = distance.cpy().nor();
+                distance = destinationCoordinates.cpy().sub(shipCoordinates);
+                Vector2 direction = distance.cpy().nor();
 
-            if (distance.len() <= SHIP_MINSPEED) {
-                shipCoordinates.set(destinationCoordinates);
-                return;
-            }
-
-            if (distance.len() > shipSpeed.len()) {
-
-                if (shipSpeed.x < SHIP_MAXSPEED ) {
-                    shipSpeed.x = shipSpeed.x + SHIP_ACCEL;
+                if (distance.len() <= SHIP_MINSPEED) {
+                    shipSpeed.set(0,0);
+                    shipCoordinates.set(destinationCoordinates);
+                    return;
                 }
 
-                if (shipSpeed.y < SHIP_MAXSPEED) {
-                    shipSpeed.y = shipSpeed.y + SHIP_ACCEL;
+                if (distance.len() > shipSpeed.len() * shipSpeed.len() * ((1/SHIP_ACCEL)-1)) {
+
+                    if (shipSpeed.x < SHIP_MAXSPEED) {
+                        shipSpeed.x += SHIP_ACCEL;
+                    }
+
+                    if (shipSpeed.y < SHIP_MAXSPEED) {
+                        shipSpeed.y += SHIP_ACCEL;
+                    }
+
+                } else {
+
+                    if (shipSpeed.x > SHIP_MINSPEED) {
+                        shipSpeed.x -= SHIP_ACCEL;
+                    }
+
+                    if (shipSpeed.y > SHIP_MINSPEED) {
+                        shipSpeed.y -= SHIP_ACCEL;
+                    }
+
                 }
 
-            } else {
-
-                if (shipSpeed.x > SHIP_MAXSPEED) {
-                    shipSpeed.x -= SHIP_ACCEL;
-                } else shipSpeed.x = SHIP_MINSPEED;
-
-                if (shipSpeed.y > SHIP_MAXSPEED) {
-                    shipSpeed.y -= SHIP_ACCEL;
-                } else shipSpeed.y = SHIP_MINSPEED;
-
+                Vector2 move = new Vector2(direction.x * shipSpeed.x, direction.y * shipSpeed.y);
+                shipCoordinates.add(move);
             }
-
-            Vector2 move = new Vector2(direction.x * shipSpeed.x, direction.y * shipSpeed.y);
-            shipCoordinates.add(move);
-        }
     }
 }
