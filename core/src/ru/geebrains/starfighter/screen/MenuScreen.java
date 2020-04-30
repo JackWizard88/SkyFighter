@@ -87,39 +87,28 @@ public class MenuScreen extends BaseScreen {
 
             if (shipCoordinates != destinationCoordinates) {
 
+                shipCoordinates.add(shipSpeed);
+
                 distance = destinationCoordinates.cpy().sub(shipCoordinates);
                 Vector2 direction = distance.cpy().nor();
 
-                if (distance.len() <= SHIP_MINSPEED) {
+                if (distance.len() < SHIP_MINSPEED) {
                     shipSpeed.set(0,0);
                     shipCoordinates.set(destinationCoordinates);
                     return;
                 }
 
-                if (distance.len() > shipSpeed.len() * shipSpeed.len() * ((1/SHIP_ACCEL)-1)) {
-
-                    if (shipSpeed.x < SHIP_MAXSPEED) {
-                        shipSpeed.x += SHIP_ACCEL;
+                if (distance.len() >= shipSpeed.len() * shipSpeed.len() / (2 * SHIP_ACCEL)) {
+                    if (shipSpeed.len() < SHIP_MAXSPEED) {
+                        shipSpeed.add(direction.scl(SHIP_ACCEL));
                     }
-
-                    if (shipSpeed.y < SHIP_MAXSPEED) {
-                        shipSpeed.y += SHIP_ACCEL;
-                    }
-
                 } else {
-
-                    if (shipSpeed.x > SHIP_MINSPEED) {
-                        shipSpeed.x -= SHIP_ACCEL;
+                    if (shipSpeed.len() >= SHIP_MINSPEED) {
+                        shipSpeed.sub(direction.scl(SHIP_ACCEL));
                     }
-
-                    if (shipSpeed.y > SHIP_MINSPEED) {
-                        shipSpeed.y -= SHIP_ACCEL;
-                    }
-
                 }
 
-                Vector2 move = new Vector2(direction.x * shipSpeed.x, direction.y * shipSpeed.y);
-                shipCoordinates.add(move);
+
             }
     }
 }
