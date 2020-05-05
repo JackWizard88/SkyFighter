@@ -10,6 +10,5 @@ public class DesktopLauncher {
 		new LwjglApplication(new StarFighter(), config);
 		config.width = 1280;
 		config.height = 720;
-		config.resizable = false;
 	}
 }

@@ -24,7 +24,7 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-
+        batch.getProjectionMatrix().setToOrtho2D(0,0,width,height);
     }
 
     @Override
