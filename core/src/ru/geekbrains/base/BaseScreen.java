@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.ScreenController;
-import ru.geekbrains.StarFighter;
 import ru.geekbrains.math.MatrixUtils;
 import ru.geekbrains.math.Rect;
 
@@ -28,8 +27,14 @@ public class BaseScreen implements Screen, InputProcessor {
 
     private Vector2 touch;
 
+    private float aspect;
+
     public BaseScreen(ScreenController controller) {
         this.controller = controller;
+    }
+
+    public float getAspect() {
+        return aspect;
     }
 
     @Override
@@ -56,7 +61,7 @@ public class BaseScreen implements Screen, InputProcessor {
         screenBounds.setLeft(0);
         screenBounds.setBottom(0);
 
-        float aspect = width / (float) height;
+        aspect = width / (float) height;
         worldBounds.setHeight(1f);
         worldBounds.setWidth(1f * aspect);
         MatrixUtils.calcTransitionMatrix(worldToGl, worldBounds, glBounds);
