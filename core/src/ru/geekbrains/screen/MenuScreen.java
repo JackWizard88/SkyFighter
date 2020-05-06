@@ -32,7 +32,6 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-
     }
 
     @Override
@@ -40,6 +39,7 @@ public class MenuScreen extends BaseScreen {
         background.resize(worldBounds);
         startButton.resize(worldBounds);
         exitButton.resize(worldBounds);
+
     }
 
     @Override
@@ -49,6 +49,7 @@ public class MenuScreen extends BaseScreen {
         background.draw(batch);
         startButton.draw(batch);
         exitButton.draw(batch);
+
         batch.end();
     }
 
