@@ -11,7 +11,7 @@ import ru.geekbrains.math.Rect;
 public class PauseButton extends Sprite{
 
     private ScreenController controller;
-    private boolean isActvated = false;
+    private boolean isActivated = false;
 
     public PauseButton(Texture texture, ScreenController controller) {
         super(new TextureRegion(texture));
@@ -28,17 +28,17 @@ public class PauseButton extends Sprite{
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if (isMe(touch)) {
             setScale(0.8f);
-            isActvated = true;
+            isActivated = true;
         }
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        if (isActvated && isMe(touch)) {
+        if (isActivated && isMe(touch)) {
             controller.setMenuScreen();
         }
-        isActvated = false;
+        isActivated = false;
         setScale(1f);
         return false;
     }

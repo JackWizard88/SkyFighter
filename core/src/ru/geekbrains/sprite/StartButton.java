@@ -12,6 +12,7 @@ import ru.geekbrains.math.Rect;
 public class StartButton extends Sprite{
 
     private ScreenController controller;
+    private boolean isActivated = false;
 
     public StartButton(Texture texture, ScreenController controller) {
         super(new TextureRegion(texture));
@@ -28,15 +29,17 @@ public class StartButton extends Sprite{
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if (isMe(touch)) {
             setScale(0.8f);
+            isActivated = true;
         }
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        if (isMe(touch)) {
+        if (isActivated && isMe(touch) ) {
             controller.setGameScreen();
         }
+        isActivated = false;
         setScale(1f);
         return false;
     }

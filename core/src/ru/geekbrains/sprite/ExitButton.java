@@ -12,6 +12,7 @@ import ru.geekbrains.math.Rect;
 public class ExitButton extends Sprite{
 
     private ScreenController controller;
+    private boolean isActivated = false;
 
     public ExitButton(Texture texture, ScreenController controller) {
         super(new TextureRegion(texture));
@@ -28,15 +29,17 @@ public class ExitButton extends Sprite{
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if (isMe(touch)) {
             setScale(0.8f);
+            isActivated = true;
         }
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        if (isMe(touch)) {
+        if (isActivated && isMe(touch)) {
             Gdx.app.exit();
         }
+        isActivated = false;
         setScale(1f);
         return false;
     }
