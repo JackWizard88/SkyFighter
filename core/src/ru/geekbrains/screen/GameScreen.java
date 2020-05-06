@@ -1,6 +1,5 @@
 package ru.geekbrains.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
@@ -66,8 +65,6 @@ public class GameScreen extends BaseScreen {
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if (pauseButton.isMe(touch)) {
             pauseButton.touchDown(touch, pointer, button);
-        } else {
-            player.setDestination(touch);
         }
         return false;
     }
@@ -76,6 +73,8 @@ public class GameScreen extends BaseScreen {
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         if (pauseButton.isMe(touch)) {
             controller.setMenuScreen();
+        } else {
+            player.setDestination(touch);
         }
         pauseButton.setScale(1f);
         return false;

@@ -63,7 +63,7 @@ public class Player extends Sprite {
                 return;
             }
 
-            if (distance.len() <= (Math.pow(velocity * delta, 2) / (2 * accel))) {
+            if (distance.len() <= (Math.pow(velocity * delta, 2) / (2 * accel * delta))) {
                     velocity -= accel;
             } else {
                 if (velocity < maxSpeed) {

@@ -24,6 +24,6 @@ public class ScreenController {
     public ScreenController(StarFighter starFighter) {
         this.menuScreen = new MenuScreen(this);
         this.game = starFighter;
-        starFighter.setScreen(menuScreen);
+        game.setScreen(menuScreen);
     }
 }
