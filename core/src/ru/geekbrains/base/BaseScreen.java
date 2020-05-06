@@ -15,6 +15,7 @@ import ru.geekbrains.math.Rect;
 public class BaseScreen implements Screen, InputProcessor {
 
     protected SpriteBatch batch;
+
     protected ScreenController controller;
 
     private Rect screenBounds;
@@ -30,6 +31,7 @@ public class BaseScreen implements Screen, InputProcessor {
 
     public BaseScreen(ScreenController controller) {
         this.controller = controller;
+
         batch = new SpriteBatch();
         screenBounds = new Rect();
         worldBounds = new Rect();
@@ -51,6 +53,7 @@ public class BaseScreen implements Screen, InputProcessor {
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
@@ -61,6 +64,7 @@ public class BaseScreen implements Screen, InputProcessor {
         screenBounds.setBottom(0);
 
         aspect = width / (float) height;
+
         worldBounds.setHeight(1f);
         worldBounds.setWidth(1f * aspect);
         MatrixUtils.calcTransitionMatrix(worldToGl, worldBounds, glBounds);
