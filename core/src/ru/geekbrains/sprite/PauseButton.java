@@ -3,7 +3,6 @@ package ru.geekbrains.sprite;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
 import ru.geekbrains.ScreenController;
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
@@ -40,11 +39,6 @@ public class PauseButton extends Sprite{
         }
         isActivated = false;
         setScale(1f);
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
         return false;
     }
 }

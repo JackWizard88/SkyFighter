@@ -50,7 +50,7 @@ public class Sprite extends Rect {
         return false;
     }
 
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
+    public boolean touchDragged(Vector2 touch, int pointer) {
         return false;
     }
 

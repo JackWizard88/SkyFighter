@@ -33,7 +33,6 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        player.setDestination(player.pos);
     }
 
     @Override
@@ -73,11 +72,6 @@ public class GameScreen extends BaseScreen {
         if (!pauseButton.isMe(touch)) {
             player.touchUp(touch, pointer, button);
         }
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(Vector2 touch, int pointer) {
         return false;
     }
 }

@@ -25,15 +25,10 @@ public class Player extends Sprite {
 
     public Player(Texture texture) {
         super(new TextureRegion(texture));
-        this.destination = pos;
+        this.destination = new Vector2(0 ,0);
         this.distance = new Vector2();
         this.speed = new Vector2();
         this.direction = new Vector2();
-    }
-
-    public void setDestination(Vector2 destination) {
-        this.destination = destination;
-
     }
 
     @Override
@@ -52,9 +47,10 @@ public class Player extends Sprite {
     @Override
     public void update(float delta) {
 
-        if (pos != destination) {
+        distance.set(destination).sub(pos);
 
-            distance.set(destination).sub(pos);
+        if (distance.len() != 0) {
+
             direction.set(distance).nor();
 
             if (distance.len() <= velocity * delta) {
@@ -83,12 +79,7 @@ public class Player extends Sprite {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        destination = touch;
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        destination.set(touch);
         return false;
     }
 }
