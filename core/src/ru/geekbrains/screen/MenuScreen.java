@@ -25,8 +25,8 @@ public class MenuScreen extends BaseScreen {
         buttonStart = new Texture(("textures/buttonStart.png"));
         buttonExit = new Texture(("textures/buttonExit.png"));
         background = new Background(bg);
-        startButton = new StartButton(buttonStart);
-        exitButton = new ExitButton(buttonExit);
+        startButton = new StartButton(buttonStart ,controller);
+        exitButton = new ExitButton(buttonExit, controller);
     }
 
     @Override
@@ -62,26 +62,20 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        if (startButton.isMe(touch)) {
-            startButton.setScale(0.8f);
-        }
-
-        if (exitButton.isMe(touch)) {
-            exitButton.setScale(0.8f);
-        }
-        return super.touchDown(touch, pointer, button);
+        startButton.touchDown(touch, pointer, button);
+        exitButton.touchDown(touch, pointer, button);
+        return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        if (startButton.isMe(touch)) {
-            controller.setGameScreen();
-        }
-        if (exitButton.isMe(touch)) {
-            Gdx.app.exit();
-        }
-        startButton.setScale(1f);
-        exitButton.setScale(1f);
-        return super.touchUp(touch, pointer, button);
+        startButton.touchUp(touch, pointer, button);
+        exitButton.touchUp(touch, pointer, button);
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
     }
 }

@@ -27,7 +27,7 @@ public class GameScreen extends BaseScreen {
         buttonPause = new Texture("textures/buttonPause.png");
         background = new Background(bg);
         player = new Player(playerTexture);
-        pauseButton = new PauseButton(buttonPause);
+        pauseButton = new PauseButton(buttonPause, controller);
     }
 
     @Override
@@ -63,20 +63,16 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        if (pauseButton.isMe(touch)) {
             pauseButton.touchDown(touch, pointer, button);
-        }
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        if (pauseButton.isMe(touch)) {
-            controller.setMenuScreen();
-        } else {
-            player.setDestination(touch);
+        pauseButton.touchUp(touch, pointer, button);
+        if (!pauseButton.isMe(touch)) {
+            player.touchUp(touch, pointer, button);
         }
-        pauseButton.setScale(1f);
         return false;
     }
 

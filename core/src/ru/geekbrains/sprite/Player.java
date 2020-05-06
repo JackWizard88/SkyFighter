@@ -75,4 +75,20 @@ public class Player extends Sprite {
             pos.mulAdd(speed, delta);
         }
     }
+
+    @Override
+    public boolean touchDown(Vector2 touch, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(Vector2 touch, int pointer, int button) {
+        destination = touch;
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
 }
