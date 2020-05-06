@@ -22,6 +22,7 @@ public class Player extends Sprite {
     private float velocity = 0f;
     private final float accel = 0.01f;
     private final float maxSpeed = 0.5f;
+    private boolean isLookingRight = false;
 
     public Player(Texture texture) {
         super(new TextureRegion(texture));
@@ -80,6 +81,19 @@ public class Player extends Sprite {
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         destination.set(touch);
+        flip();
+
         return false;
+    }
+
+    private void flip() {
+        if (pos.x < destination.x && !isLookingRight) {
+            regions[0].flip(true, false);
+            isLookingRight = true;
+        }
+        if (pos.x > destination.x && isLookingRight) {
+            regions[0].flip(true, false);
+            isLookingRight = false;
+        }
     }
 }
