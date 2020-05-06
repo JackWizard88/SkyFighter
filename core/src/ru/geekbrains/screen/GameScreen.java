@@ -23,18 +23,18 @@ public class GameScreen extends BaseScreen {
 
     public GameScreen(ScreenController controller) {
         super(controller);
+        bg = new Texture("textures/backgroundGame.jpg");
+        playerTexture = new Texture("textures/playerSpaceship.png");
+        buttonPause = new Texture("textures/buttonPause.png");
+        background = new Background(bg);
+        player = new Player(playerTexture);
+        pauseButton = new PauseButton(buttonPause);
     }
 
     @Override
     public void show() {
         super.show();
-        bg = new Texture("textures/backgroundGame.jpg");
-        playerTexture = new Texture("textures/playerSpaceship.png");
-        buttonPause = new Texture("textures/buttons/buttonPause.png");
-        background = new Background(bg);
-        player = new Player(playerTexture);
-        pauseButton = new PauseButton(buttonPause);
-
+        player.setDestination(player.pos);
     }
 
     @Override
@@ -65,12 +65,11 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         if (pauseButton.isMe(touch)) {
-            pauseButton.setScale(0.8f);
+            pauseButton.touchDown(touch, pointer, button);
         } else {
-            player.setTouch(touch);
+            player.setDestination(touch);
         }
-
-        return super.touchDown(touch, pointer, button);
+        return false;
     }
 
     @Override
@@ -79,7 +78,11 @@ public class GameScreen extends BaseScreen {
             controller.setMenuScreen();
         }
         pauseButton.setScale(1f);
-        return super.touchUp(touch, pointer, button);
+        return false;
     }
 
+    @Override
+    public boolean touchDragged(Vector2 touch, int pointer) {
+        return false;
+    }
 }

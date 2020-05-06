@@ -5,23 +5,25 @@ import ru.geekbrains.screen.MenuScreen;
 
 public class ScreenController {
 
-    private StarFighter starFighter;
-    private MenuScreen menuScreen;
+    private final StarFighter game;
+    private final MenuScreen menuScreen;
     private GameScreen gameScreen;
 
     public void setGameScreen() {
-        starFighter.setScreen(gameScreen);
+        if (gameScreen == null) {
+            gameScreen = new GameScreen(this);
+        }
+        game.setScreen(gameScreen);
     }
 
     public void setMenuScreen() {
-        starFighter.setScreen(menuScreen);
+        game.setScreen(menuScreen);
     }
 
 
     public ScreenController(StarFighter starFighter) {
         this.menuScreen = new MenuScreen(this);
-        this.gameScreen = new GameScreen(this);
-        this.starFighter = starFighter;
+        this.game = starFighter;
         starFighter.setScreen(menuScreen);
     }
 }

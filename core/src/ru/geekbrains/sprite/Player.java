@@ -3,26 +3,37 @@ package ru.geekbrains.sprite;
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import javax.swing.SpringLayout;
+
 public class Player extends Sprite {
 
-    private Vector2 coordinates;
-    private Vector2 touch;
-    private float velocity = 100f;
+    private Vector2 destination;
+    private Vector2 distance;
+    private Vector2 direction;
+    private Vector2 speed;
+    private float velocity = 0f;
+    private final float accel = 0.01f;
+    private final float maxSpeed = 0.5f;
 
     public Player(Texture texture) {
         super(new TextureRegion(texture));
-        this.coordinates = new Vector2();
-        this.touch = coordinates;
+        this.destination = pos;
+        this.distance = new Vector2();
+        this.speed = new Vector2();
+        this.direction = new Vector2();
     }
 
-    public void setTouch(Vector2 touch) {
-        this.touch = touch;
+    public void setDestination(Vector2 destination) {
+        this.destination = destination;
+
     }
 
     @Override
@@ -33,13 +44,35 @@ public class Player extends Sprite {
 
     @Override
     public void draw(SpriteBatch batch) {
-        update();
+
+        update(Gdx.graphics.getDeltaTime());
         super.draw(batch);
     }
 
-    private void update() {
-        if (coordinates != touch) {
+    @Override
+    public void update(float delta) {
 
+        if (pos != destination) {
+
+            distance.set(destination).sub(pos);
+            direction.set(distance).nor();
+
+            if (distance.len() <= velocity * delta) {
+                pos.set(destination);
+                velocity = 0f;
+                return;
+            }
+
+            if (distance.len() <= (Math.pow(velocity * delta, 2) / (2 * accel))) {
+                    velocity -= accel;
+            } else {
+                if (velocity < maxSpeed) {
+                    velocity += accel;
+                }
+            }
+
+            speed.add(direction).scl(velocity);
+            pos.mulAdd(speed, delta);
         }
     }
 }

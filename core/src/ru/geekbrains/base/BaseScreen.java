@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-
 import ru.geekbrains.ScreenController;
 import ru.geekbrains.math.MatrixUtils;
 import ru.geekbrains.math.Rect;
@@ -31,6 +30,13 @@ public class BaseScreen implements Screen, InputProcessor {
 
     public BaseScreen(ScreenController controller) {
         this.controller = controller;
+        batch = new SpriteBatch();
+        screenBounds = new Rect();
+        worldBounds = new Rect();
+        glBounds = new Rect(0, 0, 1f, 1f);
+        worldToGl = new Matrix4();
+        screenToWorld = new Matrix3();
+        touch = new Vector2();
     }
 
     public float getAspect() {
@@ -40,13 +46,6 @@ public class BaseScreen implements Screen, InputProcessor {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
-        batch = new SpriteBatch();
-        screenBounds = new Rect();
-        worldBounds = new Rect();
-        glBounds = new Rect(0, 0, 1f, 1f);
-        worldToGl = new Matrix4();
-        screenToWorld = new Matrix3();
-        touch = new Vector2();
     }
 
     @Override
@@ -83,7 +82,6 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public void hide() {
-        dispose();
     }
 
     @Override

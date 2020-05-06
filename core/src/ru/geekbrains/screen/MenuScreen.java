@@ -21,17 +21,18 @@ public class MenuScreen extends BaseScreen {
 
     public MenuScreen(ScreenController controller) {
         super(controller);
+        bg = new Texture("textures/backgroundMenu.jpg");
+        buttonStart = new Texture(("textures/buttonStart.png"));
+        buttonExit = new Texture(("textures/buttonExit.png"));
+        background = new Background(bg);
+        startButton = new StartButton(buttonStart);
+        exitButton = new ExitButton(buttonExit);
     }
 
     @Override
     public void show() {
         super.show();
-        bg = new Texture("textures/backgroundMenu.jpg");
-        buttonStart = new Texture(("textures/buttons/buttonStart.png"));
-        buttonExit = new Texture(("textures/buttons/buttonExit.png"));
-        background = new Background(bg);
-        startButton = new StartButton(buttonStart);
-        exitButton = new ExitButton(buttonExit);
+
     }
 
     @Override
@@ -77,7 +78,7 @@ public class MenuScreen extends BaseScreen {
             controller.setGameScreen();
         }
         if (exitButton.isMe(touch)) {
-           Gdx.app.exit();
+            Gdx.app.exit();
         }
         startButton.setScale(1f);
         exitButton.setScale(1f);
