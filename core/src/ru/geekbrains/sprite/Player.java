@@ -35,7 +35,6 @@ public class Player extends Sprite {
     @Override
     public void resize(Rect worldBounds) {
         setHeightProportion(0.1f);
-        this.pos.set(worldBounds.pos);
     }
 
     @Override
