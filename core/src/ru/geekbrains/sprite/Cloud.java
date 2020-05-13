@@ -24,7 +24,7 @@ public class Cloud extends Sprite {
             pos.set(Rnd.nextFloat(1f, 2f), getRandomYPos());
         }
         if (layer == Layer.BACKGROUND) {
-            this.scale = Rnd.nextFloat(0.1f, 0.15f);
+            this.scale = Rnd.nextFloat(0.1f, 0.12f);
             this.velocity = Rnd.nextFloat(0.025f, 0.075f);
             pos.set(Rnd.nextFloat(0f, 1f), getRandomYPos());
         }
@@ -57,6 +57,6 @@ public class Cloud extends Sprite {
     }
 
     private float getRandomYPos() {
-        return Rnd.nextFloat(-0.25f, 0.5f);
+        return Rnd.nextFloat(-0.3f, 0.5f);
     }
 }

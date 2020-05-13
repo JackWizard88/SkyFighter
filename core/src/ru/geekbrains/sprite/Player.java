@@ -29,11 +29,12 @@ public class Player extends Sprite {
     private final float SHIP_SPEED_STEP_FORWARD = 0.01f;
     private final float SHIP_SPEED_STEP_UP = 0.015f;
     private final float SHIP_SPEED_STEP_DOWN = 0.025f;
-    private final float SHIP_BREAK = 0.01f;
+    private final float SHIP_BREAK =  0.01f;
     private final float SHIP_SPEED_UP = 0.3f;
     private final float SHIP_SPEED_DOWN = -0.75f;
     public static final float STABILAZE_ANGLE = 0.3f;
     public static final float MAX_ANGLE = 10f;
+    public static final float FALL_SPEED = 0.01f;
 
     public Player(Texture texture) {
         super(new TextureRegion(texture));
@@ -98,6 +99,8 @@ public class Player extends Sprite {
 
     private void shipControl(float delta) {
 
+        pos.y -= FALL_SPEED * delta;
+
         if (isKeyUpPressed) {
             if (angle < MAX_ANGLE) {
                 angle += 0.5f;
@@ -107,11 +110,14 @@ public class Player extends Sprite {
                 angle -= 0.75f;
             }
         } else {
-            if (angle > 0) {
+
+            if (angle > -STABILAZE_ANGLE && angle < STABILAZE_ANGLE) {
+                angle = 0f;
+            } else if (angle > STABILAZE_ANGLE) {
                 angle -= STABILAZE_ANGLE;
-            } else if (angle < 0) {
+            } else if (angle < STABILAZE_ANGLE) {
                 angle += STABILAZE_ANGLE;
-            } else angle = 0;
+            }
         }
 
         if (isKeyUpPressed && shipSpeed.y < SHIP_SPEED_UP) {
@@ -139,9 +145,9 @@ public class Player extends Sprite {
         }
 
         if (shipSpeed.len() < SHIP_BREAK) shipSpeed.set(0,0f);
-        if (shipSpeed.len() != 0) {
-            pos.mulAdd(shipSpeed, delta);
-        } else pos.sub(0,0.0001f);
+
+        pos.mulAdd(shipSpeed, delta);
+
 
     }
 

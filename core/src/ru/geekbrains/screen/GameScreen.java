@@ -28,7 +28,7 @@ public class GameScreen extends BaseScreen {
 
     public GameScreen(ScreenController controller) {
         super(controller);
-        bg = new Texture("textures/sky.png");
+        bg = new Texture("textures/sky.jpg");
         playerTexture = new Texture("textures/plane1.png");
         buttonPause = new Texture("textures/buttonPause.png");
         background = new Background(bg);
