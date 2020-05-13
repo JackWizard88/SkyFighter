@@ -15,6 +15,8 @@ import javax.swing.SpringLayout;
 
 public class Player extends Sprite {
 
+    public static final float STABILAZE_ANGLE = 0.25f;
+    public static final float MAX_ANGLE = 15f;
     private Rect worldBounds;
 
     private boolean isKeyUpPressed = false;
@@ -24,13 +26,18 @@ public class Player extends Sprite {
 
     private Vector2 shipSpeed;
 
-    private final float SHIP_MAXSPEED = 1f;
-    private final float SHIP_SPEED_STEP = 0.05f;
+    private final float SHIP_MAXSPEED = 0.5f;
+    private final float SHIP_SPEED_STEP = 0.015f;
+    private final float SHIP_SPEED_STEP_UP = 0.015f;
+    private final float SHIP_SPEED_STEP_DOWN = 0.025f;
     private final float SHIP_BREAK = 0.01f;
+    private final float SHIP_SPEED_UP = 0.3f;
+    private final float SHIP_SPEED_DOWN = -0.75f;
 
     public Player(Texture texture) {
         super(new TextureRegion(texture));
         shipSpeed = new Vector2();
+        pos.x = -0.5f;
     }
 
     @Override
@@ -48,7 +55,22 @@ public class Player extends Sprite {
     @Override
     public void update(float delta) {
         shipControl(delta);
+        shipRotation();
         checkBounds();
+    }
+
+    private void shipRotation() {
+        if (shipSpeed.y > 0) {
+            if (angle < MAX_ANGLE) angle += 0.5f;
+        } else if (shipSpeed.y < 0) {
+            if (angle > -MAX_ANGLE) angle -= 0.75f;
+        } else {
+            if (angle > 0) {
+                angle -= STABILAZE_ANGLE;
+            } else if (angle < 0) {
+                angle += STABILAZE_ANGLE;
+            } else angle = 0;
+        }
     }
 
     @Override
@@ -88,32 +110,21 @@ public class Player extends Sprite {
         return false;
     }
 
-
-    @Override
-    public boolean touchDown(Vector2 touch, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(Vector2 touch, int pointer, int button) {
-        return false;
-    }
-
     private void shipControl(float delta) {
 
-        if (isKeyUpPressed && shipSpeed.y < SHIP_MAXSPEED) {
-            shipSpeed.y += SHIP_SPEED_STEP;
+        if (isKeyUpPressed && shipSpeed.y < SHIP_SPEED_UP) {
+            shipSpeed.y += SHIP_SPEED_STEP_UP;
         } else if (shipSpeed.y > 0) {
             shipSpeed.y -= SHIP_BREAK;
         }
 
-        if (isKeyDownPressed && shipSpeed.y > -SHIP_MAXSPEED) {
-            shipSpeed.y -= SHIP_SPEED_STEP;
+        if (isKeyDownPressed && shipSpeed.y > SHIP_SPEED_DOWN) {
+            shipSpeed.y -= SHIP_SPEED_STEP_DOWN;
         } else if (shipSpeed.y < 0) {
             shipSpeed.y += SHIP_BREAK;
         }
 
-        if (isKeyLeftPressed && shipSpeed.x > -SHIP_MAXSPEED) {
+        if (isKeyLeftPressed && shipSpeed.x > (-1.5) * SHIP_MAXSPEED) {
             shipSpeed.x -= SHIP_SPEED_STEP;
         } else if (shipSpeed.x < 0) {
             shipSpeed.x += SHIP_BREAK;
@@ -125,14 +136,16 @@ public class Player extends Sprite {
             shipSpeed.x -= SHIP_BREAK;
         }
 
-        pos.mulAdd(shipSpeed, delta);
-
-        if (shipSpeed.len() < SHIP_BREAK ) shipSpeed.set(0,0);
+        if (shipSpeed.len() < SHIP_BREAK) shipSpeed.set(0,0f);
+        if (shipSpeed.len() != 0) {
+            pos.mulAdd(shipSpeed, delta);
+        } else pos.sub(0,0.0001f);
 
 
     }
 
     private void checkBounds() {
+
         if (pos.x < worldBounds.getLeft() + halfWidth) {
             pos.x = worldBounds.getLeft() + halfWidth;
             shipSpeed.x = -shipSpeed.x / 3;
@@ -147,6 +160,7 @@ public class Player extends Sprite {
             pos.y = worldBounds.getBottom() + halfHeight;
             shipSpeed.y = -shipSpeed.y / 3;
         }
+
         if (pos.y > worldBounds.getTop() - halfHeight) {
             pos.y = worldBounds.getTop() - halfHeight;
             shipSpeed.y = -shipSpeed.y / 3;
