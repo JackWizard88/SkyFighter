@@ -50,7 +50,7 @@ public class Sprite extends Rect {
         return false;
     }
 
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
+    public boolean touchDragged(Vector2 touch, int pointer) {
         return false;
     }
 
@@ -68,5 +68,10 @@ public class Sprite extends Rect {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    @Override
+    public boolean isMe(Vector2 touch) {
+        return super.isMe(touch);
     }
 }

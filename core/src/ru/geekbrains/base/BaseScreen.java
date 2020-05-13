@@ -8,13 +8,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-
+import ru.geekbrains.ScreenController;
 import ru.geekbrains.math.MatrixUtils;
 import ru.geekbrains.math.Rect;
 
 public class BaseScreen implements Screen, InputProcessor {
 
     protected SpriteBatch batch;
+
+    protected ScreenController controller;
 
     private Rect screenBounds;
     private Rect worldBounds;
@@ -25,9 +27,11 @@ public class BaseScreen implements Screen, InputProcessor {
 
     private Vector2 touch;
 
-    @Override
-    public void show() {
-        Gdx.input.setInputProcessor(this);
+    private float aspect;
+
+    public BaseScreen(ScreenController controller) {
+        this.controller = controller;
+
         batch = new SpriteBatch();
         screenBounds = new Rect();
         worldBounds = new Rect();
@@ -37,9 +41,19 @@ public class BaseScreen implements Screen, InputProcessor {
         touch = new Vector2();
     }
 
+    public float getAspect() {
+        return aspect;
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(this);
+    }
+
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
+
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
@@ -49,7 +63,8 @@ public class BaseScreen implements Screen, InputProcessor {
         screenBounds.setLeft(0);
         screenBounds.setBottom(0);
 
-        float aspect = width / (float) height;
+        aspect = width / (float) height;
+
         worldBounds.setHeight(1f);
         worldBounds.setWidth(1f * aspect);
         MatrixUtils.calcTransitionMatrix(worldToGl, worldBounds, glBounds);
@@ -59,7 +74,6 @@ public class BaseScreen implements Screen, InputProcessor {
     }
 
     public void resize(Rect worldBounds) {
-        System.out.println("worldBounds worldBounds.height = " + worldBounds.getHeight() + " worldBounds.with = " + worldBounds.getWidth());
     }
 
     @Override
@@ -72,7 +86,6 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public void hide() {
-        dispose();
     }
 
     @Override
@@ -103,7 +116,6 @@ public class BaseScreen implements Screen, InputProcessor {
     }
 
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        System.out.println("touchDown touch.x = " + touch.x + " touch.y = " + touch.y);
         return false;
     }
 
@@ -115,7 +127,6 @@ public class BaseScreen implements Screen, InputProcessor {
     }
 
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        System.out.println("touchUp touch.x = " + touch.x + " touch.y = " + touch.y);
         return false;
     }
 
@@ -127,7 +138,6 @@ public class BaseScreen implements Screen, InputProcessor {
     }
 
     public boolean touchDragged(Vector2 touch, int pointer) {
-        System.out.println("touchDragged touch.x = " + touch.x + " touch.y = " + touch.y);
         return false;
     }
 
