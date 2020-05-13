@@ -74,4 +74,16 @@ public class GameScreen extends BaseScreen {
         }
         return false;
     }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        player.keyDown(keycode);
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        player.keyUp(keycode);
+        return false;
+    }
 }

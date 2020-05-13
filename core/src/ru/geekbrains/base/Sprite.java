@@ -42,6 +42,14 @@ public class Sprite extends Rect {
     public void resize(Rect worldBounds) {
     }
 
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         return false;
     }
