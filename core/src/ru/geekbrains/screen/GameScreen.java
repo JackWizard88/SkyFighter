@@ -10,6 +10,7 @@ import ru.geekbrains.sprite.Background;
 import ru.geekbrains.sprite.Cloud;
 import ru.geekbrains.sprite.PauseButton;
 import ru.geekbrains.sprite.Player;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GameScreen extends BaseScreen {
 
@@ -22,27 +23,34 @@ public class GameScreen extends BaseScreen {
     private Texture cloudTexture;
     private Cloud[] cloudsForeground;
     private Cloud[] cloudsBackground;
-    private final int FOREGROUND_CLOUDS_COUNT = 7;
-    private final int BACKGROUND_CLOUDS_COUNT = 7;
+    private final int FOREGROUND_CLOUDS_COUNT = 5;
+    private final int BACKGROUND_CLOUDS_COUNT = 10;
 
     public GameScreen(ScreenController controller) {
         super(controller);
         bg = new Texture("textures/sky.png");
         playerTexture = new Texture("textures/plane1.png");
         buttonPause = new Texture("textures/buttonPause.png");
-        cloudTexture = new Texture("textures/cloud1.png");
         background = new Background(bg);
         player = new Player(playerTexture);
         pauseButton = new PauseButton(buttonPause, controller);
         cloudsForeground = new Cloud[FOREGROUND_CLOUDS_COUNT];
         cloudsBackground = new Cloud[BACKGROUND_CLOUDS_COUNT];
         for (int i = 0; i < FOREGROUND_CLOUDS_COUNT; i++) {
-            cloudsForeground[i] = new Cloud(cloudTexture, worldBounds, Layer.FOREGROUND);
+            cloudTexture = getRandomCloudTexture();
+            cloudsForeground[i] = new Cloud(cloudTexture, Layer.FOREGROUND);
         }
         for (int i = 0; i < BACKGROUND_CLOUDS_COUNT; i++) {
-            cloudsBackground[i] = new Cloud(cloudTexture, worldBounds, Layer.BACKGROUND);
+            cloudTexture = getRandomCloudTexture();
+            cloudsBackground[i] = new Cloud(cloudTexture, Layer.BACKGROUND);
         }
 
+    }
+
+    private Texture getRandomCloudTexture() {
+
+        String path = "textures/cloud" + (int)((Math.random() * 4) + 1) + ".png";
+        return new Texture(path);
     }
 
     @Override

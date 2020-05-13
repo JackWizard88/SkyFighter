@@ -15,8 +15,6 @@ import javax.swing.SpringLayout;
 
 public class Player extends Sprite {
 
-    public static final float STABILAZE_ANGLE = 0.25f;
-    public static final float MAX_ANGLE = 15f;
     private Rect worldBounds;
 
     private boolean isKeyUpPressed = false;
@@ -27,12 +25,15 @@ public class Player extends Sprite {
     private Vector2 shipSpeed;
 
     private final float SHIP_MAXSPEED = 0.5f;
-    private final float SHIP_SPEED_STEP = 0.015f;
+    private final float SHIP_SPEED_STEP_BACK = 0.02f;
+    private final float SHIP_SPEED_STEP_FORWARD = 0.01f;
     private final float SHIP_SPEED_STEP_UP = 0.015f;
     private final float SHIP_SPEED_STEP_DOWN = 0.025f;
     private final float SHIP_BREAK = 0.01f;
     private final float SHIP_SPEED_UP = 0.3f;
     private final float SHIP_SPEED_DOWN = -0.75f;
+    public static final float STABILAZE_ANGLE = 0.3f;
+    public static final float MAX_ANGLE = 10f;
 
     public Player(Texture texture) {
         super(new TextureRegion(texture));
@@ -55,22 +56,7 @@ public class Player extends Sprite {
     @Override
     public void update(float delta) {
         shipControl(delta);
-        shipRotation();
         checkBounds();
-    }
-
-    private void shipRotation() {
-        if (shipSpeed.y > 0) {
-            if (angle < MAX_ANGLE) angle += 0.5f;
-        } else if (shipSpeed.y < 0) {
-            if (angle > -MAX_ANGLE) angle -= 0.75f;
-        } else {
-            if (angle > 0) {
-                angle -= STABILAZE_ANGLE;
-            } else if (angle < 0) {
-                angle += STABILAZE_ANGLE;
-            } else angle = 0;
-        }
     }
 
     @Override
@@ -112,6 +98,22 @@ public class Player extends Sprite {
 
     private void shipControl(float delta) {
 
+        if (isKeyUpPressed) {
+            if (angle < MAX_ANGLE) {
+                angle += 0.5f;
+            }
+        } else if (isKeyDownPressed) {
+            if (angle > -MAX_ANGLE) {
+                angle -= 0.75f;
+            }
+        } else {
+            if (angle > 0) {
+                angle -= STABILAZE_ANGLE;
+            } else if (angle < 0) {
+                angle += STABILAZE_ANGLE;
+            } else angle = 0;
+        }
+
         if (isKeyUpPressed && shipSpeed.y < SHIP_SPEED_UP) {
             shipSpeed.y += SHIP_SPEED_STEP_UP;
         } else if (shipSpeed.y > 0) {
@@ -124,14 +126,14 @@ public class Player extends Sprite {
             shipSpeed.y += SHIP_BREAK;
         }
 
-        if (isKeyLeftPressed && shipSpeed.x > (-1.5) * SHIP_MAXSPEED) {
-            shipSpeed.x -= SHIP_SPEED_STEP;
+        if (isKeyLeftPressed && shipSpeed.x > (-2) * SHIP_MAXSPEED) {
+            shipSpeed.x -= SHIP_SPEED_STEP_BACK;
         } else if (shipSpeed.x < 0) {
             shipSpeed.x += SHIP_BREAK;
         }
 
         if (isKeyRightPressed && shipSpeed.x < SHIP_MAXSPEED) {
-            shipSpeed.x += SHIP_SPEED_STEP;
+            shipSpeed.x += SHIP_SPEED_STEP_FORWARD;
         } else if (shipSpeed.x > 0) {
             shipSpeed.x -= SHIP_BREAK;
         }
@@ -140,7 +142,6 @@ public class Player extends Sprite {
         if (shipSpeed.len() != 0) {
             pos.mulAdd(shipSpeed, delta);
         } else pos.sub(0,0.0001f);
-
 
     }
 

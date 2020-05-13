@@ -16,24 +16,25 @@ public class Cloud extends Sprite {
     private float scale;
     private float velocity;
 
-    public Cloud(Texture texture, Rect worldBounds, Layer layer) {
+    public Cloud(Texture texture, Layer layer) {
         super(new TextureRegion(texture));
-        this.worldBounds = worldBounds;
         if (layer == Layer.FOREGROUND) {
             this.scale = Rnd.nextFloat(0.15f, 0.2f);
             this.velocity = Rnd.nextFloat(0.2f, 0.3f);
+            pos.set(Rnd.nextFloat(1f, 2f), getRandomYPos());
         }
         if (layer == Layer.BACKGROUND) {
             this.scale = Rnd.nextFloat(0.1f, 0.15f);
-            this.velocity = Rnd.nextFloat(0.1f, 0.2f);
+            this.velocity = Rnd.nextFloat(0.025f, 0.075f);
+            pos.set(Rnd.nextFloat(0f, 1f), getRandomYPos());
         }
+
     }
 
     @Override
     public void resize(Rect worldBounds) {
         setHeightProportion(scale);
         this.worldBounds = worldBounds;
-        pos.set(Rnd.nextFloat(worldBounds.getRight(), worldBounds.getRight() + worldBounds.getHalfHeight()), getRandomYPos());
     }
 
     @Override
@@ -56,6 +57,6 @@ public class Cloud extends Sprite {
     }
 
     private float getRandomYPos() {
-        return Rnd.nextFloat(worldBounds.getBottom(), worldBounds.getTop());
+        return Rnd.nextFloat(-0.25f, 0.5f);
     }
 }
