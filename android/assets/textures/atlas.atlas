@@ -1,0 +1,83 @@
+
+atlas.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+buttonContinue
+  rotate: false
+  xy: 294, 98
+  size: 300, 80
+  orig: 300, 80
+  offset: 0, 0
+  index: -1
+buttonExit
+  rotate: false
+  xy: 968, 776
+  size: 300, 80
+  orig: 300, 80
+  offset: 0, 0
+  index: -1
+buttonPause
+  rotate: false
+  xy: 1893, 1851
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+buttonStart
+  rotate: false
+  xy: 1504, 1671
+  size: 300, 80
+  orig: 300, 80
+  offset: 0, 0
+  index: -1
+cloud1
+  rotate: false
+  xy: 2, 2
+  size: 290, 176
+  orig: 290, 176
+  offset: 0, 0
+  index: -1
+cloud2
+  rotate: false
+  xy: 1504, 1753
+  size: 387, 162
+  orig: 387, 162
+  offset: 0, 0
+  index: -1
+cloud3
+  rotate: false
+  xy: 1504, 1487
+  size: 184, 182
+  orig: 184, 182
+  offset: 0, 0
+  index: -1
+cloud4
+  rotate: false
+  xy: 968, 858
+  size: 389, 159
+  orig: 389, 159
+  offset: 0, 0
+  index: -1
+explosion
+  rotate: false
+  xy: 2, 1019
+  size: 1500, 896
+  orig: 1500, 896
+  offset: 0, 0
+  index: -1
+plane1
+  rotate: false
+  xy: 2, 180
+  size: 932, 394
+  orig: 932, 394
+  offset: 0, 0
+  index: -1
+plane2
+  rotate: false
+  xy: 2, 576
+  size: 964, 441
+  orig: 964, 441
+  offset: 0, 0
+  index: -1
