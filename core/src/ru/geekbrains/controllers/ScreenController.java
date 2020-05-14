@@ -34,7 +34,7 @@ public class ScreenController {
 
 
     public ScreenController(StarFighter starFighter) {
-        this.atlas = new TextureAtlas(Gdx.files.internal("textures/atlas.atlas"));
+        this.atlas = new TextureAtlas("textures/atlas.atlas");
         this.menuScreen = new MenuScreen(atlas, this);
         this.game = starFighter;
         game.setScreen(menuScreen);

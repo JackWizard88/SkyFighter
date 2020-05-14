@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -23,13 +24,15 @@ public class Player extends Sprite {
     private boolean isKeyRightPressed = false;
 
     private Vector2 shipSpeed;
+    private int score;
+    private int health;
 
     private final float SHIP_MAXSPEED = 0.5f;
     private final float SHIP_SPEED_STEP_BACK = 0.02f;
     private final float SHIP_SPEED_STEP_FORWARD = 0.01f;
     private final float SHIP_SPEED_STEP_UP = 0.015f;
     private final float SHIP_SPEED_STEP_DOWN = 0.025f;
-    private final float SHIP_BREAK =  0.01f;
+    private final float SHIP_BREAK =  0.005f;
     private final float SHIP_SPEED_UP = 0.3f;
     private final float SHIP_SPEED_DOWN = -0.75f;
     public static final float STABILAZE_ANGLE = 0.3f;
@@ -40,6 +43,8 @@ public class Player extends Sprite {
         super(region);
         shipSpeed = new Vector2();
         pos.x = -0.5f;
+        this.score = 0;
+        this.health = 3;
     }
 
     @Override
@@ -58,22 +63,29 @@ public class Player extends Sprite {
     public void update(float delta) {
         shipControl(delta);
         checkBounds();
+        this.score += 1;
     }
 
     @Override
     public boolean keyDown(int keycode) {
 
-        if (keycode == 19) {
-            isKeyUpPressed = true;
-        }
-        if (keycode == 20) {
-            isKeyDownPressed = true;
-        }
-        if (keycode == 21) {
-            isKeyLeftPressed = true;
-        }
-        if (keycode == 22) {
-            isKeyRightPressed = true;
+        switch (keycode) {
+            case (Input.Keys.UP):
+            case (Input.Keys.W):
+                isKeyUpPressed = true;
+                break;
+            case (Input.Keys.DOWN):
+            case (Input.Keys.S):
+                isKeyDownPressed = true;
+                break;
+            case (Input.Keys.LEFT):
+            case (Input.Keys.A):
+                isKeyLeftPressed = true;
+                break;
+            case (Input.Keys.RIGHT):
+            case (Input.Keys.D):
+                isKeyRightPressed = true;
+                break;
         }
         return false;
     }
@@ -81,17 +93,23 @@ public class Player extends Sprite {
     @Override
     public boolean keyUp(int keycode) {
 
-        if (keycode == 19) {
-            isKeyUpPressed = false;
-        }
-        if (keycode == 20) {
-            isKeyDownPressed = false;
-        }
-        if (keycode == 21) {
-            isKeyLeftPressed = false;
-        }
-        if (keycode == 22) {
-            isKeyRightPressed = false;
+        switch (keycode) {
+            case (Input.Keys.UP):
+            case (Input.Keys.W):
+                    isKeyUpPressed = false;
+                    break;
+            case (Input.Keys.DOWN):
+            case (Input.Keys.S):
+                    isKeyDownPressed = false;
+                    break;
+            case (Input.Keys.LEFT):
+            case (Input.Keys.A):
+                    isKeyLeftPressed = false;
+                    break;
+            case (Input.Keys.RIGHT):
+            case (Input.Keys.D):
+                    isKeyRightPressed = false;
+                    break;
         }
 
         return false;
@@ -101,11 +119,11 @@ public class Player extends Sprite {
 
         pos.y -= FALL_SPEED * delta;
 
-        if (isKeyUpPressed) {
+        if (isKeyUpPressed && !isKeyDownPressed) {
             if (angle < MAX_ANGLE) {
                 angle += 0.5f;
             }
-        } else if (isKeyDownPressed) {
+        } else if (isKeyDownPressed && !isKeyUpPressed) {
             if (angle > -MAX_ANGLE) {
                 angle -= 0.75f;
             }
@@ -120,25 +138,25 @@ public class Player extends Sprite {
             }
         }
 
-        if (isKeyUpPressed && shipSpeed.y < SHIP_SPEED_UP) {
+        if (isKeyUpPressed && !isKeyDownPressed && shipSpeed.y < SHIP_SPEED_UP) {
             shipSpeed.y += SHIP_SPEED_STEP_UP;
         } else if (shipSpeed.y > 0) {
             shipSpeed.y -= SHIP_BREAK;
         }
 
-        if (isKeyDownPressed && shipSpeed.y > SHIP_SPEED_DOWN) {
+        if (isKeyDownPressed && !isKeyUpPressed && shipSpeed.y > SHIP_SPEED_DOWN) {
             shipSpeed.y -= SHIP_SPEED_STEP_DOWN;
         } else if (shipSpeed.y < 0) {
             shipSpeed.y += SHIP_BREAK;
         }
 
-        if (isKeyLeftPressed && shipSpeed.x > (-2) * SHIP_MAXSPEED) {
+        if (isKeyLeftPressed && !isKeyRightPressed && shipSpeed.x > (-2) * SHIP_MAXSPEED) {
             shipSpeed.x -= SHIP_SPEED_STEP_BACK;
         } else if (shipSpeed.x < 0) {
             shipSpeed.x += SHIP_BREAK;
         }
 
-        if (isKeyRightPressed && shipSpeed.x < SHIP_MAXSPEED) {
+        if (isKeyRightPressed && !isKeyLeftPressed && shipSpeed.x < SHIP_MAXSPEED) {
             shipSpeed.x += SHIP_SPEED_STEP_FORWARD;
         } else if (shipSpeed.x > 0) {
             shipSpeed.x -= SHIP_BREAK;
