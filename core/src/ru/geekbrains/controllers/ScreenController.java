@@ -18,10 +18,13 @@ public class ScreenController {
         return gameScreen;
     }
 
+    public void setNewGameScreen() {
+        gameScreen = new GameScreen(atlas, this);
+        menuScreen.getMenuButtonController().setGameExists(true);
+        setGameScreen();
+    }
+
     public void setGameScreen() {
-        if (gameScreen == null) {
-            gameScreen = new GameScreen(atlas, this);
-        }
         game.setScreen(gameScreen);
     }
 

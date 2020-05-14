@@ -15,15 +15,20 @@ public class MenuScreen extends BaseScreen {
 
     private Texture bg;
     private TextureAtlas atlas;
-    private MenuButtonController menuButtonController;
-    private Background background;
 
+    private MenuButtonController menuButtonController;
+
+    private Background background;
     public MenuScreen(TextureAtlas atlas, ScreenController controller) {
         super(controller);
         this.atlas = atlas;
         menuButtonController = new MenuButtonController(atlas, controller);
         bg = new Texture("textures/backgroundMenu.jpg");
         background = new Background(bg);
+    }
+
+    public MenuButtonController getMenuButtonController() {
+        return menuButtonController;
     }
 
     @Override
