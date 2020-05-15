@@ -1,6 +1,7 @@
 package ru.geekbrains.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -175,6 +176,9 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean keyDown(int keycode) {
         player.keyDown(keycode);
+        if (keycode == Input.Keys.ESCAPE) {
+            controller.setMenuScreen();
+        }
         return false;
     }
 
