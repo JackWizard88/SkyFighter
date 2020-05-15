@@ -27,7 +27,7 @@ public class Enemy extends Sprite {
         regions = new TextureRegion[1];
         v = new Vector2();
         grav1 = new Vector2();
-        this.health = 10;
+        this.health = 5;
         soundFlying = SoundController.getSoundEnemyFlying();
         soundExplosion = SoundController.getSoundEnemyExplosion();
         soundShooting = SoundController.getSoundEnemyShooting();
