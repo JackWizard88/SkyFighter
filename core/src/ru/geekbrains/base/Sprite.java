@@ -81,4 +81,9 @@ public class Sprite extends Rect {
     public boolean isMe(Vector2 touch) {
         return super.isMe(touch);
     }
+
+    @Override
+    public boolean isOutside(Rect other) {
+        return super.isOutside(other);
+    }
 }

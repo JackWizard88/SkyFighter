@@ -19,12 +19,9 @@ public class GameScreen extends BaseScreen {
     private Background background;
     private Player player;
     private PauseButton pauseButton;
-
-    private TextureAtlas.AtlasRegion regionBackground;
     private TextureAtlas.AtlasRegion regionPlayer;
     private TextureAtlas.AtlasRegion regionButtonPause;
     private TextureAtlas.AtlasRegion cloudTextureRegion;
-
 
     private Cloud[] cloudsForeground;
     private Cloud[] cloudsMiddle;
@@ -42,7 +39,7 @@ public class GameScreen extends BaseScreen {
         regionButtonPause = new TextureAtlas.AtlasRegion(atlas.findRegion("buttonPause"));
 
         background = new Background(bg);
-        player = new Player(regionPlayer);
+        player = new Player(regionPlayer, worldBounds);
         pauseButton = new PauseButton(regionButtonPause, controller);
 
         cloudsForeground = new Cloud[FOREGROUND_CLOUDS_COUNT];
@@ -71,6 +68,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        player.show();
     }
 
     @Override
@@ -109,8 +107,15 @@ public class GameScreen extends BaseScreen {
     }
 
     @Override
+    public void hide() {
+        super.hide();
+        player.hide();
+    }
+
+    @Override
     public void dispose() {
         super.dispose();
+        player.dispose();
     }
 
     @Override

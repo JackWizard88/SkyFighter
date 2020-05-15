@@ -5,14 +5,10 @@ import ru.geekbrains.math.Rect;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
-import javax.swing.SpringLayout;
 
 public class Player extends Sprite {
 
@@ -27,6 +23,12 @@ public class Player extends Sprite {
     private int score;
     private int health;
 
+
+    private Sound soundFlying;
+    private Sound soundShooting;
+    private Sound soundExplosion;
+    long idSoundFlying = 1;
+
     private final float SHIP_MAXSPEED = 0.5f;
     private final float SHIP_SPEED_STEP_BACK = 0.02f;
     private final float SHIP_SPEED_STEP_FORWARD = 0.01f;
@@ -39,18 +41,28 @@ public class Player extends Sprite {
     public static final float MAX_ANGLE = 10f;
     public static final float FALL_SPEED = 0.01f;
 
-    public Player(TextureRegion region) {
+    public Player(TextureRegion region, Rect worldBounds) {
         super(region);
+        this.worldBounds = worldBounds;
         shipSpeed = new Vector2();
-        pos.x = -0.5f;
+        setLeft(worldBounds.getLeft());
         this.score = 0;
         this.health = 3;
+        soundFlying = Gdx.audio.newSound(Gdx.files.internal("sounds/flying1.mp3"));
+        soundShooting = Gdx.audio.newSound(Gdx.files.internal("sounds/shooting.mp3"));
+        soundExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion1.mp3"));
+    }
+
+    public void show() {
+        idSoundFlying = soundFlying.play();
+        soundFlying.setLooping(1, true);
     }
 
     @Override
     public void resize(Rect worldBounds) {
         setHeightProportion(0.1f);
         this.worldBounds = worldBounds;
+        soundFlying.resume();
     }
 
     @Override
@@ -61,9 +73,20 @@ public class Player extends Sprite {
 
     @Override
     public void update(float delta) {
-        shipControl(delta);
+        planeControl(delta);
         checkBounds();
         this.score += 1;
+        soundFlying.setPitch(idSoundFlying, 1 + (shipSpeed.x + shipSpeed.y)/6);
+    }
+
+    public void hide() {
+        soundFlying.pause();
+    }
+
+    public void dispose() {
+        soundFlying.dispose();
+        soundExplosion.dispose();
+        soundShooting.dispose();
     }
 
     @Override
@@ -115,7 +138,7 @@ public class Player extends Sprite {
         return false;
     }
 
-    private void shipControl(float delta) {
+    private void planeControl(float delta) {
 
         pos.y -= FALL_SPEED * delta;
 
