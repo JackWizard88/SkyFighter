@@ -20,7 +20,7 @@ public class Enemy extends Sprite {
     @Override
     public void update(float delta) {
         pos.mulAdd(v, delta);
-        if (isOutside(worldBounds)) {
+        if (isOutside(worldBounds) || health <= 0) {
             destroy();
         }
     }
@@ -29,13 +29,19 @@ public class Enemy extends Sprite {
             TextureRegion region,
             Vector2 pos0,
             Vector2 v,
+            int health,
             float height,
             Rect worldBounds
     ) {
         this.regions[0] = region;
         this.pos.set(pos0);
         this.v.set(v);
+        this.health = health;
         setHeightProportion(height);
         this.worldBounds = worldBounds;
+    }
+
+    public void damage() {
+        this.health -= 1;
     }
 }

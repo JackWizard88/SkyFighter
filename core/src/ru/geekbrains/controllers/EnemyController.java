@@ -4,9 +4,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.math.Rnd;
+import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.pool.EnemyPool;
+import ru.geekbrains.sprite.gameObjects.Bullet;
 import ru.geekbrains.sprite.gameObjects.Enemy;
 
 public class EnemyController {
@@ -19,7 +25,6 @@ public class EnemyController {
     private Vector2 velocity;
     private float timerSpawn = 0;
 
-
     public EnemyController(TextureAtlas atlas, EnemyPool enemyPool, Rect worldbounds) {
         this.worldbounds = worldbounds;
         this.enemyPool = enemyPool;
@@ -28,17 +33,27 @@ public class EnemyController {
         velocity = new Vector2(-0.15f, 0);
     }
 
-    public void checkEnemies(float delta) {
+    public void checkEnemies(float delta, BulletPool bulletPool) {
+        for (Enemy enemy : enemyPool.getActiveObjects()) {
+            checkCollisions(bulletPool, enemy);
+        }
         timerSpawn += delta;
         if (timerSpawn >= Rnd.nextFloat(1.5f, 3f)) {
             timerSpawn = 0;
             if (enemyPool.getSize() < ENEMY_LIMIT) {
                 Enemy enemy = enemyPool.obtain();
-                enemy.set(enemyRegion, getSpawnCoordinates(enemy), velocity, 0.1f, worldbounds);
+                enemy.set(enemyRegion, getSpawnCoordinates(enemy), velocity, 10, 0.1f, worldbounds);
             }
         }
+    }
 
-
+    private void checkCollisions(BulletPool bulletPool, Enemy enemy) {
+        for (Bullet bullet : bulletPool.getActiveObjects()) {
+            if (enemy.isMe(bullet.pos)) {
+                enemy.damage();
+                bullet.destroy();
+            }
+        }
     }
 
     private Vector2 getSpawnCoordinates(Enemy enemy) {

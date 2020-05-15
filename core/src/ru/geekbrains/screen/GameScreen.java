@@ -110,7 +110,7 @@ public class GameScreen extends BaseScreen {
         super.render(delta);
         update(delta);
         free();
-        enemyController.checkEnemies(delta);
+        enemyController.checkEnemies(delta, bulletPool);
         draw();
     }
 
