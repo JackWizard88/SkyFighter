@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-import ru.geekbrains.ScreenController;
+import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.math.MatrixUtils;
 import ru.geekbrains.math.Rect;
 
@@ -19,7 +19,7 @@ public class BaseScreen implements Screen, InputProcessor {
     protected ScreenController controller;
 
     private Rect screenBounds;
-    private Rect worldBounds;
+    protected Rect worldBounds;
     private Rect glBounds;
 
     private Matrix4 worldToGl;
@@ -31,7 +31,6 @@ public class BaseScreen implements Screen, InputProcessor {
 
     public BaseScreen(ScreenController controller) {
         this.controller = controller;
-
         batch = new SpriteBatch();
         screenBounds = new Rect();
         worldBounds = new Rect();

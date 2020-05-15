@@ -1,32 +1,34 @@
 package ru.geekbrains.screen;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
-import ru.geekbrains.ScreenController;
+import ru.geekbrains.controllers.MenuButtonController;
+import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
-import ru.geekbrains.sprite.Background;
-import ru.geekbrains.sprite.ExitButton;
-import ru.geekbrains.sprite.StartButton;
+import ru.geekbrains.sprite.gameObjects.Background;
+
 
 public class MenuScreen extends BaseScreen {
 
     private Texture bg;
-    private Texture buttonStart;
-    private Texture buttonExit;
-    private Background background;
-    private StartButton startButton;
-    private ExitButton exitButton;
+    private TextureAtlas atlas;
 
-    public MenuScreen(ScreenController controller) {
+    private MenuButtonController menuButtonController;
+
+    private Background background;
+    public MenuScreen(TextureAtlas atlas, ScreenController controller) {
         super(controller);
+        this.atlas = atlas;
+        menuButtonController = new MenuButtonController(atlas, controller);
         bg = new Texture("textures/backgroundMenu.jpg");
-        buttonStart = new Texture(("textures/buttonStart.png"));
-        buttonExit = new Texture(("textures/buttonExit.png"));
         background = new Background(bg);
-        startButton = new StartButton(buttonStart ,controller);
-        exitButton = new ExitButton(buttonExit, controller);
+    }
+
+    public MenuButtonController getMenuButtonController() {
+        return menuButtonController;
     }
 
     @Override
@@ -37,9 +39,7 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
-        startButton.resize(worldBounds);
-        exitButton.resize(worldBounds);
-
+        menuButtonController.resize(worldBounds);
     }
 
     @Override
@@ -47,36 +47,25 @@ public class MenuScreen extends BaseScreen {
         super.render(delta);
         batch.begin();
         background.draw(batch);
-        startButton.draw(batch);
-        exitButton.draw(batch);
-
+        menuButtonController.draw(batch);
         batch.end();
     }
 
     @Override
     public void dispose() {
-        bg.dispose();
-        buttonStart.dispose();
-        buttonExit.dispose();
         super.dispose();
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        startButton.touchDown(touch, pointer, button);
-        exitButton.touchDown(touch, pointer, button);
+        menuButtonController.touchDown(touch, pointer, button);
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        startButton.touchUp(touch, pointer, button);
-        exitButton.touchUp(touch, pointer, button);
+        menuButtonController.touchUp(touch, pointer, button);
         return false;
     }
 
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
 }

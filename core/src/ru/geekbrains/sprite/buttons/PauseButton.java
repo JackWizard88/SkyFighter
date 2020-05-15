@@ -1,20 +1,16 @@
-package ru.geekbrains.sprite;
+package ru.geekbrains.sprite.buttons;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import ru.geekbrains.ScreenController;
-import ru.geekbrains.base.Sprite;
+import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.math.Rect;
 
-public class PauseButton extends Sprite{
+public class PauseButton extends Button{
 
-    private ScreenController controller;
-    private boolean isActivated = false;
 
-    public PauseButton(Texture texture, ScreenController controller) {
-        super(new TextureRegion(texture));
-        this.controller = controller;
+    public PauseButton(TextureRegion region, ScreenController controller) {
+        super(region, controller);
+
     }
 
     @Override
@@ -25,11 +21,7 @@ public class PauseButton extends Sprite{
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        if (isMe(touch)) {
-            setScale(0.8f);
-            isActivated = true;
-        }
-        return false;
+        return super.touchDown(touch, pointer, button);
     }
 
     @Override
@@ -37,8 +29,6 @@ public class PauseButton extends Sprite{
         if (isActivated && isMe(touch)) {
             controller.setMenuScreen();
         }
-        isActivated = false;
-        setScale(1f);
-        return false;
+        return super.touchUp(touch, pointer, button);
     }
 }
