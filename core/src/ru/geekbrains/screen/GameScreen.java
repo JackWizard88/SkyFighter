@@ -6,14 +6,16 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+
+import ru.geekbrains.controllers.EnemyController;
 import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.base.Layer;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
+import ru.geekbrains.pool.EnemyPool;
 import ru.geekbrains.sprite.gameObjects.Background;
 import ru.geekbrains.sprite.gameObjects.Cloud;
-import ru.geekbrains.sprite.buttons.PauseButton;
 import ru.geekbrains.sprite.gameObjects.Player;
 
 public class GameScreen extends BaseScreen {
@@ -23,17 +25,17 @@ public class GameScreen extends BaseScreen {
     private TextureAtlas atlas;
     private Background background;
     private Player player;
-    private PauseButton pauseButton;
-    private TextureAtlas.AtlasRegion regionPlayer;
-    private TextureAtlas.AtlasRegion regionButtonPause;
     private TextureAtlas.AtlasRegion cloudTextureRegion;
 
     //sounds
     private Music windSound;
-    private Music battleMusic;
 
     //pools
     private BulletPool bulletPool;
+    private EnemyPool enemyPool;
+
+    //controllers
+    private EnemyController enemyController;
 
     //clouds
     private Cloud[] cloudsForeground;
@@ -48,16 +50,14 @@ public class GameScreen extends BaseScreen {
         super(controller);
         this.atlas = atlas;
         bulletPool = new BulletPool();
-        bg = new Texture("textures/sky.jpg");
-        regionButtonPause = new TextureAtlas.AtlasRegion(atlas.findRegion("buttonPause"));
+        enemyPool = new EnemyPool();
+        enemyController = new EnemyController(atlas, enemyPool, worldBounds);
+        bg = new Texture("textures/skyGrey.png");
         windSound = Gdx.audio.newMusic(Gdx.files.internal("sounds/wind.mp3"));
-        battleMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/battleMusic.mp3"));
-        battleMusic.setVolume(0.7f);
-        windSound.setVolume(0.7f);
+        windSound.setVolume(0.9f);
 
         background = new Background(bg);
         player = new Player(atlas, bulletPool);
-        pauseButton = new PauseButton(regionButtonPause, controller);
 
         cloudsForeground = new Cloud[FOREGROUND_CLOUDS_COUNT];
         cloudsMiddle = new Cloud[MIDDLE_CLOUDS_COUNT];
@@ -88,8 +88,6 @@ public class GameScreen extends BaseScreen {
         player.show();
         windSound.play();
         windSound.setLooping(true);
-        battleMusic.play();
-        battleMusic.setLooping(true);
     }
 
     @Override
@@ -105,7 +103,6 @@ public class GameScreen extends BaseScreen {
         for (Cloud cloud: cloudsForeground) {
             cloud.resize(worldBounds);
         }
-        pauseButton.resize(worldBounds);
     }
 
     @Override
@@ -113,15 +110,18 @@ public class GameScreen extends BaseScreen {
         super.render(delta);
         update(delta);
         free();
+        enemyController.checkEnemies(delta);
         draw();
     }
 
     private void update(float delta) {
         bulletPool.updateActiveSprites(delta);
+        enemyController.updateActiveSprites(delta);
     }
 
     private void free() {
         bulletPool.freeAllDestroyed();
+        enemyController.freeAllDestroyed();
     }
 
     public void draw() {
@@ -134,11 +134,11 @@ public class GameScreen extends BaseScreen {
             cloud.draw(batch);
         }
         bulletPool.drawActiveSprites(batch);
+        enemyController.drawActiveSprites(batch);
         player.draw(batch);
         for (Cloud cloud: cloudsForeground) {
             cloud.draw(batch);
         }
-        pauseButton.draw(batch);
         batch.end();
     }
 
@@ -147,7 +147,6 @@ public class GameScreen extends BaseScreen {
         super.hide();
         player.hide();
         windSound.pause();
-        battleMusic.pause();
     }
 
     @Override
@@ -155,21 +154,15 @@ public class GameScreen extends BaseScreen {
         super.dispose();
         player.dispose();
         windSound.dispose();
-        battleMusic.dispose();
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        pauseButton.touchDown(touch, pointer, button);
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        pauseButton.touchUp(touch, pointer, button);
-        if (!pauseButton.isMe(touch)) {
-            player.touchUp(touch, pointer, button);
-        }
         return false;
     }
 

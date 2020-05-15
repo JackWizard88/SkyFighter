@@ -6,85 +6,99 @@ filter: Nearest,Nearest
 repeat: none
 bullet
   rotate: false
-  xy: 2, 163
+  xy: 1028, 980
+  size: 947, 146
+  orig: 947, 146
+  offset: 0, 0
+  index: -1
+bullet2
+  rotate: false
+  xy: 1028, 832
   size: 947, 146
   orig: 947, 146
   offset: 0, 0
   index: -1
 buttonContinue
   rotate: false
-  xy: 1504, 1720
+  xy: 1028, 589
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
 buttonExit
   rotate: false
-  xy: 1504, 1802
+  xy: 1419, 750
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
 buttonPause
   rotate: false
-  xy: 1893, 1982
+  xy: 1979, 1960
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 buttonStart
   rotate: false
-  xy: 393, 81
+  xy: 2, 2
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
 cloud1
   rotate: false
-  xy: 968, 972
+  xy: 1504, 1476
   size: 290, 176
   orig: 290, 176
   offset: 0, 0
   index: -1
 cloud2
   rotate: false
-  xy: 1504, 1884
+  xy: 1504, 1654
   size: 387, 162
   orig: 387, 162
   offset: 0, 0
   index: -1
 cloud3
   rotate: false
-  xy: 968, 788
+  xy: 1504, 1292
   size: 184, 182
   orig: 184, 182
   offset: 0, 0
   index: -1
 cloud4
   rotate: false
-  xy: 2, 2
+  xy: 1028, 671
   size: 389, 159
   orig: 389, 159
   offset: 0, 0
   index: -1
 explosion
   rotate: false
-  xy: 2, 1150
+  xy: 2, 1128
   size: 1500, 896
   orig: 1500, 896
   offset: 0, 0
   index: -1
-plane1
+plane3
   rotate: false
-  xy: 2, 311
-  size: 932, 394
-  orig: 932, 394
+  xy: 1504, 1818
+  size: 473, 206
+  orig: 473, 206
   offset: 0, 0
   index: -1
-plane2
+plane4
   rotate: false
-  xy: 2, 707
-  size: 964, 441
-  orig: 964, 441
+  xy: 2, 84
+  size: 1024, 520
+  orig: 1024, 520
+  offset: 0, 0
+  index: -1
+plane4f
+  rotate: false
+  xy: 2, 606
+  size: 1024, 520
+  orig: 1024, 520
   offset: 0, 0
   index: -1

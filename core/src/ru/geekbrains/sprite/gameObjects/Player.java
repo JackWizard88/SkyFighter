@@ -3,7 +3,6 @@ package ru.geekbrains.sprite.gameObjects;
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
@@ -33,7 +32,8 @@ public class Player extends Sprite {
     private Sound soundFlying;
     private Sound soundShooting;
     private Sound soundExplosion;
-    long idSoundFlying = 1;
+    long idSoundFlying;
+    long idShooting;
 
     //projectiles
     private BulletPool bulletPool;
@@ -58,17 +58,17 @@ public class Player extends Sprite {
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public Player(TextureAtlas atlas, BulletPool bulletPool) {
-        super(atlas.findRegion("plane1"), 1, 1, 1);
+        super(atlas.findRegion("plane3"), 1, 1, 1);
         shipSpeed = new Vector2();
         dir = new Vector2();
         bulletPos0 = new Vector2();
         this.bulletPool = bulletPool;
-        bulletRegion = atlas.findRegion("bullet");
+        bulletRegion = atlas.findRegion("bullet2");
         pos.set(-0.5f, 0);
         this.score = 0;
         this.health = 3;
         soundFlying = Gdx.audio.newSound(Gdx.files.internal("sounds/flying1.mp3"));
-        soundShooting = Gdx.audio.newSound(Gdx.files.internal("sounds/shooting.mp3"));
+        soundShooting = Gdx.audio.newSound(Gdx.files.internal("sounds/shooting1.mp3"));
         soundExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion1.mp3"));
     }
 
@@ -79,7 +79,7 @@ public class Player extends Sprite {
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.1f);
+        setHeightProportion(0.075f);
         this.worldBounds = worldBounds;
         soundFlying.resume();
     }
@@ -96,14 +96,13 @@ public class Player extends Sprite {
         planeControl(delta);
         checkBounds();
         this.score += 1;
-        soundFlying.setPitch(idSoundFlying, 1 + (shipSpeed.x + shipSpeed.y)/6);
+        soundFlying.setPitch(idSoundFlying, 1 - (shipSpeed.x + shipSpeed.y)/6);
     }
 
     private void checkShooting(float delta) {
 
         if (isKeySpacePressed) {
             timer += delta;
-            System.out.println(timer);
             if (timer >= 0.1f) {
                 shoot();
                 timer = 0f;
@@ -125,7 +124,7 @@ public class Player extends Sprite {
     private void shoot() {
         Bullet bullet = bulletPool.obtain();
         //смещение точки выстрела в зависимости от угла
-        bulletPos0.set(pos.x + halfWidth * 0.9f, pos.y + getHeight() * (float) Math.sin(Math.toRadians(angle)));
+        bulletPos0.set(pos.x + halfWidth * 0.95f, pos.y + getHeight() / 5 + getHeight() * (float) Math.sin(Math.toRadians(angle)));
         //поворот аектора направления полета снаряда
         dir.set((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle))).nor();
         bullet.set(this, bulletRegion, bulletPos0, bulletV, angle, dir, 0.01f, worldBounds, 1);
@@ -153,7 +152,8 @@ public class Player extends Sprite {
                 break;
             case (Input.Keys.SPACE):
                 isKeySpacePressed = true;
-                soundShooting.play();
+                idShooting = soundShooting.play();
+                soundShooting.setLooping(idShooting, true);
                 break;
         }
         return false;

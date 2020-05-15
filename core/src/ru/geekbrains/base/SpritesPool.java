@@ -56,6 +56,10 @@ public abstract class SpritesPool<T extends Sprite> {
         return activeObjects;
     }
 
+    public int getSize() {
+        return activeObjects.size();
+    }
+
     public void dispose() {
         activeObjects.clear();
         freeObjects.clear();
