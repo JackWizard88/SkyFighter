@@ -11,6 +11,7 @@ import ru.geekbrains.controllers.EnemyController;
 import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.base.Layer;
+import ru.geekbrains.controllers.SoundController;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.pool.EnemyPool;
@@ -36,6 +37,7 @@ public class GameScreen extends BaseScreen {
 
     //controllers
     private EnemyController enemyController;
+    private SoundController soundcontroller;
 
     //clouds
     private Cloud[] cloudsForeground;
@@ -51,6 +53,7 @@ public class GameScreen extends BaseScreen {
         this.atlas = atlas;
         bulletPool = new BulletPool();
         enemyPool = new EnemyPool();
+        soundcontroller = new SoundController();
         enemyController = new EnemyController(atlas, enemyPool, worldBounds);
         bg = new Texture("textures/skyGrey.png");
         windSound = Gdx.audio.newMusic(Gdx.files.internal("sounds/wind.mp3"));
@@ -99,6 +102,7 @@ public class GameScreen extends BaseScreen {
         for (Cloud cloud: cloudsMiddle) {
             cloud.resize(worldBounds);
         }
+        enemyController.resize();
         player.resize(worldBounds);
         for (Cloud cloud: cloudsForeground) {
             cloud.resize(worldBounds);
@@ -145,6 +149,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void hide() {
         super.hide();
+        enemyController.hide();
         player.hide();
         windSound.pause();
     }
@@ -152,6 +157,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
+        enemyController.dispose();
         player.dispose();
         windSound.dispose();
     }

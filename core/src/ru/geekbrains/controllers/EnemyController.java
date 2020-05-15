@@ -1,5 +1,7 @@
 package ru.geekbrains.controllers;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -52,10 +54,28 @@ public class EnemyController {
 
     private void checkCollisions(BulletPool bulletPool, Enemy enemy) {
         for (Bullet bullet : bulletPool.getActiveObjects()) {
-            if (enemy.isMe(bullet.pos)) {
+            if (enemy.isMe(bullet.pos) && !enemy.isFalling()) {
                 enemy.damage();
                 bullet.destroy();
             }
+        }
+    }
+
+    public void resize() {
+        for (Enemy enemy : enemyPool.getActiveObjects()) {
+            enemy.resize(worldbounds);
+        }
+    }
+
+    public void hide() {
+        for (Enemy enemy : enemyPool.getActiveObjects()) {
+            enemy.hide();
+        }
+    }
+
+    public void dispose() {
+        for (Enemy enemy : enemyPool.getActiveObjects()) {
+            enemy.dispose();
         }
     }
 
