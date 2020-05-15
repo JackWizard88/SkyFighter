@@ -34,9 +34,12 @@ public class EnemyController {
     }
 
     public void checkEnemies(float delta, BulletPool bulletPool) {
+        //проверка попадания
         for (Enemy enemy : enemyPool.getActiveObjects()) {
             checkCollisions(bulletPool, enemy);
         }
+
+        //спаунер врагов в случайной координате по таймеру
         timerSpawn += delta;
         if (timerSpawn >= Rnd.nextFloat(1.5f, 3f)) {
             timerSpawn = 0;
