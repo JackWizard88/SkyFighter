@@ -1,5 +1,7 @@
 package ru.geekbrains.screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -7,6 +9,7 @@ import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.base.Layer;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.sprite.gameObjects.Background;
 import ru.geekbrains.sprite.gameObjects.Cloud;
 import ru.geekbrains.sprite.buttons.PauseButton;
@@ -14,6 +17,7 @@ import ru.geekbrains.sprite.gameObjects.Player;
 
 public class GameScreen extends BaseScreen {
 
+    //textures and atlas
     private Texture bg;
     private TextureAtlas atlas;
     private Background background;
@@ -23,23 +27,35 @@ public class GameScreen extends BaseScreen {
     private TextureAtlas.AtlasRegion regionButtonPause;
     private TextureAtlas.AtlasRegion cloudTextureRegion;
 
+    //sounds
+    private Music windSound;
+    private Music battleMusic;
+
+    //pools
+    private BulletPool bulletPool;
+
+    //clouds
     private Cloud[] cloudsForeground;
     private Cloud[] cloudsMiddle;
     private Cloud[] cloudsBackground;
-
     private final int FOREGROUND_CLOUDS_COUNT = 5;
     private final int MIDDLE_CLOUDS_COUNT = 7;
     private final int BACKGROUND_CLOUDS_COUNT = 10;
 
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public GameScreen(TextureAtlas atlas, ScreenController controller) {
         super(controller);
         this.atlas = atlas;
+        bulletPool = new BulletPool();
         bg = new Texture("textures/sky.jpg");
-        regionPlayer = new TextureAtlas.AtlasRegion(atlas.findRegion("plane1"));
         regionButtonPause = new TextureAtlas.AtlasRegion(atlas.findRegion("buttonPause"));
+        windSound = Gdx.audio.newMusic(Gdx.files.internal("sounds/wind.mp3"));
+        battleMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/battleMusic.mp3"));
+        battleMusic.setVolume(0.7f);
+        windSound.setVolume(0.7f);
 
         background = new Background(bg);
-        player = new Player(regionPlayer, worldBounds);
+        player = new Player(atlas, bulletPool);
         pauseButton = new PauseButton(regionButtonPause, controller);
 
         cloudsForeground = new Cloud[FOREGROUND_CLOUDS_COUNT];
@@ -69,6 +85,10 @@ public class GameScreen extends BaseScreen {
     public void show() {
         super.show();
         player.show();
+        windSound.play();
+        windSound.setLooping(true);
+        battleMusic.play();
+        battleMusic.setLooping(true);
     }
 
     @Override
@@ -90,6 +110,20 @@ public class GameScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+        update(delta);
+        free();
+        draw();
+    }
+
+    private void update(float delta) {
+        bulletPool.updateActiveSprites(delta);
+    }
+
+    private void free() {
+        bulletPool.freeAllDestroyed();
+    }
+
+    public void draw() {
         batch.begin();
         background.draw(batch);
         for (Cloud cloud: cloudsBackground) {
@@ -98,6 +132,7 @@ public class GameScreen extends BaseScreen {
         for (Cloud cloud: cloudsMiddle) {
             cloud.draw(batch);
         }
+        bulletPool.drawActiveSprites(batch);
         player.draw(batch);
         for (Cloud cloud: cloudsForeground) {
             cloud.draw(batch);
@@ -110,12 +145,16 @@ public class GameScreen extends BaseScreen {
     public void hide() {
         super.hide();
         player.hide();
+        windSound.pause();
+        battleMusic.pause();
     }
 
     @Override
     public void dispose() {
         super.dispose();
         player.dispose();
+        windSound.dispose();
+        battleMusic.dispose();
     }
 
     @Override

@@ -2,33 +2,48 @@ package ru.geekbrains.sprite.gameObjects;
 
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.pool.BulletPool;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Sprite {
 
+    //worldBounds
     private Rect worldBounds;
 
+    //keyControl booleans
     private boolean isKeyUpPressed = false;
     private boolean isKeyDownPressed = false;
     private boolean isKeyLeftPressed = false;
     private boolean isKeyRightPressed = false;
+    private boolean isKeySpacePressed = false;
 
+    //plane fields
     private Vector2 shipSpeed;
     private int score;
     private int health;
 
-
+    //sounds
     private Sound soundFlying;
     private Sound soundShooting;
     private Sound soundExplosion;
     long idSoundFlying = 1;
 
+    //projectiles
+    private BulletPool bulletPool;
+    private TextureRegion bulletRegion;
+    private final float bulletV = 1f;
+    private Vector2 dir;
+    private Vector2 bulletPos0;
+    private float timer = 0f;
+
+    //constants
     private final float SHIP_MAXSPEED = 0.5f;
     private final float SHIP_SPEED_STEP_BACK = 0.02f;
     private final float SHIP_SPEED_STEP_FORWARD = 0.01f;
@@ -41,11 +56,15 @@ public class Player extends Sprite {
     public static final float MAX_ANGLE = 10f;
     public static final float FALL_SPEED = 0.01f;
 
-    public Player(TextureRegion region, Rect worldBounds) {
-        super(region);
-        this.worldBounds = worldBounds;
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    public Player(TextureAtlas atlas, BulletPool bulletPool) {
+        super(atlas.findRegion("plane1"), 1, 1, 1);
         shipSpeed = new Vector2();
-        setLeft(worldBounds.getLeft());
+        dir = new Vector2();
+        bulletPos0 = new Vector2();
+        this.bulletPool = bulletPool;
+        bulletRegion = atlas.findRegion("bullet");
+        pos.set(-0.5f, 0);
         this.score = 0;
         this.health = 3;
         soundFlying = Gdx.audio.newSound(Gdx.files.internal("sounds/flying1.mp3"));
@@ -55,7 +74,7 @@ public class Player extends Sprite {
 
     public void show() {
         idSoundFlying = soundFlying.play();
-        soundFlying.setLooping(1, true);
+        soundFlying.setLooping(idSoundFlying, true);
     }
 
     @Override
@@ -73,10 +92,24 @@ public class Player extends Sprite {
 
     @Override
     public void update(float delta) {
+        checkShooting(delta);
         planeControl(delta);
         checkBounds();
         this.score += 1;
         soundFlying.setPitch(idSoundFlying, 1 + (shipSpeed.x + shipSpeed.y)/6);
+    }
+
+    private void checkShooting(float delta) {
+
+        if (isKeySpacePressed) {
+            timer += delta;
+            System.out.println(timer);
+            if (timer >= 0.1f) {
+                shoot();
+                timer = 0f;
+            }
+        }
+
     }
 
     public void hide() {
@@ -87,6 +120,15 @@ public class Player extends Sprite {
         soundFlying.dispose();
         soundExplosion.dispose();
         soundShooting.dispose();
+    }
+
+    private void shoot() {
+        Bullet bullet = bulletPool.obtain();
+        //смещение точки выстрела в зависимости от угла
+        bulletPos0.set(pos.x + halfWidth * 0.9f, pos.y + getHeight() * (float) Math.sin(Math.toRadians(angle)));
+        //поворот аектора направления полета снаряда
+        dir.set((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle))).nor();
+        bullet.set(this, bulletRegion, bulletPos0, bulletV, angle, dir, 0.01f, worldBounds, 1);
     }
 
     @Override
@@ -108,6 +150,10 @@ public class Player extends Sprite {
             case (Input.Keys.RIGHT):
             case (Input.Keys.D):
                 isKeyRightPressed = true;
+                break;
+            case (Input.Keys.SPACE):
+                isKeySpacePressed = true;
+                soundShooting.play();
                 break;
         }
         return false;
@@ -133,6 +179,11 @@ public class Player extends Sprite {
             case (Input.Keys.D):
                     isKeyRightPressed = false;
                     break;
+            case (Input.Keys.SPACE):
+                isKeySpacePressed = false;
+                soundShooting.stop();
+                timer = 0f;
+                break;
         }
 
         return false;
