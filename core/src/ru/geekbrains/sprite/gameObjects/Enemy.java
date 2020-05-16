@@ -1,18 +1,20 @@
 package ru.geekbrains.sprite.gameObjects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.controllers.SoundController;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.screen.GameScreen;
 
 public class Enemy extends Sprite {
 
+    public static final double MAX_ANGLE = 3f;
+    private static final float STABILAZE_ANGLE = 0.2f;
     private Rect worldBounds;
     private Vector2 v;
-    private final Vector2 grav = new Vector2(0, -0.0001f);
+    private final Vector2 grav = new Vector2(0, 0.0001f);
     private Vector2 grav1;
     private int health;
 
@@ -38,8 +40,31 @@ public class Enemy extends Sprite {
 
         if (isFalling) {
             if (angle < 60f) angle += 0.2f;
-            if (grav1.len() < 10f) grav1.add(grav);
+            if (grav1.len() < 10f) grav1.sub(grav);
             v.add(grav1);
+        } else {
+
+            if (GameScreen.getGameScreen().getPlayer().pos.y - pos.y > 0.05f && GameScreen.getGameScreen().getPlayer().pos.x - pos.x < -0.05f) {
+                v.add(grav);
+                if (angle > -MAX_ANGLE) {
+                    angle -= 0.5f;
+                }
+            } else if (GameScreen.getGameScreen().getPlayer().pos.y - pos.y < -0.05f && GameScreen.getGameScreen().getPlayer().pos.x - pos.x < -0.05f) {
+                v.sub(grav);
+                if (angle < MAX_ANGLE) {
+                    angle += 0.5f;
+                }
+            } else {
+                if (angle > -STABILAZE_ANGLE && angle < STABILAZE_ANGLE) {
+                    angle = 0f;
+                } else if (angle > STABILAZE_ANGLE) {
+                    angle -= STABILAZE_ANGLE;
+                } else if (angle < STABILAZE_ANGLE) {
+                    angle += STABILAZE_ANGLE;
+                }
+            }
+
+
         }
 
         pos.mulAdd(v, delta);
