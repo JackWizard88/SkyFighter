@@ -6,6 +6,7 @@ import ru.geekbrains.pool.BulletPool;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -27,6 +28,7 @@ public class Player extends Sprite {
     private Vector2 shipSpeed;
     private int score;
     private int health;
+    private StringBuilder strBuilder;
 
     //sounds
     private Sound soundFlying;
@@ -44,6 +46,7 @@ public class Player extends Sprite {
     private float timer = 0f;
 
     //constants
+    private static final float MARGIN = 0.05f;
     private final float SHIP_MAXSPEED = 0.5f;
     private final float SHIP_SPEED_STEP_BACK = 0.02f;
     private final float SHIP_SPEED_STEP_FORWARD = 0.01f;
@@ -52,9 +55,9 @@ public class Player extends Sprite {
     private final float SHIP_BREAK =  0.005f;
     private final float SHIP_SPEED_UP = 0.3f;
     private final float SHIP_SPEED_DOWN = -0.75f;
-    public static final float STABILAZE_ANGLE = 0.3f;
-    public static final float MAX_ANGLE = 10f;
-    public static final float FALL_SPEED = 0.01f;
+    private static final float STABILAZE_ANGLE = 0.3f;
+    private static final float MAX_ANGLE = 10f;
+    private static final float FALL_SPEED = 0.01f;
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public Player(TextureAtlas atlas, BulletPool bulletPool) {
@@ -64,6 +67,7 @@ public class Player extends Sprite {
         bulletPos0 = new Vector2();
         this.bulletPool = bulletPool;
         bulletRegion = atlas.findRegion("bullet2");
+        this.strBuilder = new StringBuilder();
         pos.set(-0.5f, 0);
         this.score = 0;
         this.health = 3;

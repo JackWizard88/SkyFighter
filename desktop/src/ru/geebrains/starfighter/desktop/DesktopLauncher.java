@@ -12,6 +12,6 @@ public class DesktopLauncher {
 		config.height = 800;
 		config.foregroundFPS = 100;
 		config.vSyncEnabled = false;
-		config.resizable = false;
+//		config.resizable = false;
 	}
 }

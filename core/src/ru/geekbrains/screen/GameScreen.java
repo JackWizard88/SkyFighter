@@ -37,7 +37,6 @@ public class GameScreen extends BaseScreen {
 
     //controllers
     private EnemyController enemyController;
-    private SoundController soundcontroller;
 
     //clouds
     private Cloud[] cloudsForeground;
@@ -51,14 +50,13 @@ public class GameScreen extends BaseScreen {
     public GameScreen(TextureAtlas atlas, ScreenController controller) {
         super(controller);
         this.atlas = atlas;
+        SoundController.getSoundController();
         bulletPool = new BulletPool();
         enemyPool = new EnemyPool();
-        soundcontroller = new SoundController();
         enemyController = new EnemyController(atlas, enemyPool, worldBounds);
         bg = new Texture("textures/skyGrey.png");
         windSound = Gdx.audio.newMusic(Gdx.files.internal("sounds/wind.mp3"));
         windSound.setVolume(0.9f);
-
         background = new Background(bg);
         player = new Player(atlas, bulletPool);
 
@@ -160,6 +158,8 @@ public class GameScreen extends BaseScreen {
         enemyController.dispose();
         player.dispose();
         windSound.dispose();
+        enemyPool.dispose();
+        bulletPool.dispose();
     }
 
     @Override
