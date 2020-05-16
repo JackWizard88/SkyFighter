@@ -164,7 +164,7 @@ public class GameScreen extends BaseScreen {
             batch.setColor(1,1,1,1);
         }
         for (Cloud cloud: cloudsMiddle) {
-            batch.setColor(0.8f,0.8f,0.8f,1);
+            batch.setColor(0.8f,0.8f,0.8f,0.97f);
             cloud.draw(batch);
             batch.setColor(1,1,1,1);
         }
@@ -172,7 +172,9 @@ public class GameScreen extends BaseScreen {
         enemyController.drawActiveSprites(batch);
         player.draw(batch);
         for (Cloud cloud: cloudsForeground) {
+            batch.setColor(1,1,1,0.93f);
             cloud.draw(batch);
+            batch.setColor(1,1,1,1);
         }
         batch.end();
     }
