@@ -1,5 +1,6 @@
 package ru.geekbrains.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
@@ -21,44 +22,46 @@ import ru.geekbrains.sprite.gameObjects.Player;
 
 public class GameScreen extends BaseScreen {
 
+    private static GameScreen gameScreen;
+
     //textures and atlas
+
     private Texture bg;
     private TextureAtlas atlas;
     private Background background;
     private Player player;
     private TextureAtlas.AtlasRegion cloudTextureRegion;
-
     //sounds
-    private Music windSound;
 
+    private Music windSound;
     //pools
+
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
-
     //controllers
-    private EnemyController enemyController;
 
+    private EnemyController enemyController;
     //clouds
+
     private Cloud[] cloudsForeground;
     private Cloud[] cloudsMiddle;
     private Cloud[] cloudsBackground;
     private final int FOREGROUND_CLOUDS_COUNT = 5;
     private final int MIDDLE_CLOUDS_COUNT = 7;
     private final int BACKGROUND_CLOUDS_COUNT = 10;
-
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    public GameScreen(TextureAtlas atlas, ScreenController controller) {
+    private GameScreen(TextureAtlas atlas, ScreenController controller) {
         super(controller);
         this.atlas = atlas;
         SoundController.getSoundController();
         bulletPool = new BulletPool();
         enemyPool = new EnemyPool();
-        enemyController = new EnemyController(atlas, enemyPool, worldBounds);
+        enemyController = new EnemyController(this, worldBounds);
         bg = new Texture("textures/skyGrey.png");
         windSound = Gdx.audio.newMusic(Gdx.files.internal("sounds/wind.mp3"));
         windSound.setVolume(0.9f);
         background = new Background(bg);
-        player = new Player(atlas, bulletPool);
+        player = new Player(atlas);
 
         cloudsForeground = new Cloud[FOREGROUND_CLOUDS_COUNT];
         cloudsMiddle = new Cloud[MIDDLE_CLOUDS_COUNT];
@@ -77,6 +80,32 @@ public class GameScreen extends BaseScreen {
         }
 
     }
+
+    public static GameScreen getGameScreen() {
+        return gameScreen;
+    }
+
+    public static GameScreen getGameScreen(TextureAtlas atlas, ScreenController controller) {
+        gameScreen = new GameScreen(atlas, controller);
+        return gameScreen;
+    }
+
+    public TextureAtlas getAtlas() {
+        return atlas;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public BulletPool getBulletPool() {
+        return bulletPool;
+    }
+
+    public EnemyPool getEnemyPool() {
+        return enemyPool;
+    }
+
 
     private TextureAtlas.AtlasRegion getRandomCloudTexture() {
         String path = "cloud" + (int)((Math.random() * 4) + 1);
@@ -112,7 +141,7 @@ public class GameScreen extends BaseScreen {
         super.render(delta);
         update(delta);
         free();
-        enemyController.checkEnemies(delta, bulletPool);
+        enemyController.checkEnemies(delta);
         draw();
     }
 
@@ -130,10 +159,14 @@ public class GameScreen extends BaseScreen {
         batch.begin();
         background.draw(batch);
         for (Cloud cloud: cloudsBackground) {
+            batch.setColor(0.7f,0.7f,0.7f,1);
             cloud.draw(batch);
+            batch.setColor(1,1,1,1);
         }
         for (Cloud cloud: cloudsMiddle) {
+            batch.setColor(0.8f,0.8f,0.8f,1);
             cloud.draw(batch);
+            batch.setColor(1,1,1,1);
         }
         bulletPool.drawActiveSprites(batch);
         enemyController.drawActiveSprites(batch);

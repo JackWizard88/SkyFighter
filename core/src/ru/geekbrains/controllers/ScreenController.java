@@ -19,7 +19,7 @@ public class ScreenController {
     }
 
     public void setNewGameScreen() {
-        gameScreen = new GameScreen(atlas, this);
+        gameScreen = GameScreen.getGameScreen(atlas, this);
         menuScreen.getMenuButtonController().setGameExists(true);
         setGameScreen();
     }

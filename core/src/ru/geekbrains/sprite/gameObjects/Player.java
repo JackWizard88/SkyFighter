@@ -2,11 +2,10 @@ package ru.geekbrains.sprite.gameObjects;
 
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
-import ru.geekbrains.pool.BulletPool;
+import ru.geekbrains.screen.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -38,7 +37,6 @@ public class Player extends Sprite {
     long idShooting;
 
     //projectiles
-    private BulletPool bulletPool;
     private TextureRegion bulletRegion;
     private final float bulletV = 1f;
     private Vector2 dir;
@@ -60,13 +58,11 @@ public class Player extends Sprite {
     private static final float FALL_SPEED = 0.01f;
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    public Player(TextureAtlas atlas, BulletPool bulletPool) {
+    public Player(TextureAtlas atlas) {
         super(atlas.findRegion("plane3"), 1, 1, 1);
         shipSpeed = new Vector2();
         dir = new Vector2();
         bulletPos0 = new Vector2();
-        this.bulletPool = bulletPool;
-        bulletRegion = atlas.findRegion("bullet2");
         this.strBuilder = new StringBuilder();
         pos.set(-0.5f, 0);
         this.score = 0;
@@ -126,7 +122,8 @@ public class Player extends Sprite {
     }
 
     private void shoot() {
-        Bullet bullet = bulletPool.obtain();
+        Bullet bullet = GameScreen.getGameScreen().getBulletPool().obtain();
+        bulletRegion = GameScreen.getGameScreen().getAtlas().findRegion("bullet2");
         //смещение точки выстрела в зависимости от угла
         bulletPos0.set(pos.x + halfWidth * 0.95f, pos.y + getHeight() / 5 + getHeight() * (float) Math.sin(Math.toRadians(angle)));
         //поворот аектора направления полета снаряда
