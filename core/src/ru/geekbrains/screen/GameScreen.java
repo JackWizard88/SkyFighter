@@ -1,12 +1,13 @@
 package ru.geekbrains.screen;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import ru.geekbrains.controllers.EnemyController;
 import ru.geekbrains.controllers.ScreenController;
@@ -25,24 +26,22 @@ public class GameScreen extends BaseScreen {
     private static GameScreen gameScreen;
 
     //textures and atlas
-
     private Texture bg;
     private TextureAtlas atlas;
     private Background background;
     private Player player;
     private TextureAtlas.AtlasRegion cloudTextureRegion;
+
     //sounds
-
     private Music windSound;
-    //pools
 
+    //pools
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
-    //controllers
 
+    //controllers
     private EnemyController enemyController;
     //clouds
-
     private Cloud[] cloudsForeground;
     private Cloud[] cloudsMiddle;
     private Cloud[] cloudsBackground;

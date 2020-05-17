@@ -10,7 +10,8 @@ import ru.geekbrains.screen.GameScreen;
 
 public class Enemy extends Sprite {
 
-    public static final double MAX_ANGLE = 3f;
+    private static final int SCORE = 3;
+    private static final double MAX_ANGLE = 3f;
     private static final float STABILAZE_ANGLE = 0.2f;
     private Rect worldBounds;
     private Vector2 v;
@@ -29,7 +30,7 @@ public class Enemy extends Sprite {
         regions = new TextureRegion[1];
         v = new Vector2();
         grav1 = new Vector2();
-        this.health = 5;
+        this.health = 7;
         soundFlying = SoundController.getSoundEnemyFlying();
         soundExplosion = SoundController.getSoundEnemyExplosion();
         soundShooting = SoundController.getSoundEnemyShooting();
@@ -40,7 +41,7 @@ public class Enemy extends Sprite {
 
         if (isFalling) {
             if (angle < 60f) angle += 0.2f;
-            if (grav1.len() < 10f) grav1.sub(grav);
+            if (grav1.len() < 5f) grav1.sub(grav);
             v.add(grav1);
         } else {
 
@@ -109,7 +110,7 @@ public class Enemy extends Sprite {
         grav1.setZero();
         isFalling = false;
         angle = 0;
-        soundFlying.play(0.5f);
+        soundFlying.play(0.8f);
     }
 
     public boolean isFalling() {
@@ -122,6 +123,7 @@ public class Enemy extends Sprite {
             isFalling = true;
             soundExplosion.play(1f);
             soundFlying.stop();
+            GameScreen.getGameScreen().getPlayer().addScore(SCORE);
         }
     }
 }

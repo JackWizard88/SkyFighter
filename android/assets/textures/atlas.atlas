@@ -6,99 +6,106 @@ filter: Nearest,Nearest
 repeat: none
 bullet
   rotate: false
-  xy: 1028, 980
+  xy: 2, 774
   size: 947, 146
   orig: 947, 146
   offset: 0, 0
   index: -1
 bullet2
   rotate: false
-  xy: 1028, 832
+  xy: 2, 626
   size: 947, 146
   orig: 947, 146
   offset: 0, 0
   index: -1
 buttonContinue
   rotate: false
-  xy: 1028, 589
+  xy: 2, 84
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
 buttonExit
   rotate: false
-  xy: 1419, 750
+  xy: 2, 2
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
 buttonPause
   rotate: false
-  xy: 1979, 1960
+  xy: 951, 636
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 buttonStart
   rotate: false
-  xy: 2, 2
+  xy: 2, 166
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
 cloud1
   rotate: false
-  xy: 1504, 1476
+  xy: 1504, 1228
   size: 290, 176
   orig: 290, 176
   offset: 0, 0
   index: -1
 cloud2
   rotate: false
-  xy: 1504, 1654
+  xy: 2, 248
   size: 387, 162
   orig: 387, 162
   offset: 0, 0
   index: -1
 cloud3
   rotate: false
-  xy: 1504, 1292
+  xy: 1504, 1044
   size: 184, 182
   orig: 184, 182
   offset: 0, 0
   index: -1
 cloud4
   rotate: false
-  xy: 1028, 671
+  xy: 504, 465
   size: 389, 159
   orig: 389, 159
   offset: 0, 0
   index: -1
 explosion
   rotate: false
-  xy: 2, 1128
+  xy: 2, 922
   size: 1500, 896
   orig: 1500, 896
   offset: 0, 0
   index: -1
 plane3
   rotate: false
-  xy: 1504, 1818
-  size: 473, 206
-  orig: 473, 206
-  offset: 0, 0
-  index: -1
-plane4
-  rotate: false
-  xy: 2, 84
-  size: 1024, 520
-  orig: 1024, 520
+  xy: 951, 702
+  size: 500, 218
+  orig: 500, 218
   offset: 0, 0
   index: -1
 plane4f
   rotate: false
-  xy: 2, 606
-  size: 1024, 520
-  orig: 1024, 520
+  xy: 1504, 1406
+  size: 500, 191
+  orig: 500, 191
+  offset: 0, 0
+  index: -1
+plane5f
+  rotate: false
+  xy: 1504, 1599
+  size: 500, 219
+  orig: 500, 219
+  offset: 0, 0
+  index: -1
+plane6f
+  rotate: false
+  xy: 2, 412
+  size: 500, 212
+  orig: 500, 212
   offset: 0, 0
   index: -1

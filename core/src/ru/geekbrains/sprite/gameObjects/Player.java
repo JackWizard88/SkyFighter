@@ -6,6 +6,8 @@ import ru.geekbrains.screen.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -27,7 +29,6 @@ public class Player extends Sprite {
     private Vector2 shipSpeed;
     private int score;
     private int health;
-    private StringBuilder strBuilder;
 
     //sounds
     private Sound soundFlying;
@@ -42,6 +43,7 @@ public class Player extends Sprite {
     private Vector2 dir;
     private Vector2 bulletPos0;
     private float timer = 0f;
+    private float scoreTimer = 0f;
 
     //constants
     private static final float MARGIN = 0.05f;
@@ -63,7 +65,6 @@ public class Player extends Sprite {
         shipSpeed = new Vector2();
         dir = new Vector2();
         bulletPos0 = new Vector2();
-        this.strBuilder = new StringBuilder();
         pos.set(-0.5f, 0);
         this.score = 0;
         this.health = 3;
@@ -73,7 +74,7 @@ public class Player extends Sprite {
     }
 
     public void show() {
-        idSoundFlying = soundFlying.play();
+        idSoundFlying = soundFlying.play(0.9f);
         soundFlying.setLooping(idSoundFlying, true);
     }
 
@@ -95,7 +96,14 @@ public class Player extends Sprite {
         checkShooting(delta);
         planeControl(delta);
         checkBounds();
-        this.score += 1;
+
+        scoreTimer += delta;
+        if (scoreTimer >= 1f) {
+            this.score += 1;
+            scoreTimer = 0;
+            System.out.println(score);
+        }
+
         soundFlying.setPitch(idSoundFlying, 1 - (shipSpeed.x + shipSpeed.y)/6);
     }
 
@@ -265,5 +273,10 @@ public class Player extends Sprite {
             pos.y = worldBounds.getTop() - halfHeight;
             shipSpeed.y = -shipSpeed.y / 3;
         }
+    }
+
+    public void addScore(int amount) {
+        this.score += amount;
+        System.out.println(score);
     }
 }
