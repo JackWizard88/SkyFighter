@@ -1,8 +1,8 @@
 package ru.geekbrains.sprite.gameObjects;
 
 import ru.geekbrains.base.Sprite;
+import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.math.Rect;
-import ru.geekbrains.screen.GameScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
@@ -29,6 +29,8 @@ public class Player extends Sprite {
     private Vector2 shipSpeed;
     private int score;
     private int health;
+    private BitmapFont font;
+    private StringBuilder strBuilder;
 
     //sounds
     private Sound soundFlying;
@@ -62,12 +64,21 @@ public class Player extends Sprite {
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public Player(TextureAtlas atlas) {
         super(atlas.findRegion("plane3"), 1, 1, 1);
+
+        //GUI
+        strBuilder = new StringBuilder();
+        font = new BitmapFont();
+        font.setColor(Color.ORANGE);
+        font.getData().setScale(0.075f);
+
         shipSpeed = new Vector2();
         dir = new Vector2();
         bulletPos0 = new Vector2();
         pos.set(-0.5f, 0);
         this.score = 0;
         this.health = 3;
+
+        //Sounds
         soundFlying = Gdx.audio.newSound(Gdx.files.internal("sounds/flying1.mp3"));
         soundShooting = Gdx.audio.newSound(Gdx.files.internal("sounds/shooting1.mp3"));
         soundExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion1.mp3"));
@@ -91,11 +102,18 @@ public class Player extends Sprite {
         super.draw(batch);
     }
 
+    public void drawGUI(SpriteBatch batch) {
+        strBuilder.setLength(0);
+        strBuilder.append("SCORE: ").append(score).append("\nHP: ").append(health);
+        font.draw(batch, strBuilder, 0f, 0f);
+    }
+
     @Override
     public void update(float delta) {
         checkShooting(delta);
         planeControl(delta);
         checkBounds();
+        checkCollisions();
 
         scoreTimer += delta;
         if (scoreTimer >= 1f) {
@@ -119,6 +137,26 @@ public class Player extends Sprite {
 
     }
 
+    private void checkCollisions() {
+        for (Bullet bullet : ScreenController.getGameScreen().getBulletPool().getActiveObjects()) {
+            if (this.isMe(bullet.pos) && bullet.getOwner() != this) {
+                this.damage();
+                bullet.destroy();
+            }
+        }
+
+        for (Enemy enemy : ScreenController.getGameScreen().getEnemyPool().getActiveObjects()) {
+            if (!this.isOutside(enemy) && !enemy.isFalling()) {
+                this.damage();
+                enemy.kill();
+            }
+        }
+    }
+
+    private void damage() {
+        this.health -= 1;
+    }
+
     public void hide() {
         soundFlying.pause();
     }
@@ -130,8 +168,8 @@ public class Player extends Sprite {
     }
 
     private void shoot() {
-        Bullet bullet = GameScreen.getGameScreen().getBulletPool().obtain();
-        bulletRegion = GameScreen.getGameScreen().getAtlas().findRegion("bullet2");
+        Bullet bullet = ScreenController.getGameScreen().getBulletPool().obtain();
+        bulletRegion = ScreenController.getGameScreen().getAtlas().findRegion("bullet2");
         //смещение точки выстрела в зависимости от угла
         bulletPos0.set(pos.x + halfWidth * 0.95f, pos.y + getHeight() / 5 + getHeight() * (float) Math.sin(Math.toRadians(angle)));
         //поворот аектора направления полета снаряда

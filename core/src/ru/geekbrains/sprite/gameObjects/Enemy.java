@@ -4,9 +4,9 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.base.Sprite;
+import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.controllers.SoundController;
 import ru.geekbrains.math.Rect;
-import ru.geekbrains.screen.GameScreen;
 
 public class Enemy extends Sprite {
 
@@ -45,12 +45,12 @@ public class Enemy extends Sprite {
             v.add(grav1);
         } else {
 
-            if (GameScreen.getGameScreen().getPlayer().pos.y - pos.y > 0.05f && GameScreen.getGameScreen().getPlayer().pos.x - pos.x < -0.05f) {
+            if (ScreenController.getGameScreen().getPlayer().pos.y - pos.y > 0.05f && ScreenController.getGameScreen().getPlayer().pos.x - pos.x < -0.05f) {
                 v.add(grav);
                 if (angle > -MAX_ANGLE) {
                     angle -= 0.5f;
                 }
-            } else if (GameScreen.getGameScreen().getPlayer().pos.y - pos.y < -0.05f && GameScreen.getGameScreen().getPlayer().pos.x - pos.x < -0.05f) {
+            } else if (ScreenController.getGameScreen().getPlayer().pos.y - pos.y < -0.05f && ScreenController.getGameScreen().getPlayer().pos.x - pos.x < -0.05f) {
                 v.sub(grav);
                 if (angle < MAX_ANGLE) {
                     angle += 0.5f;
@@ -119,11 +119,20 @@ public class Enemy extends Sprite {
 
     public void damage() {
         this.health -= 1;
+        checkHealth();
+    }
+
+    public void kill() {
+        this.health = 0;
+        checkHealth();
+    }
+
+    public void checkHealth() {
         if (health <= 0) {
             isFalling = true;
             soundExplosion.play(1f);
             soundFlying.stop();
-            GameScreen.getGameScreen().getPlayer().addScore(SCORE);
+            ScreenController.getGameScreen().getPlayer().addScore(SCORE);
         }
     }
 }
