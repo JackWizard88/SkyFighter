@@ -77,7 +77,7 @@ public class PlayerPlane extends Sprite {
         bulletPos0 = new Vector2();
         pos.set(-0.5f, 0);
         this.score = 0;
-        this.health = 3;
+        this.health = 10;
 
         //Sounds
         soundFlying = Gdx.audio.newSound(Gdx.files.internal("sounds/flying1.mp3"));
