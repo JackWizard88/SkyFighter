@@ -16,7 +16,7 @@ import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.pool.EnemyPool;
 import ru.geekbrains.sprite.gameObjects.Background;
 import ru.geekbrains.sprite.gameObjects.Cloud;
-import ru.geekbrains.sprite.gameObjects.Player;
+import ru.geekbrains.sprite.gameObjects.PlayerPlane;
 
 public class GameScreen extends BaseScreen {
 
@@ -26,7 +26,7 @@ public class GameScreen extends BaseScreen {
     private Texture bg;
     private TextureAtlas atlas;
     private Background background;
-    private Player player;
+    private PlayerPlane player;
     private TextureAtlas.AtlasRegion cloudTextureRegion;
 
     //sounds
@@ -57,7 +57,7 @@ public class GameScreen extends BaseScreen {
         windSound = Gdx.audio.newMusic(Gdx.files.internal("sounds/wind.mp3"));
         windSound.setVolume(0.9f);
         background = new Background(bg);
-        player = new Player(atlas);
+        player = new PlayerPlane(atlas);
 
         cloudsForeground = new Cloud[FOREGROUND_CLOUDS_COUNT];
         cloudsMiddle = new Cloud[MIDDLE_CLOUDS_COUNT];
@@ -77,8 +77,14 @@ public class GameScreen extends BaseScreen {
 
     }
 
+    public static GameScreen getGameScreen() {
+        return gameScreen;
+    }
+
     public static GameScreen getGameScreen(TextureAtlas atlas, ScreenController controller) {
-        gameScreen = new GameScreen(atlas, controller);
+        if (gameScreen == null) {
+            gameScreen = new GameScreen(atlas, controller);
+        }
         return gameScreen;
     }
 
@@ -86,7 +92,7 @@ public class GameScreen extends BaseScreen {
         return atlas;
     }
 
-    public Player getPlayer() {
+    public PlayerPlane getPlayer() {
         return player;
     }
 
@@ -135,6 +141,7 @@ public class GameScreen extends BaseScreen {
         free();
         enemyController.checkEnemies(delta);
         draw();
+        checkHP();
     }
 
     private void update(float delta) {
@@ -168,7 +175,7 @@ public class GameScreen extends BaseScreen {
             cloud.draw(batch);
             batch.setColor(1,1,1,1);
         }
-//        player.drawGUI(batch);
+        player.drawGUI(batch);
         batch.end();
     }
 
@@ -213,5 +220,13 @@ public class GameScreen extends BaseScreen {
     public boolean keyUp(int keycode) {
         player.keyUp(keycode);
         return false;
+    }
+
+
+    private void checkHP() {
+        if (player.getHealth() <= 0) {
+            gameScreen = null;
+            controller.gameOver();
+        }
     }
 }

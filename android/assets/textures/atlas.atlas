@@ -4,14 +4,14 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-bullet
+bullet2
   rotate: false
   xy: 2, 774
   size: 947, 146
   orig: 947, 146
   offset: 0, 0
   index: -1
-bullet2
+bullet3
   rotate: false
   xy: 2, 626
   size: 947, 146
@@ -107,5 +107,19 @@ plane6f
   xy: 2, 412
   size: 500, 212
   orig: 500, 212
+  offset: 0, 0
+  index: -1
+playerPlaneBody
+  rotate: false
+  xy: 391, 380
+  size: 90, 30
+  orig: 90, 30
+  offset: 0, 0
+  index: -1
+playerPlanePropeller
+  rotate: false
+  xy: 504, 430
+  size: 55, 33
+  orig: 55, 33
   offset: 0, 0
   index: -1

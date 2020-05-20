@@ -7,18 +7,35 @@ import ru.geekbrains.base.Sprite;
 import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.controllers.SoundController;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.math.Rnd;
 
-public class Enemy extends Sprite {
+public class EnemyPlane extends Sprite {
 
     private static final int SCORE = 3;
-    private static final double MAX_ANGLE = 3f;
+    private static final double MAX_ANGLE = 5f;
     private static final float STABILAZE_ANGLE = 0.2f;
+    private float deltaHight;
     private Rect worldBounds;
     private Vector2 v;
     private final Vector2 grav = new Vector2(0, 0.0001f);
+    private final Vector2 move = new Vector2(0, 0.001f);
     private Vector2 grav1;
+    private Vector2 vertShift;
     private int health;
 
+    //timers
+    private float shootTimer = 0;
+    private float reloadTimer = 0;
+    private int shootingTurn = 0;
+
+    //bullets
+    private TextureRegion bulletRegion;
+    private Vector2 bulletPos0;
+    private final float bulletV = 0.75f;
+    private Vector2 dir;
+    private final int BULLET_TURN_COUNTER = 3;
+
+    //status
     private boolean isFalling = false;
 
     //sounds
@@ -26,14 +43,17 @@ public class Enemy extends Sprite {
     private Sound soundShooting;
     private Sound soundExplosion;
 
-    public Enemy() {
+    public EnemyPlane() {
         regions = new TextureRegion[1];
         v = new Vector2();
         grav1 = new Vector2();
+        vertShift = new Vector2();
+        bulletPos0 = new Vector2();
+        dir = new Vector2();
         this.health = 7;
         soundFlying = SoundController.getSoundEnemyFlying();
         soundExplosion = SoundController.getSoundEnemyExplosion();
-        soundShooting = SoundController.getSoundEnemyShooting();
+        soundShooting = SoundController.getSoundEnemyShootingTriple();
     }
 
     @Override
@@ -45,24 +65,27 @@ public class Enemy extends Sprite {
             v.add(grav1);
         } else {
 
-            if (ScreenController.getGameScreen().getPlayer().pos.y - pos.y > 0.05f && ScreenController.getGameScreen().getPlayer().pos.x - pos.x < -0.05f) {
-                v.add(grav);
+            shoot(delta);
+
+            deltaHight = ScreenController.getGameScreen().getPlayer().pos.y - pos.y;
+            vertShift.set(move).scl(deltaHight);
+
+            if (deltaHight > 0.005f && ScreenController.getGameScreen().getPlayer().pos.x - pos.x < -0.005f) {
+                v.add(vertShift);
                 if (angle > -MAX_ANGLE) {
-                    angle -= 0.5f;
+                    angle -= 0.25f;
                 }
-            } else if (ScreenController.getGameScreen().getPlayer().pos.y - pos.y < -0.05f && ScreenController.getGameScreen().getPlayer().pos.x - pos.x < -0.05f) {
-                v.sub(grav);
+            } else if (deltaHight < -0.005f && ScreenController.getGameScreen().getPlayer().pos.x - pos.x < -0.005f) {
+                v.add(vertShift);
                 if (angle < MAX_ANGLE) {
-                    angle += 0.5f;
+                    angle += 0.25f;
                 }
             } else {
-                if (angle > -STABILAZE_ANGLE && angle < STABILAZE_ANGLE) {
-                    angle = 0f;
-                } else if (angle > STABILAZE_ANGLE) {
+                if (angle > STABILAZE_ANGLE) {
                     angle -= STABILAZE_ANGLE;
                 } else if (angle < STABILAZE_ANGLE) {
                     angle += STABILAZE_ANGLE;
-                }
+                } else angle = 0f;
             }
 
 
@@ -70,7 +93,7 @@ public class Enemy extends Sprite {
 
         pos.mulAdd(v, delta);
 
-        if (isOutside(worldBounds)) {
+        if (pos.x < worldBounds.getLeft() - getHalfWidth() || pos.y < worldBounds.getBottom() - getHalfHeight()) {
             destroy();
         }
     }
@@ -133,6 +156,31 @@ public class Enemy extends Sprite {
             soundExplosion.play(1f);
             soundFlying.stop();
             ScreenController.getGameScreen().getPlayer().addScore(SCORE);
+        }
+    }
+
+    public void shoot(float delta) {
+        reloadTimer += delta;
+
+        if (reloadTimer >= Rnd.nextFloat(2f, 3f) && !isFalling) {
+
+            shootTimer += delta;
+
+            if (shootTimer >= 0.1f) {
+                shootingTurn++;
+                shootTimer = 0;
+                soundShooting.play();
+                Bullet bullet = ScreenController.getGameScreen().getBulletPool().obtain();
+                bulletRegion = ScreenController.getGameScreen().getAtlas().findRegion("bullet3");
+                bulletPos0.set(pos.x - halfWidth * 0.95f, pos.y + getHeight() / 5 + getHeight() * (float) Math.sin(Math.toRadians(angle)));
+                dir.set((float) Math.cos(Math.toRadians(angle + 180)), (float) Math.sin(Math.toRadians(180 + angle))).nor();
+                bullet.set(this, bulletRegion, bulletPos0, bulletV, angle, dir, 0.0075f, worldBounds, 1);
+            }
+
+            if (shootingTurn >= BULLET_TURN_COUNTER) {
+                reloadTimer = 0;
+                shootingTurn = 0;
+            }
         }
     }
 }

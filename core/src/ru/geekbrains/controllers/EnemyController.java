@@ -7,7 +7,7 @@ import ru.geekbrains.math.Rect;
 import ru.geekbrains.math.Rnd;
 import ru.geekbrains.screen.GameScreen;
 import ru.geekbrains.sprite.gameObjects.Bullet;
-import ru.geekbrains.sprite.gameObjects.Enemy;
+import ru.geekbrains.sprite.gameObjects.EnemyPlane;
 
 public class EnemyController {
 
@@ -29,13 +29,13 @@ public class EnemyController {
         enemyRegion1 = gameScreen.getAtlas().findRegion("plane4f");
         enemyRegion2 = gameScreen.getAtlas().findRegion("plane5f");
         enemyRegion3 = gameScreen.getAtlas().findRegion("plane6f");
-        velocity = new Vector2(-0.15f, 0);
+        velocity = new Vector2(-0.2f, 0);
     }
 
     public void checkEnemies(float delta) {
         //проверка попадания
-        for (Enemy enemy : gameScreen.getEnemyPool().getActiveObjects()) {
-            checkCollisions(enemy);
+        for (EnemyPlane enemyPlane : gameScreen.getEnemyPool().getActiveObjects()) {
+            checkCollisions(enemyPlane);
         }
 
         //спаунер врагов в случайной координате по таймеру
@@ -43,8 +43,8 @@ public class EnemyController {
         if (timerSpawn >= Rnd.nextFloat(2f, 4f)) {
             timerSpawn = 0;
             if (gameScreen.getEnemyPool().getSize() < ENEMY_LIMIT) {
-                Enemy enemy = gameScreen.getEnemyPool().obtain();
-                enemy.set(getRandomEnemyRegion(), getSpawnCoordinates(enemy), velocity, 7, 0.066f, worldBounds);
+                EnemyPlane enemyPlane = gameScreen.getEnemyPool().obtain();
+                enemyPlane.set(getRandomEnemyRegion(), getSpawnCoordinates(enemyPlane), velocity, 7, 0.066f, worldBounds);
             }
         }
     }
@@ -66,36 +66,37 @@ public class EnemyController {
         }
     }
 
-    private void checkCollisions(Enemy enemy) {
+    private void checkCollisions(EnemyPlane enemyPlane) {
         for (Bullet bullet : gameScreen.getBulletPool().getActiveObjects()) {
-            if (enemy.isMe(bullet.pos) && !enemy.isFalling()) {
-                enemy.damage();
+            if (enemyPlane.isMe(bullet.pos) && !enemyPlane.isFalling() && bullet.getOwner() != enemyPlane) {
+                enemyPlane.damage();
+                SoundController.getSoundHit().play();
                 bullet.destroy();
             }
         }
     }
 
     public void resize() {
-        for (Enemy enemy : gameScreen.getEnemyPool().getActiveObjects()) {
-            enemy.resize(worldBounds);
+        for (EnemyPlane enemyPlane : gameScreen.getEnemyPool().getActiveObjects()) {
+            enemyPlane.resize(worldBounds);
         }
     }
 
     public void hide() {
-        for (Enemy enemy : gameScreen.getEnemyPool().getActiveObjects()) {
-            enemy.hide();
+        for (EnemyPlane enemyPlane : gameScreen.getEnemyPool().getActiveObjects()) {
+            enemyPlane.hide();
         }
     }
 
     public void dispose() {
-        for (Enemy enemy : gameScreen.getEnemyPool().getActiveObjects()) {
-            enemy.dispose();
+        for (EnemyPlane enemyPlane : gameScreen.getEnemyPool().getActiveObjects()) {
+            enemyPlane.dispose();
         }
     }
 
-    private Vector2 getSpawnCoordinates(Enemy enemy) {
-        spawnCoordinates.x = worldBounds.getRight();
-        spawnCoordinates.y = Rnd.nextFloat(worldBounds.getBottom() + enemy.getHalfHeight(), worldBounds.getTop() - enemy.getHalfHeight());
+    private Vector2 getSpawnCoordinates(EnemyPlane enemyPlane) {
+        spawnCoordinates.x = worldBounds.getRight() + 2 * enemyPlane.getWidth();
+        spawnCoordinates.y = Rnd.nextFloat(worldBounds.getBottom() + enemyPlane.getHalfHeight(), worldBounds.getTop() - enemyPlane.getHalfHeight());
         return spawnCoordinates;
     }
 

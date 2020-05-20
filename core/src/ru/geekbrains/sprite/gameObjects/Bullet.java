@@ -12,11 +12,9 @@ public class Bullet extends Sprite {
     private Vector2 dir;
     private float velocity;
     private Vector2 grav;
-    private Vector2 friction;
     private int damage;
     private Sprite owner;
-    private final Vector2 grav1 = new Vector2(0, -0.001f);
-    private final Vector2 friction1 = new Vector2(-0.00001f, 0);
+    private final Vector2 grav1 = new Vector2(0, -0.00001f);
     private final Vector2 correction = new Vector2(0, 0.05f);
 
     public Bullet() {
@@ -24,16 +22,14 @@ public class Bullet extends Sprite {
         v = new Vector2();
         dir = new Vector2();
         grav = new Vector2();
-        friction = new Vector2();
     }
 
     @Override
     public void update(float delta) {
-        v.set(dir.scl(velocity));
         grav.add(grav1);
-        friction.add(friction1);
-        v.add(grav).add(friction);
+        v.add(grav);
         pos.mulAdd(v, delta);
+
         if (isOutside(worldBounds)) {
             destroy();
         }
@@ -60,7 +56,7 @@ public class Bullet extends Sprite {
         this.worldBounds = worldBounds;
         this.damage = damage;
         grav.setZero();
-        friction.setZero();
+        v.set(dir.scl(velocity));
     }
 
     public int getDamage() {

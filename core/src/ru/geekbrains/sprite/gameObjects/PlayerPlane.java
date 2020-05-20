@@ -2,18 +2,18 @@ package ru.geekbrains.sprite.gameObjects;
 
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.controllers.ScreenController;
+import ru.geekbrains.controllers.SoundController;
 import ru.geekbrains.math.Rect;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class Player extends Sprite {
+public class PlayerPlane extends Sprite {
 
     //worldBounds
     private Rect worldBounds;
@@ -29,25 +29,27 @@ public class Player extends Sprite {
     private Vector2 shipSpeed;
     private int score;
     private int health;
+    private Propeller propeller;
+
     private BitmapFont font;
     private StringBuilder strBuilder;
-
     //sounds
+
     private Sound soundFlying;
     private Sound soundShooting;
     private Sound soundExplosion;
     long idSoundFlying;
     long idShooting;
-
     //projectiles
+
     private TextureRegion bulletRegion;
     private final float bulletV = 1f;
     private Vector2 dir;
     private Vector2 bulletPos0;
     private float timer = 0f;
     private float scoreTimer = 0f;
-
     //constants
+
     private static final float MARGIN = 0.05f;
     private final float SHIP_MAXSPEED = 0.5f;
     private final float SHIP_SPEED_STEP_BACK = 0.02f;
@@ -57,19 +59,18 @@ public class Player extends Sprite {
     private final float SHIP_BREAK =  0.005f;
     private final float SHIP_SPEED_UP = 0.3f;
     private final float SHIP_SPEED_DOWN = -0.75f;
-    private static final float STABILAZE_ANGLE = 0.3f;
+    private static final float STABILIZE_ANGLE = 0.3f;
     private static final float MAX_ANGLE = 10f;
     private static final float FALL_SPEED = 0.01f;
-
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    public Player(TextureAtlas atlas) {
-        super(atlas.findRegion("plane3"), 1, 1, 1);
+
+    public PlayerPlane(TextureAtlas atlas) {
+        super(atlas.findRegion("playerPlaneBody"), 1, 1, 1);
 
         //GUI
         strBuilder = new StringBuilder();
-        font = new BitmapFont();
-        font.setColor(Color.ORANGE);
-        font.getData().setScale(0.075f);
+        font = new BitmapFont(Gdx.files.internal("fonts/font02.fnt"));
+        font.getData().setScale(0.1f);
 
         shipSpeed = new Vector2();
         dir = new Vector2();
@@ -82,16 +83,27 @@ public class Player extends Sprite {
         soundFlying = Gdx.audio.newSound(Gdx.files.internal("sounds/flying1.mp3"));
         soundShooting = Gdx.audio.newSound(Gdx.files.internal("sounds/shooting1.mp3"));
         soundExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion1.mp3"));
+
+        propeller = new Propeller(atlas.findRegion("playerPlanePropeller"), 1, 11, 11, this);
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getHealth() {
+        return health;
     }
 
     public void show() {
-        idSoundFlying = soundFlying.play(0.9f);
+        idSoundFlying = soundFlying.play(0.8f);
         soundFlying.setLooping(idSoundFlying, true);
     }
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.075f);
+        setHeightProportion(0.05f);
+        propeller.resize(worldBounds);
         this.worldBounds = worldBounds;
         soundFlying.resume();
     }
@@ -99,6 +111,7 @@ public class Player extends Sprite {
     @Override
     public void draw(SpriteBatch batch) {
         update(Gdx.graphics.getDeltaTime());
+        propeller.draw(batch);
         super.draw(batch);
     }
 
@@ -114,6 +127,7 @@ public class Player extends Sprite {
         planeControl(delta);
         checkBounds();
         checkCollisions();
+        propeller.update(delta);
 
         scoreTimer += delta;
         if (scoreTimer >= 1f) {
@@ -141,14 +155,15 @@ public class Player extends Sprite {
         for (Bullet bullet : ScreenController.getGameScreen().getBulletPool().getActiveObjects()) {
             if (this.isMe(bullet.pos) && bullet.getOwner() != this) {
                 this.damage();
+                SoundController.getSoundHit().play();
                 bullet.destroy();
             }
         }
 
-        for (Enemy enemy : ScreenController.getGameScreen().getEnemyPool().getActiveObjects()) {
-            if (!this.isOutside(enemy) && !enemy.isFalling()) {
+        for (EnemyPlane enemyPlane : ScreenController.getGameScreen().getEnemyPool().getActiveObjects()) {
+            if (!this.isOutside(enemyPlane) && !enemyPlane.isFalling()) {
                 this.damage();
-                enemy.kill();
+                enemyPlane.kill();
             }
         }
     }
@@ -159,6 +174,8 @@ public class Player extends Sprite {
 
     public void hide() {
         soundFlying.pause();
+        soundShooting.pause();
+        soundExplosion.pause();
     }
 
     public void dispose() {
@@ -174,7 +191,7 @@ public class Player extends Sprite {
         bulletPos0.set(pos.x + halfWidth * 0.95f, pos.y + getHeight() / 5 + getHeight() * (float) Math.sin(Math.toRadians(angle)));
         //поворот аектора направления полета снаряда
         dir.set((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle))).nor();
-        bullet.set(this, bulletRegion, bulletPos0, bulletV, angle, dir, 0.01f, worldBounds, 1);
+        bullet.set(this, bulletRegion, bulletPos0, bulletV, angle, dir, 0.0075f, worldBounds, 1);
     }
 
     @Override
@@ -250,12 +267,12 @@ public class Player extends Sprite {
             }
         } else {
 
-            if (angle > -STABILAZE_ANGLE && angle < STABILAZE_ANGLE) {
+            if (angle > -STABILIZE_ANGLE && angle < STABILIZE_ANGLE) {
                 angle = 0f;
-            } else if (angle > STABILAZE_ANGLE) {
-                angle -= STABILAZE_ANGLE;
-            } else if (angle < STABILAZE_ANGLE) {
-                angle += STABILAZE_ANGLE;
+            } else if (angle > STABILIZE_ANGLE) {
+                angle -= STABILIZE_ANGLE;
+            } else if (angle < STABILIZE_ANGLE) {
+                angle += STABILIZE_ANGLE;
             }
         }
 

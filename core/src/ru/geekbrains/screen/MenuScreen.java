@@ -21,6 +21,7 @@ public class MenuScreen extends BaseScreen {
     private Music menuMusic;
 
     private Background background;
+
     public MenuScreen(TextureAtlas atlas, ScreenController controller) {
         super(controller);
         this.atlas = atlas;
