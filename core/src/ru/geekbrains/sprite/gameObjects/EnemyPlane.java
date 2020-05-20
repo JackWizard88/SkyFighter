@@ -12,13 +12,13 @@ import ru.geekbrains.math.Rnd;
 public class EnemyPlane extends Sprite {
 
     private static final int SCORE = 3;
-    private static final double MAX_ANGLE = 5f;
+    private static final double MAX_ANGLE = 3f;
     private static final float STABILAZE_ANGLE = 0.2f;
     private float deltaHight;
     private Rect worldBounds;
     private Vector2 v;
-    private final Vector2 grav = new Vector2(0, 0.0001f);
-    private final Vector2 move = new Vector2(0, 0.001f);
+    private final Vector2 grav = new Vector2(0, 0.00005f);
+    private final Vector2 move = new Vector2(0, 0.1f);
     private Vector2 grav1;
     private Vector2 vertShift;
     private int health;
@@ -60,38 +60,38 @@ public class EnemyPlane extends Sprite {
     public void update(float delta) {
 
         if (isFalling) {
-            if (angle < 60f) angle += 0.2f;
+            if (angle < 60f) angle += 0.5f;
             if (grav1.len() < 5f) grav1.sub(grav);
             v.add(grav1);
         } else {
 
-            shoot(delta);
+            if (!passedBy()) {
+                shoot(delta);
 
-            deltaHight = ScreenController.getGameScreen().getPlayer().pos.y - pos.y;
-            vertShift.set(move).scl(deltaHight);
+                deltaHight = ScreenController.getGameScreen().getPlayer().pos.y - pos.y;
+                vertShift.set(move).scl(deltaHight);
 
-            if (deltaHight > 0.005f && ScreenController.getGameScreen().getPlayer().pos.x - pos.x < -0.005f) {
-                v.add(vertShift);
-                if (angle > -MAX_ANGLE) {
-                    angle -= 0.25f;
+                if (deltaHight > 0.001f) {
+                    if (angle > -MAX_ANGLE) {
+                        angle -= 0.25f;
+                    }
+                } else if (deltaHight < -0.001f) {
+                    if (angle < MAX_ANGLE) {
+                        angle += 0.25f;
+                    }
+                } else {
+                    if (angle > STABILAZE_ANGLE) {
+                        angle -= STABILAZE_ANGLE;
+                    } else if (angle < STABILAZE_ANGLE) {
+                        angle += STABILAZE_ANGLE;
+                    } else angle = 0f;
                 }
-            } else if (deltaHight < -0.005f && ScreenController.getGameScreen().getPlayer().pos.x - pos.x < -0.005f) {
-                v.add(vertShift);
-                if (angle < MAX_ANGLE) {
-                    angle += 0.25f;
-                }
-            } else {
-                if (angle > STABILAZE_ANGLE) {
-                    angle -= STABILAZE_ANGLE;
-                } else if (angle < STABILAZE_ANGLE) {
-                    angle += STABILAZE_ANGLE;
-                } else angle = 0f;
             }
-
-
+            pos.mulAdd(vertShift, delta);
         }
 
         pos.mulAdd(v, delta);
+
 
         if (pos.x < worldBounds.getLeft() - getHalfWidth() || pos.y < worldBounds.getBottom() - getHalfHeight()) {
             destroy();
@@ -182,5 +182,9 @@ public class EnemyPlane extends Sprite {
                 shootingTurn = 0;
             }
         }
+    }
+
+    private boolean passedBy() {
+        return ScreenController.getGameScreen().getPlayer().pos.x - pos.x > 0;
     }
 }

@@ -25,7 +25,7 @@ public class Propeller extends Sprite {
     public void update(float delta) {
         super.update(delta);
         this.angle = owner.getAngle();
-        shift.set(owner.getHalfWidth() * 1.05f,  owner.getHeight() * (float) Math.sin(Math.toRadians(angle)) - getHeight() / 6);
+        shift.set(owner.getHalfWidth() * 1.05f, 2 * owner.getHeight() * (float) Math.sin(Math.toRadians(angle)) - getHeight() / 6);
         this.pos.set(owner.pos).add(shift);
 
             frame = (frame + 1) % frames;
