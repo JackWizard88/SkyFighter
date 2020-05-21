@@ -35,6 +35,9 @@ public class EnemyPlane extends Sprite {
     private Vector2 dir;
     private final int BULLET_TURN_COUNTER = 3;
 
+    //explosion
+    private TextureRegion explosionRegion;
+
     //status
     private boolean isFalling = false;
 
@@ -152,6 +155,7 @@ public class EnemyPlane extends Sprite {
 
     public void checkHealth() {
         if (health <= 0) {
+            explode();
             isFalling = true;
             soundExplosion.play(1f);
             soundFlying.stop();
@@ -186,5 +190,11 @@ public class EnemyPlane extends Sprite {
 
     private boolean passedBy() {
         return ScreenController.getGameScreen().getPlayer().pos.x - pos.x > 0;
+    }
+
+    private void explode() {
+        Explosion explosion = ScreenController.getGameScreen().getExplosionPool().obtain();
+        explosionRegion = ScreenController.getGameScreen().getAtlas().findRegion("explosion");
+        explosion.set(this, explosionRegion, 2, 4, 8, 0.1f );
     }
 }

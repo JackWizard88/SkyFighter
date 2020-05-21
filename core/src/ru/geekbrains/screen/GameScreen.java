@@ -14,6 +14,7 @@ import ru.geekbrains.controllers.SoundController;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.pool.EnemyPool;
+import ru.geekbrains.pool.ExplosionPool;
 import ru.geekbrains.sprite.gameObjects.Background;
 import ru.geekbrains.sprite.gameObjects.Cloud;
 import ru.geekbrains.sprite.gameObjects.PlayerPlane;
@@ -35,6 +36,7 @@ public class GameScreen extends BaseScreen {
     //pools
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
+    private ExplosionPool explosionPool;
 
     //controllers
     private EnemyController enemyController;
@@ -50,6 +52,7 @@ public class GameScreen extends BaseScreen {
         super(controller);
         this.atlas = atlas;
         SoundController.getSoundController();
+        explosionPool = new ExplosionPool();
         bulletPool = new BulletPool();
         enemyPool = new EnemyPool();
         enemyController = new EnemyController(this, worldBounds);
@@ -104,6 +107,9 @@ public class GameScreen extends BaseScreen {
         return enemyPool;
     }
 
+    public ExplosionPool getExplosionPool() {
+        return explosionPool;
+    }
 
     private TextureAtlas.AtlasRegion getRandomCloudTexture() {
         String path = "cloud" + (int)((Math.random() * 4) + 1);
@@ -147,11 +153,13 @@ public class GameScreen extends BaseScreen {
     private void update(float delta) {
         bulletPool.updateActiveSprites(delta);
         enemyController.updateActiveSprites(delta);
+        explosionPool.updateActiveSprites(delta);
     }
 
     private void free() {
         bulletPool.freeAllDestroyed();
         enemyController.freeAllDestroyed();
+        explosionPool.freeAllDestroyed();
     }
 
     public void draw() {
@@ -170,6 +178,7 @@ public class GameScreen extends BaseScreen {
         bulletPool.drawActiveSprites(batch);
         enemyController.drawActiveSprites(batch);
         player.draw(batch);
+        explosionPool.drawActiveSprites(batch);
         for (Cloud cloud: cloudsForeground) {
             batch.setColor(1,1,1,0.93f);
             cloud.draw(batch);
@@ -195,6 +204,7 @@ public class GameScreen extends BaseScreen {
         windSound.dispose();
         enemyPool.dispose();
         bulletPool.dispose();
+        explosionPool.dispose();
     }
 
     @Override
