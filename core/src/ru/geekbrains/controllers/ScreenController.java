@@ -16,7 +16,7 @@ public class ScreenController {
     private static ScreenController instance;
 
     private ScreenController(StarFighter starFighter) {
-//        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         this.atlas = new TextureAtlas("textures/atlas.atlas");
         this.menuScreen = new MenuScreen(atlas, this);
         this.game = starFighter;

@@ -13,12 +13,13 @@ public class EnemyController {
 
     private GameScreen gameScreen;
 
-    private final int ENEMY_LIMIT = 3;
+    private int ENEMY_LIMIT = 3;
     private TextureRegion enemyRegion;
     private Rect worldBounds;
     private Vector2 spawnCoordinates;
     private Vector2 velocity;
     private float timerSpawn = 0;
+    private int playerScore;
 
     public EnemyController(GameScreen gameScreen, Rect worldBounds) {
         this.gameScreen = gameScreen;
@@ -94,10 +95,22 @@ public class EnemyController {
     }
 
     private int getBulletTurnLength() {
-       if (ScreenController.getGameScreen().getPlayer().getScore() < 150) {
+        playerScore = ScreenController.getGameScreen().getPlayer().getScore();
+       if (playerScore < 150) {
            return 3;
-       } else if (ScreenController.getGameScreen().getPlayer().getScore() >= 150 && ScreenController.getGameScreen().getPlayer().getScore() < 250) {
+       } else if (playerScore >= 150 && playerScore < 300) {
            return 4;
-       } else return 5;
+       } else if (playerScore >= 300 && playerScore < 500) {
+           ENEMY_LIMIT = 4;
+           return 5;
+       } else if (playerScore >= 500 && playerScore < 700) {
+           return 6;
+       } else if (playerScore >= 700) {
+           ENEMY_LIMIT = 5;
+           return 7;
+       } else if (playerScore >= 1000) {
+           ENEMY_LIMIT = 6;
+           return 8;
+       } else return 1;
     }
 }

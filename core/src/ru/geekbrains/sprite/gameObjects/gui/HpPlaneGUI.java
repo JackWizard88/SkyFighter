@@ -17,12 +17,12 @@ public class HpPlaneGUI extends Sprite {
 
     public void draw(SpriteBatch batch, int i) {
         super.draw(batch);
-        pos.set(worldBounds.getLeft() + 0.1f + (MARGIN + getWidth()) * i, worldBounds.getTop() - MARGIN - getHalfHeight());
+        pos.set(worldBounds.getLeft() + 0.065f + (MARGIN + getWidth()) * i, worldBounds.getTop() - MARGIN - getHalfHeight());
     }
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.05f);
+        setHeightProportion(0.03f);
         this.worldBounds = worldBounds;
         super.resize(worldBounds);
     }

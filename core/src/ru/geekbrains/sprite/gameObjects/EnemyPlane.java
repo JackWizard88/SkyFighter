@@ -25,7 +25,7 @@ public class EnemyPlane extends Sprite {
     private int health;
     private Vector2 fightingPosition;
     private Vector2 rallyingDirection;
-    private final float RALLYING_SPEED = 0.1f;
+    private final float RALLYING_SPEED = 0.15f;
 
     //timers
     private float shootTimer = 0;
@@ -35,7 +35,7 @@ public class EnemyPlane extends Sprite {
     //bullets
     private TextureRegion bulletRegion;
     private Vector2 bulletPos0;
-    private final float bulletV = 0.75f;
+    private final float bulletV = 1f;
     private Vector2 dir;
     private int BULLET_TURN_COUNTER;
 
@@ -153,7 +153,7 @@ public class EnemyPlane extends Sprite {
         isActive = false;
         angle = 0;
         soundFlying.play(0.8f);
-        fightingPosition.set(Rnd.nextFloat(worldBounds.getRight() - 0.25f, worldBounds.getRight() - getHalfWidth()), Rnd.nextFloat(pos.y - 0.2f, pos.y + 0.2f));
+        fightingPosition.set(Rnd.nextFloat(worldBounds.getRight() - 0.3f, worldBounds.getRight() - getWidth()), Rnd.nextFloat(pos.y - 0.1f, pos.y + 0.1f));
     }
 
     public boolean isFalling() {
@@ -191,7 +191,7 @@ public class EnemyPlane extends Sprite {
 
             shootTimer += delta;
 
-            if (shootTimer >= 0.05f) {
+            if (shootTimer >= 0.1f) {
                 shootingTurn++;
                 shootTimer = 0;
                 soundShooting.play();

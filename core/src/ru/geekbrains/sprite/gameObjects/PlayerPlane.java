@@ -78,7 +78,6 @@ public class PlayerPlane extends Sprite {
 
         strBuilder = new StringBuilder();
         font = new BitmapFont(Gdx.files.internal("fonts/font02.fnt"));
-        font.getData().setScale(0.1f);
 
         shipSpeed = new Vector2();
         dir = new Vector2();
@@ -118,6 +117,7 @@ public class PlayerPlane extends Sprite {
         soundFlying.resume();
         hp.resize(worldBounds);
         hpPlane.resize(worldBounds);
+        font.getData().setScale(0.05f);
     }
 
     @Override
@@ -134,7 +134,7 @@ public class PlayerPlane extends Sprite {
         }
 //        strBuilder.setLength(0);
 //        strBuilder.append("SCORE: ").append(score).append("\nHP: ").append(health);
-//        font.draw(batch, strBuilder, 0f, 0f);
+//        font.draw(batch, strBuilder,-0.5f, -0.5f);
     }
 
     @Override

@@ -20,7 +20,7 @@ public class HpGUI extends Sprite {
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.05f);
+        setHeightProportion(0.03f);
         pos.set(worldBounds.getLeft() + MARGIN + getHalfHeight(), worldBounds.getTop() - getHalfHeight() - MARGIN);
         super.resize(worldBounds);
     }
