@@ -150,7 +150,7 @@ public class EnemyPlane extends Sprite {
         isActive = false;
         angle = 0;
         soundFlying.play(0.8f);
-        fightingPosition.set(Rnd.nextFloat(worldBounds.getRight() - 0.25f, worldBounds.getRight()), Rnd.nextFloat(pos.y - 0.2f, pos.y + 0.2f));
+        fightingPosition.set(Rnd.nextFloat(worldBounds.getRight() - 0.25f, worldBounds.getRight() - getHalfWidth()), Rnd.nextFloat(pos.y - 0.2f, pos.y + 0.2f));
     }
 
     public boolean isFalling() {
@@ -196,8 +196,8 @@ public class EnemyPlane extends Sprite {
                 bulletRegion = ScreenController.getGameScreen().getAtlas().findRegion("bullets");
                 gunPosition.set(0 - getHalfWidth() / 4, getHalfHeight() / 2);
                 bulletPos0.set(pos).add(gunPosition);
-                dir.set((float) Math.cos(Math.toRadians(angle + 180)), (float) Math.sin(Math.toRadians(180 + angle))).nor();
-                bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, angle, dir, -0.003f, worldBounds, 1);
+                dir.set(ScreenController.getGameScreen().getPlayer().pos).sub(pos).nor();
+                bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, dir.angle(), dir, 0.003f, worldBounds, 1);
             }
 
             if (shootingTurn >= BULLET_TURN_COUNTER) {
