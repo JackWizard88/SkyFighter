@@ -56,7 +56,8 @@ public class EnemyController {
         }
     }
 
-    public void resize() {
+    public void resize(Rect worldBounds) {
+        this.worldBounds = worldBounds;
         for (EnemyPlane enemyPlane : gameScreen.getEnemyPool().getActiveObjects()) {
             enemyPlane.resize(worldBounds);
         }

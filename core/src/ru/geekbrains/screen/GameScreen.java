@@ -133,7 +133,7 @@ public class GameScreen extends BaseScreen {
         for (Cloud cloud: cloudsMiddle) {
             cloud.resize(worldBounds);
         }
-        enemyController.resize();
+        enemyController.resize(worldBounds);
         player.resize(worldBounds);
         for (Cloud cloud: cloudsForeground) {
             cloud.resize(worldBounds);

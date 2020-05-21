@@ -23,6 +23,9 @@ public class EnemyPlane extends Sprite {
     private Vector2 grav1;
     private Vector2 vertShift;
     private int health;
+    private Vector2 fightingPosition;
+    private Vector2 rallyingDirection;
+    private final float RALLYING_SPEED = 0.1f;
 
     //timers
     private float shootTimer = 0;
@@ -41,6 +44,7 @@ public class EnemyPlane extends Sprite {
 
     //status
     private boolean isFalling = false;
+    private boolean isActive = false;
 
     //sounds
     private Sound soundFlying;
@@ -54,6 +58,8 @@ public class EnemyPlane extends Sprite {
         vertShift = new Vector2();
         bulletPos0 = new Vector2();
         gunPosition = new Vector2();
+        fightingPosition = new Vector2();
+        rallyingDirection = new Vector2();
         dir = new Vector2();
         this.health = 7;
         soundFlying = SoundController.getSoundEnemyFlying();
@@ -64,7 +70,9 @@ public class EnemyPlane extends Sprite {
     @Override
     public void update(float delta) {
 
-        if (isFalling) {
+        if (!isActive) {
+            Rallying(delta);
+        } else if (isFalling) {
             if (angle > -60f) angle -= 0.5f;
             if (grav1.len() < 5f) grav1.sub(grav);
             v.add(grav1);
@@ -104,10 +112,11 @@ public class EnemyPlane extends Sprite {
         }
     }
 
-    public void resize() {
+    public void resize(Rect worldBounds) {
         soundShooting.resume();
         soundFlying.resume();
         soundExplosion.resume();
+        this.worldBounds = worldBounds;
     }
 
     public void hide() {
@@ -138,12 +147,18 @@ public class EnemyPlane extends Sprite {
         this.worldBounds = worldBounds;
         grav1.setZero();
         isFalling = false;
+        isActive = false;
         angle = 0;
         soundFlying.play(0.8f);
+        fightingPosition.set(Rnd.nextFloat(worldBounds.getRight() - 0.25f, worldBounds.getRight()), Rnd.nextFloat(pos.y - 0.2f, pos.y + 0.2f));
     }
 
     public boolean isFalling() {
         return isFalling;
+    }
+
+    public boolean isActive() {
+        return isActive;
     }
 
     public void damage() {
@@ -199,6 +214,13 @@ public class EnemyPlane extends Sprite {
     private void explode() {
         Explosion explosion = ScreenController.getGameScreen().getExplosionPool().obtain();
         explosionRegion = ScreenController.getGameScreen().getAtlas().findRegion("explosion");
-        explosion.set(this, explosionRegion, 2, 5, 9, 0.2f );
+        explosion.set(this, explosionRegion, 2, 5, 9, 0.2f);
+    }
+
+    private void Rallying(float delta) {
+        if (fightingPosition.dst2(pos) > 0.01f) {
+            rallyingDirection.set(fightingPosition).sub(pos).nor();
+            pos.mulAdd((rallyingDirection).scl(RALLYING_SPEED), delta);
+        } else isActive = true;
     }
 }
