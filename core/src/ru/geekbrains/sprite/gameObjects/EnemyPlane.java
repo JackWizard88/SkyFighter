@@ -195,6 +195,6 @@ public class EnemyPlane extends Sprite {
     private void explode() {
         Explosion explosion = ScreenController.getGameScreen().getExplosionPool().obtain();
         explosionRegion = ScreenController.getGameScreen().getAtlas().findRegion("explosion");
-        explosion.set(this, explosionRegion, 2, 4, 8, 0.1f );
+        explosion.set(this, explosionRegion, 2, 5, 9, 0.2f );
     }
 }

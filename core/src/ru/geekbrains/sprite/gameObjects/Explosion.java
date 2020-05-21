@@ -33,7 +33,7 @@ public class Explosion extends Sprite {
 
         timer += delta;
 
-        pos.set(owner.pos);
+        pos.set(owner.pos.x, owner.pos.y + owner.getHalfHeight());
 
         if (timer >= 0.1f) {
             if (frame < regions.length - 1) {

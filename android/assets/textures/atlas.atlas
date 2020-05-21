@@ -6,112 +6,105 @@ filter: Nearest,Nearest
 repeat: none
 bullets
   rotate: false
-  xy: 2006, 1570
+  xy: 1993, 1696
   size: 32, 6
   orig: 32, 6
   offset: 0, 0
   index: -1
 buttonContinue
   rotate: false
-  xy: 2, 2
+  xy: 504, 445
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
 buttonExit
   rotate: false
-  xy: 1504, 1112
+  xy: 1604, 1458
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
-buttonPause
-  rotate: false
-  xy: 1893, 1292
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
 buttonStart
   rotate: false
-  xy: 1006, 598
+  xy: 2, 186
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
 cloud1
   rotate: false
-  xy: 504, 309
+  xy: 1006, 724
   size: 290, 176
   orig: 290, 176
   offset: 0, 0
   index: -1
 cloud2
   rotate: false
-  xy: 1504, 1194
+  xy: 1604, 1540
   size: 387, 162
   orig: 387, 162
   offset: 0, 0
   index: -1
 cloud3
   rotate: false
-  xy: 1504, 928
+  xy: 2, 2
   size: 184, 182
   orig: 184, 182
   offset: 0, 0
   index: -1
 cloud4
   rotate: false
-  xy: 2, 84
+  xy: 504, 527
   size: 389, 159
   orig: 389, 159
   offset: 0, 0
   index: -1
 explosion
   rotate: false
-  xy: 2, 680
-  size: 1500, 896
-  orig: 1500, 896
+  xy: 2, 902
+  size: 1600, 800
+  orig: 1600, 800
   offset: 0, 0
   index: -1
 plane3
   rotate: false
-  xy: 1504, 1358
+  xy: 2, 461
   size: 500, 218
   orig: 500, 218
   offset: 0, 0
   index: -1
 plane4f
   rotate: false
-  xy: 504, 487
+  xy: 2, 268
   size: 500, 191
   orig: 500, 191
   offset: 0, 0
   index: -1
 plane5f
   rotate: false
-  xy: 2, 459
+  xy: 2, 681
   size: 500, 219
   orig: 500, 219
   offset: 0, 0
   index: -1
 plane6f
   rotate: false
-  xy: 2, 245
+  xy: 504, 688
   size: 500, 212
   orig: 500, 212
   offset: 0, 0
   index: -1
 playerPlaneBody
   rotate: false
-  xy: 393, 213
+  xy: 895, 656
   size: 90, 30
   orig: 90, 30
   offset: 0, 0
   index: -1
 playerPlanePropeller
   rotate: false
-  xy: 504, 274
+  xy: 1006, 689
   size: 55, 33
   orig: 55, 33
   offset: 0, 0
