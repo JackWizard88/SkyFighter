@@ -4,121 +4,114 @@ size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-bullet2
+bullets
   rotate: false
-  xy: 2, 774
-  size: 947, 146
-  orig: 947, 146
-  offset: 0, 0
-  index: -1
-bullet3
-  rotate: false
-  xy: 2, 626
-  size: 947, 146
-  orig: 947, 146
+  xy: 2006, 1570
+  size: 32, 6
+  orig: 32, 6
   offset: 0, 0
   index: -1
 buttonContinue
-  rotate: false
-  xy: 2, 84
-  size: 300, 80
-  orig: 300, 80
-  offset: 0, 0
-  index: -1
-buttonExit
   rotate: false
   xy: 2, 2
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
+buttonExit
+  rotate: false
+  xy: 1504, 1112
+  size: 300, 80
+  orig: 300, 80
+  offset: 0, 0
+  index: -1
 buttonPause
   rotate: false
-  xy: 951, 636
+  xy: 1893, 1292
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 buttonStart
   rotate: false
-  xy: 2, 166
+  xy: 1006, 598
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
 cloud1
   rotate: false
-  xy: 1504, 1228
+  xy: 504, 309
   size: 290, 176
   orig: 290, 176
   offset: 0, 0
   index: -1
 cloud2
   rotate: false
-  xy: 2, 248
+  xy: 1504, 1194
   size: 387, 162
   orig: 387, 162
   offset: 0, 0
   index: -1
 cloud3
   rotate: false
-  xy: 1504, 1044
+  xy: 1504, 928
   size: 184, 182
   orig: 184, 182
   offset: 0, 0
   index: -1
 cloud4
   rotate: false
-  xy: 504, 465
+  xy: 2, 84
   size: 389, 159
   orig: 389, 159
   offset: 0, 0
   index: -1
 explosion
   rotate: false
-  xy: 2, 922
+  xy: 2, 680
   size: 1500, 896
   orig: 1500, 896
   offset: 0, 0
   index: -1
 plane3
   rotate: false
-  xy: 951, 702
+  xy: 1504, 1358
   size: 500, 218
   orig: 500, 218
   offset: 0, 0
   index: -1
 plane4f
   rotate: false
-  xy: 1504, 1406
+  xy: 504, 487
   size: 500, 191
   orig: 500, 191
   offset: 0, 0
   index: -1
 plane5f
   rotate: false
-  xy: 1504, 1599
+  xy: 2, 459
   size: 500, 219
   orig: 500, 219
   offset: 0, 0
   index: -1
 plane6f
   rotate: false
-  xy: 2, 412
+  xy: 2, 245
   size: 500, 212
   orig: 500, 212
   offset: 0, 0
   index: -1
 playerPlaneBody
   rotate: false
-  xy: 391, 380
+  xy: 393, 213
   size: 90, 30
   orig: 90, 30
   offset: 0, 0
   index: -1
 playerPlanePropeller
   rotate: false
-  xy: 504, 430
+  xy: 504, 274
   size: 55, 33
   orig: 55, 33
   offset: 0, 0

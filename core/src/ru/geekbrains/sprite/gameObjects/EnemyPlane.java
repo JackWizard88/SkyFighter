@@ -53,7 +53,7 @@ public class EnemyPlane extends Sprite {
         this.health = 7;
         soundFlying = SoundController.getSoundEnemyFlying();
         soundExplosion = SoundController.getSoundEnemyExplosion();
-        soundShooting = SoundController.getSoundEnemyShootingTriple();
+        soundShooting = SoundController.getSoundEnemyShooting();
     }
 
     @Override
@@ -166,15 +166,15 @@ public class EnemyPlane extends Sprite {
 
             shootTimer += delta;
 
-            if (shootTimer >= 0.1f) {
+            if (shootTimer >= 0.05f) {
                 shootingTurn++;
                 shootTimer = 0;
                 soundShooting.play();
                 Bullet bullet = ScreenController.getGameScreen().getBulletPool().obtain();
-                bulletRegion = ScreenController.getGameScreen().getAtlas().findRegion("bullet3");
+                bulletRegion = ScreenController.getGameScreen().getAtlas().findRegion("bullets");
                 bulletPos0.set(pos.x - halfWidth * 0.95f, pos.y + getHeight() / 5 + getHeight() * (float) Math.sin(Math.toRadians(angle)));
                 dir.set((float) Math.cos(Math.toRadians(angle + 180)), (float) Math.sin(Math.toRadians(180 + angle))).nor();
-                bullet.set(this, bulletRegion, bulletPos0, bulletV, angle, dir, 0.0075f, worldBounds, 1);
+                bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, angle, dir, -0.003f, worldBounds, 1);
             }
 
             if (shootingTurn >= BULLET_TURN_COUNTER) {

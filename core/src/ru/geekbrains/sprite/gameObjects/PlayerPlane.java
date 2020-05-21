@@ -75,6 +75,8 @@ public class PlayerPlane extends Sprite {
         shipSpeed = new Vector2();
         dir = new Vector2();
         bulletPos0 = new Vector2();
+
+
         pos.set(-0.5f, 0);
         this.score = 0;
         this.health = 10;
@@ -186,12 +188,12 @@ public class PlayerPlane extends Sprite {
 
     private void shoot() {
         Bullet bullet = ScreenController.getGameScreen().getBulletPool().obtain();
-        bulletRegion = ScreenController.getGameScreen().getAtlas().findRegion("bullet2");
+        bulletRegion = ScreenController.getGameScreen().getAtlas().findRegion("bullets");
         //смещение точки выстрела в зависимости от угла
         bulletPos0.set(pos.x + halfWidth * 0.95f, pos.y + getHeight() / 5 + getHeight() * (float) Math.sin(Math.toRadians(angle)));
         //поворот аектора направления полета снаряда
         dir.set((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle))).nor();
-        bullet.set(this, bulletRegion, bulletPos0, bulletV, angle, dir, 0.0075f, worldBounds, 1);
+        bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, angle, dir, 0.003f, worldBounds, 1);
     }
 
     @Override
