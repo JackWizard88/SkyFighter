@@ -27,8 +27,7 @@ public class Propeller extends Sprite {
         this.angle = owner.getAngle();
         shift.set(owner.getHalfWidth() + getHalfWidth(), - owner.getHalfHeight() / 3);
         this.pos.set(owner.pos).add(shift);
-
-            frame = (frame + 1) % frames;
+        frame = (frame + 1) % frames;
 
     }
 

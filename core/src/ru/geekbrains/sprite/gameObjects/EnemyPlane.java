@@ -37,7 +37,7 @@ public class EnemyPlane extends Sprite {
     private Vector2 bulletPos0;
     private final float bulletV = 0.75f;
     private Vector2 dir;
-    private final int BULLET_TURN_COUNTER = 3;
+    private int BULLET_TURN_COUNTER;
 
     //explosion
     private TextureRegion explosionRegion;
@@ -137,7 +137,8 @@ public class EnemyPlane extends Sprite {
             Vector2 v,
             int health,
             float height,
-            Rect worldBounds
+            Rect worldBounds,
+            int turnLength
     ) {
         this.regions[0] = region;
         this.pos.set(pos0);
@@ -145,6 +146,8 @@ public class EnemyPlane extends Sprite {
         this.health = health;
         setHeightProportion(height);
         this.worldBounds = worldBounds;
+        BULLET_TURN_COUNTER = turnLength;
+
         grav1.setZero();
         isFalling = false;
         isActive = false;

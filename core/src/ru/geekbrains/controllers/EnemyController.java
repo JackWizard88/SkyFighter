@@ -41,7 +41,7 @@ public class EnemyController {
             if (gameScreen.getEnemyPool().getSize() < ENEMY_LIMIT) {
                 EnemyPlane enemyPlane = gameScreen.getEnemyPool().obtain();
                 velocity.set(Rnd.nextFloat(-0.02f, -0.1f), 0);
-                enemyPlane.set(enemyRegion, getSpawnCoordinates(enemyPlane), velocity, 7, 0.09f, worldBounds);
+                enemyPlane.set(enemyRegion, getSpawnCoordinates(enemyPlane), velocity, 7, 0.09f, worldBounds, getBulletTurnLength());
             }
         }
     }
@@ -91,5 +91,13 @@ public class EnemyController {
 
     public void drawActiveSprites(SpriteBatch batch) {
         gameScreen.getEnemyPool().drawActiveSprites(batch);
+    }
+
+    private int getBulletTurnLength() {
+       if (ScreenController.getGameScreen().getPlayer().getScore() < 150) {
+           return 3;
+       } else if (ScreenController.getGameScreen().getPlayer().getScore() >= 150 && ScreenController.getGameScreen().getPlayer().getScore() < 250) {
+           return 4;
+       } else return 5;
     }
 }

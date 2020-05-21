@@ -4,6 +4,20 @@ size: 2048,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+Hp
+  rotate: false
+  xy: 995, 180
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+HpPlane
+  rotate: false
+  xy: 1604, 459
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 bullets
   rotate: false
   xy: 1995, 992
