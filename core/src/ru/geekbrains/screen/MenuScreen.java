@@ -1,8 +1,9 @@
 package ru.geekbrains.screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.controllers.MenuButtonController;
 import ru.geekbrains.controllers.ScreenController;
@@ -17,14 +18,17 @@ public class MenuScreen extends BaseScreen {
     private TextureAtlas atlas;
 
     private MenuButtonController menuButtonController;
+    private Music menuMusic;
 
     private Background background;
+
     public MenuScreen(TextureAtlas atlas, ScreenController controller) {
         super(controller);
         this.atlas = atlas;
         menuButtonController = new MenuButtonController(atlas, controller);
-        bg = new Texture("textures/backgroundMenu.jpg");
+        bg = new Texture("textures/backgroundMenu2.jpg");
         background = new Background(bg);
+        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/menuMusic.mp3"));
     }
 
     public MenuButtonController getMenuButtonController() {
@@ -34,12 +38,15 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        menuMusic.play();
+        menuMusic.setLooping(true);
     }
 
     @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
         menuButtonController.resize(worldBounds);
+        menuMusic.play();
     }
 
     @Override
@@ -52,8 +59,16 @@ public class MenuScreen extends BaseScreen {
     }
 
     @Override
+    public void hide() {
+        super.hide();
+        menuMusic.pause();
+    }
+
+    @Override
     public void dispose() {
         super.dispose();
+        bg.dispose();
+        menuMusic.dispose();
     }
 
     @Override

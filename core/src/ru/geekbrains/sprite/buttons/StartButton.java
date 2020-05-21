@@ -26,7 +26,7 @@ public class StartButton extends Button {
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
         if (isActivated && isMe(touch)) {
-            controller.setNewGameScreen();
+            controller.newGameScreen();
         }
         return super.touchUp(touch, pointer, button);
     }

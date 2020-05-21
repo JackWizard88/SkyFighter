@@ -19,7 +19,7 @@ public abstract class Button extends Sprite {
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(worldBounds.getHeight() * 0.1f);
+        setHeightProportion(worldBounds.getHeight() * 0.08f);
     }
 
     @Override

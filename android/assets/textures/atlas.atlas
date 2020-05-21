@@ -1,83 +1,90 @@
 
 atlas.png
-size: 2048,2048
+size: 2048,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+bullets
+  rotate: false
+  xy: 1995, 992
+  size: 32, 6
+  orig: 32, 6
+  offset: 0, 0
+  index: -1
 buttonContinue
   rotate: false
-  xy: 294, 98
+  xy: 693, 116
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
 buttonExit
   rotate: false
-  xy: 968, 776
+  xy: 391, 34
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
-buttonPause
-  rotate: false
-  xy: 1893, 1851
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
 buttonStart
   rotate: false
-  xy: 1504, 1671
+  xy: 391, 116
   size: 300, 80
   orig: 300, 80
   offset: 0, 0
   index: -1
 cloud1
   rotate: false
-  xy: 2, 2
+  xy: 1604, 661
   size: 290, 176
   orig: 290, 176
   offset: 0, 0
   index: -1
 cloud2
   rotate: false
-  xy: 1504, 1753
+  xy: 2, 34
   size: 387, 162
   orig: 387, 162
   offset: 0, 0
   index: -1
 cloud3
   rotate: false
-  xy: 1504, 1487
+  xy: 1604, 477
   size: 184, 182
   orig: 184, 182
   offset: 0, 0
   index: -1
 cloud4
   rotate: false
-  xy: 968, 858
+  xy: 1604, 839
   size: 389, 159
   orig: 389, 159
   offset: 0, 0
   index: -1
+enemyPlaneBody1
+  rotate: false
+  xy: 693, 53
+  size: 139, 61
+  orig: 139, 61
+  offset: 0, 0
+  index: -1
 explosion
   rotate: false
-  xy: 2, 1019
-  size: 1500, 896
-  orig: 1500, 896
+  xy: 2, 198
+  size: 1600, 800
+  orig: 1600, 800
   offset: 0, 0
   index: -1
-plane1
+playerPlaneBody
   rotate: false
-  xy: 2, 180
-  size: 932, 394
-  orig: 932, 394
+  xy: 2, 2
+  size: 90, 30
+  orig: 90, 30
   offset: 0, 0
   index: -1
-plane2
+playerPlanePropeller
   rotate: false
-  xy: 2, 576
-  size: 964, 441
-  orig: 964, 441
+  xy: 1896, 804
+  size: 55, 33
+  orig: 55, 33
   offset: 0, 0
   index: -1

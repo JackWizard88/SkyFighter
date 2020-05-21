@@ -45,9 +45,7 @@ public class MenuButtonController {
     }
 
     public void resize(Rect worldBounds) {
-        if (isGameExists) {
-            buttonList.add(2, new ResumeButton(regionButtonResume, screenController));
-        }
+
         for (Button butt : buttonList) {
             butt.resize(worldBounds);
         }
@@ -61,6 +59,14 @@ public class MenuButtonController {
     }
 
     public void update(float delta) {
+
+        if (isGameExists) {
+            buttonList.add(2, new ResumeButton(regionButtonResume, screenController));
+        } else {
+            if (buttonList.size() > 2) {
+                buttonList.remove(2);
+            }
+        }
         for (Button butt : buttonList) {
             butt.update(delta);
         }
