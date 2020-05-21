@@ -14,9 +14,7 @@ public class EnemyController {
     private GameScreen gameScreen;
 
     private final int ENEMY_LIMIT = 3;
-    private TextureRegion enemyRegion1;
-    private TextureRegion enemyRegion2;
-    private TextureRegion enemyRegion3;
+    private TextureRegion enemyRegion;
     private Rect worldBounds;
     private Vector2 spawnCoordinates;
     private Vector2 velocity;
@@ -26,10 +24,8 @@ public class EnemyController {
         this.gameScreen = gameScreen;
         this.worldBounds = worldBounds;
         spawnCoordinates = new Vector2();
-        enemyRegion1 = gameScreen.getAtlas().findRegion("plane4f");
-        enemyRegion2 = gameScreen.getAtlas().findRegion("plane5f");
-        enemyRegion3 = gameScreen.getAtlas().findRegion("plane6f");
-        velocity = new Vector2(-0.2f, 0);
+        enemyRegion = gameScreen.getAtlas().findRegion("enemyPlaneBody1");
+        velocity = new Vector2();
     }
 
     public void checkEnemies(float delta) {
@@ -44,25 +40,9 @@ public class EnemyController {
             timerSpawn = 0;
             if (gameScreen.getEnemyPool().getSize() < ENEMY_LIMIT) {
                 EnemyPlane enemyPlane = gameScreen.getEnemyPool().obtain();
-                enemyPlane.set(getRandomEnemyRegion(), getSpawnCoordinates(enemyPlane), velocity, 7, 0.066f, worldBounds);
+                velocity.set(Rnd.nextFloat(-0.02f, -0.1f), 0);
+                enemyPlane.set(enemyRegion, getSpawnCoordinates(enemyPlane), velocity, 7, 0.09f, worldBounds);
             }
-        }
-    }
-
-    private TextureRegion getRandomEnemyRegion() {
-        switch ((int) (Math.random() * 3)) {
-            case 0 :
-                return enemyRegion1;
-
-            case 1 :
-                return enemyRegion2;
-
-            case 2 :
-                return enemyRegion3;
-
-            default:
-                return enemyRegion1;
-
         }
     }
 
@@ -95,7 +75,7 @@ public class EnemyController {
     }
 
     private Vector2 getSpawnCoordinates(EnemyPlane enemyPlane) {
-        spawnCoordinates.x = worldBounds.getRight() + 2 * enemyPlane.getWidth();
+        spawnCoordinates.x = worldBounds.getRight() + enemyPlane.getWidth();
         spawnCoordinates.y = Rnd.nextFloat(worldBounds.getBottom() + enemyPlane.getHalfHeight(), worldBounds.getTop() - enemyPlane.getHalfHeight());
         return spawnCoordinates;
     }

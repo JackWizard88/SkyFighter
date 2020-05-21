@@ -11,9 +11,10 @@ import ru.geekbrains.math.Rnd;
 
 public class EnemyPlane extends Sprite {
 
-    private static final int SCORE = 3;
-    private static final double MAX_ANGLE = 3f;
-    private static final float STABILAZE_ANGLE = 0.2f;
+    private final int SCORE = 3;
+    private final double MAX_ANGLE = 1f;
+    private final float STABILAZE_ANGLE = 0.2f;
+    private Vector2 gunPosition;
     private float deltaHight;
     private Rect worldBounds;
     private Vector2 v;
@@ -52,6 +53,7 @@ public class EnemyPlane extends Sprite {
         grav1 = new Vector2();
         vertShift = new Vector2();
         bulletPos0 = new Vector2();
+        gunPosition = new Vector2();
         dir = new Vector2();
         this.health = 7;
         soundFlying = SoundController.getSoundEnemyFlying();
@@ -63,7 +65,7 @@ public class EnemyPlane extends Sprite {
     public void update(float delta) {
 
         if (isFalling) {
-            if (angle < 60f) angle += 0.5f;
+            if (angle > -60f) angle -= 0.5f;
             if (grav1.len() < 5f) grav1.sub(grav);
             v.add(grav1);
         } else {
@@ -75,12 +77,13 @@ public class EnemyPlane extends Sprite {
                 vertShift.set(move).scl(deltaHight);
 
                 if (deltaHight > 0.001f) {
-                    if (angle > -MAX_ANGLE) {
-                        angle -= 0.25f;
-                    }
-                } else if (deltaHight < -0.001f) {
                     if (angle < MAX_ANGLE) {
                         angle += 0.25f;
+                    }
+
+                } else if (deltaHight < -0.001f) {
+                    if (angle > -MAX_ANGLE) {
+                        angle -= 0.25f;
                     }
                 } else {
                     if (angle > STABILAZE_ANGLE) {
@@ -176,7 +179,8 @@ public class EnemyPlane extends Sprite {
                 soundShooting.play();
                 Bullet bullet = ScreenController.getGameScreen().getBulletPool().obtain();
                 bulletRegion = ScreenController.getGameScreen().getAtlas().findRegion("bullets");
-                bulletPos0.set(pos.x - halfWidth * 0.95f, pos.y + getHeight() / 5 + getHeight() * (float) Math.sin(Math.toRadians(angle)));
+                gunPosition.set(0 - getHalfWidth() / 4, getHalfHeight() / 2);
+                bulletPos0.set(pos).add(gunPosition);
                 dir.set((float) Math.cos(Math.toRadians(angle + 180)), (float) Math.sin(Math.toRadians(180 + angle))).nor();
                 bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, angle, dir, -0.003f, worldBounds, 1);
             }

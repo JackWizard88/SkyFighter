@@ -1,6 +1,5 @@
 package ru.geekbrains.sprite.gameObjects;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.utils.Regions;
@@ -9,6 +8,7 @@ public class Explosion extends Sprite {
 
     private Sprite owner;
     private float timer = 0;
+    private final float EXPLOSION_FRAME_RATE = 0.075f;
 
     public Explosion() {
     }
@@ -35,7 +35,7 @@ public class Explosion extends Sprite {
 
         pos.set(owner.pos.x, owner.pos.y + owner.getHalfHeight());
 
-        if (timer >= 0.1f) {
+        if (timer >= EXPLOSION_FRAME_RATE) {
             if (frame < regions.length - 1) {
                 frame = (frame + 1);
             }
@@ -47,15 +47,4 @@ public class Explosion extends Sprite {
         }
     }
 
-    @Override
-    public void draw(SpriteBatch batch) {
-        batch.draw(
-                regions[frame],
-                getLeft(), getBottom(),
-                getHalfWidth(), getHalfHeight(),
-                getWidth(), getHeight(),
-                scale, scale,
-                angle
-        );
-    }
 }
