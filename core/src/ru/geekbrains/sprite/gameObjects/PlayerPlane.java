@@ -142,7 +142,7 @@ public class PlayerPlane extends Sprite {
         }
 //        strBuilder.setLength(0);
 //        strBuilder.append("SCORE: ").append(score).append("\nHP: ").append(health);
-//        font.draw(batch, strBuilder,-0.5f, -0.5f);
+//        font.draw(batch, strBuilder, 0, 0);
     }
 
     @Override
