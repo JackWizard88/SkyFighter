@@ -1,12 +1,9 @@
 package ru.geekbrains.controllers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-
 import java.util.ArrayList;
-
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.sprite.buttons.Button;
 import ru.geekbrains.sprite.buttons.ExitButton;
@@ -21,6 +18,7 @@ public class MenuButtonController {
     private TextureAtlas.AtlasRegion regionButtonStart;
     private TextureAtlas.AtlasRegion regionButtonExit;
     private TextureAtlas.AtlasRegion regionButtonResume;
+    private Button buttonResume;
 
     private boolean isGameExists;
 
@@ -40,8 +38,10 @@ public class MenuButtonController {
         regionButtonStart = atlas.findRegion("buttonStart");
         regionButtonExit = atlas.findRegion("buttonExit");
         regionButtonResume = atlas.findRegion("buttonContinue");
-        buttonList.add(0, new ExitButton(regionButtonExit, screenController));
-        buttonList.add(1, new StartButton(regionButtonStart, screenController));
+        buttonResume = new ResumeButton(regionButtonResume, screenController);
+        buttonList.add(new ExitButton(regionButtonExit, screenController));
+        buttonList.add(new StartButton(regionButtonStart, screenController));
+        buttonList.add(buttonResume);
     }
 
     public void resize(Rect worldBounds) {
@@ -51,23 +51,9 @@ public class MenuButtonController {
     }
 
     public void draw(SpriteBatch batch) {
-        update(Gdx.graphics.getDeltaTime());
         for (Button butt : buttonList) {
+            if (butt == buttonResume && !isGameExists) continue;
             butt.draw(batch);
-        }
-    }
-
-    public void update(float delta) {
-
-        if (isGameExists) {
-            buttonList.add(2, new ResumeButton(regionButtonResume, screenController));
-        } else {
-            if (buttonList.size() > 2) {
-                buttonList.remove(2);
-            }
-        }
-        for (Button butt : buttonList) {
-            butt.update(delta);
         }
     }
 

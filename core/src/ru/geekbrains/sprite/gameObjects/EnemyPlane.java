@@ -44,7 +44,7 @@ public class EnemyPlane extends Sprite {
     //objects
     private Propeller propeller;
     private PilotHead pilotHead;
-    private final Vector2 PILOT_POS = new Vector2(getHalfWidth() / 2, getHalfHeight() / 3);
+    private Vector2 pilotPos;
 
     //explosion
     private TextureRegion explosionRegion;
@@ -72,16 +72,16 @@ public class EnemyPlane extends Sprite {
         soundFlying = SoundController.getSoundEnemyFlying();
         soundExplosion = SoundController.getSoundEnemyExplosion();
         soundShooting = SoundController.getSoundEnemyShooting();
-
-        pilotHead = new PilotHead(ScreenController.getAtlas().findRegion("pilotHead"), 2, 6, 12, this, PILOT_POS);
+        pilotPos = new Vector2();
+        pilotHead = new PilotHead(ScreenController.getAtlas().findRegion("pilotHead"), 2, 6, 12, this, pilotPos);
         propeller = new Propeller(ScreenController.getAtlas().findRegion("playerPlanePropeller"), 1, 11, 11, this);
     }
 
     @Override
     public void draw(SpriteBatch batch) {
-//        super.draw(batch);
         pilotHead.draw(batch);
-        propeller.draw(batch);
+        super.draw(batch);
+//        propeller.draw(batch);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class EnemyPlane extends Sprite {
 
         pos.mulAdd(v, delta);
         pilotHead.update(delta);
-        propeller.update(delta);
+//        propeller.update(delta);
 
         if (pos.x < worldBounds.getLeft() - getHalfWidth() || pos.y < worldBounds.getBottom() - getHalfHeight()) {
             destroy();
@@ -138,11 +138,12 @@ public class EnemyPlane extends Sprite {
     }
 
     public void resize(Rect worldBounds) {
+        super.resize(worldBounds);
         soundShooting.resume();
         soundFlying.resume();
         soundExplosion.resume();
-        pilotHead.resize(worldBounds);
-        propeller.resize(worldBounds);
+        pilotHead.resize(worldBounds, pilotPos);
+//        propeller.resize(worldBounds);
         this.worldBounds = worldBounds;
     }
 
@@ -181,6 +182,9 @@ public class EnemyPlane extends Sprite {
         angle = 0;
         soundFlying.play(0.8f);
         fightingPosition.set(Rnd.nextFloat(worldBounds.getRight() - 0.3f, worldBounds.getRight() - getWidth()), Rnd.nextFloat(pos.y - 0.1f, pos.y + 0.1f));
+        pilotPos.set(getHalfWidth() / 2.8f, getHalfHeight() / 3.1f);
+        pilotHead.resize(worldBounds, pilotPos);
+//        propeller.resize(worldBounds);
     }
 
     public boolean isFalling() {

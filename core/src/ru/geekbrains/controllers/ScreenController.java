@@ -16,15 +16,11 @@ public class ScreenController {
     private static ScreenController instance;
 
     private ScreenController(StarFighter starFighter) {
-//        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         this.atlas = new TextureAtlas("textures/atlas.atlas");
         this.menuScreen = new MenuScreen(atlas, this);
         this.game = starFighter;
         game.setScreen(menuScreen);
-    }
-
-    public static TextureAtlas getAtlas() {
-        return atlas;
     }
 
     public static ScreenController getInstance(StarFighter starFighter) {
@@ -38,30 +34,32 @@ public class ScreenController {
         return instance;
     }
 
+    public static TextureAtlas getAtlas() {
+        return atlas;
+    }
+
     public static GameScreen getGameScreen() {
         return gameScreen;
     }
 
     public void newGameScreen() {
+        gameScreen = new GameScreen(atlas, this);
         menuScreen.getMenuButtonController().setGameExists(true);
-        gameScreen = GameScreen.getGameScreen(atlas, this);
         setGameScreen();
     }
 
     public void gameOver() {
         setMenuScreen();
         gameScreen = null;
+        System.gc();
         menuScreen.getMenuButtonController().setGameExists(false);
     }
 
     public void setGameScreen() {
-        menuScreen.getMenuButtonController().setGameExists(true);
-        Gdx.input.setCursorCatched(true);
         game.setScreen(gameScreen);
     }
 
     public void setMenuScreen() {
-        Gdx.input.setCursorCatched(false);
         game.setScreen(menuScreen);
     }
 

@@ -44,8 +44,9 @@ public class PilotHead extends Sprite {
         );
     }
 
-    public void resize(Rect worldBounds) {
+    public void resize(Rect worldBounds, Vector2 pilotPos) {
         setHeightProportion(0.02f);
+        this.pilotPos.set(pilotPos);
         super.resize(worldBounds);
     }
 }
