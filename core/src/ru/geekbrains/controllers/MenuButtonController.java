@@ -45,7 +45,6 @@ public class MenuButtonController {
     }
 
     public void resize(Rect worldBounds) {
-
         for (Button butt : buttonList) {
             butt.resize(worldBounds);
         }

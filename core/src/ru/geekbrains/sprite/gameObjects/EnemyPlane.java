@@ -223,7 +223,7 @@ public class EnemyPlane extends Sprite {
                 shootTimer = 0;
                 soundShooting.play();
                 Bullet bullet = ScreenController.getGameScreen().getBulletPool().obtain();
-                bulletRegion = ScreenController.getGameScreen().getAtlas().findRegion("bullets");
+                bulletRegion = ScreenController.getAtlas().findRegion("bullets");
                 bulletPos0.set(pos).add(gunPosition);
                 dir.set(ScreenController.getGameScreen().getPlayer().pos).sub(pos).nor();
                 bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, dir.angle(), dir, 0.003f, worldBounds, 1);
@@ -242,7 +242,7 @@ public class EnemyPlane extends Sprite {
 
     private void explode() {
         Explosion explosion = ScreenController.getGameScreen().getExplosionPool().obtain();
-        explosionRegion = ScreenController.getGameScreen().getAtlas().findRegion("explosion");
+        explosionRegion = ScreenController.getAtlas().findRegion("explosion");
         explosion.set(this, explosionRegion, 2, 5, 9, 0.2f);
     }
 

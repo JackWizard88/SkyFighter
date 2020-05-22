@@ -43,8 +43,8 @@ public class ScreenController {
     }
 
     public void newGameScreen() {
-        gameScreen = GameScreen.getGameScreen(atlas, this);
         menuScreen.getMenuButtonController().setGameExists(true);
+        gameScreen = GameScreen.getGameScreen(atlas, this);
         setGameScreen();
     }
 
@@ -55,6 +55,7 @@ public class ScreenController {
     }
 
     public void setGameScreen() {
+        menuScreen.getMenuButtonController().setGameExists(true);
         Gdx.input.setCursorCatched(true);
         game.setScreen(gameScreen);
     }
