@@ -1,6 +1,8 @@
 package ru.geekbrains.sprite.gameObjects;
 
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.base.Sprite;
@@ -39,6 +41,11 @@ public class EnemyPlane extends Sprite {
     private Vector2 dir;
     private int BULLET_TURN_COUNTER;
 
+    //objects
+    private Propeller propeller;
+    private PilotHead pilotHead;
+    private final Vector2 PILOT_POS = new Vector2(getHalfWidth() / 2, getHalfHeight() / 3);
+
     //explosion
     private TextureRegion explosionRegion;
 
@@ -65,10 +72,26 @@ public class EnemyPlane extends Sprite {
         soundFlying = SoundController.getSoundEnemyFlying();
         soundExplosion = SoundController.getSoundEnemyExplosion();
         soundShooting = SoundController.getSoundEnemyShooting();
+
+        pilotHead = new PilotHead(ScreenController.getAtlas().findRegion("pilotHead"), 2, 6, 12, this, PILOT_POS);
+        propeller = new Propeller(ScreenController.getAtlas().findRegion("playerPlanePropeller"), 1, 11, 11, this);
+    }
+
+    @Override
+    public void draw(SpriteBatch batch) {
+//        super.draw(batch);
+        pilotHead.draw(batch);
+        propeller.draw(batch);
     }
 
     @Override
     public void update(float delta) {
+
+        if (ScreenController.getGameScreen().getPlayer().pos.x < pos.x) {
+            gunPosition.set( -getHalfWidth() / 3, getHalfHeight() / 2);
+        } else {
+            gunPosition.set(getHalfWidth(), getHalfHeight() / 2);
+        }
 
         if (!isActive) {
             Rallying(delta);
@@ -78,8 +101,9 @@ public class EnemyPlane extends Sprite {
             v.add(grav1);
         } else {
 
+            shoot(delta);
+
             if (!passedBy()) {
-                shoot(delta);
 
                 deltaHight = ScreenController.getGameScreen().getPlayer().pos.y - pos.y;
                 vertShift.set(move).scl(deltaHight);
@@ -105,7 +129,8 @@ public class EnemyPlane extends Sprite {
         }
 
         pos.mulAdd(v, delta);
-
+        pilotHead.update(delta);
+        propeller.update(delta);
 
         if (pos.x < worldBounds.getLeft() - getHalfWidth() || pos.y < worldBounds.getBottom() - getHalfHeight()) {
             destroy();
@@ -116,6 +141,8 @@ public class EnemyPlane extends Sprite {
         soundShooting.resume();
         soundFlying.resume();
         soundExplosion.resume();
+        pilotHead.resize(worldBounds);
+        propeller.resize(worldBounds);
         this.worldBounds = worldBounds;
     }
 
@@ -197,7 +224,6 @@ public class EnemyPlane extends Sprite {
                 soundShooting.play();
                 Bullet bullet = ScreenController.getGameScreen().getBulletPool().obtain();
                 bulletRegion = ScreenController.getGameScreen().getAtlas().findRegion("bullets");
-                gunPosition.set(0 - getHalfWidth() / 4, getHalfHeight() / 2);
                 bulletPos0.set(pos).add(gunPosition);
                 dir.set(ScreenController.getGameScreen().getPlayer().pos).sub(pos).nor();
                 bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, dir.angle(), dir, 0.003f, worldBounds, 1);

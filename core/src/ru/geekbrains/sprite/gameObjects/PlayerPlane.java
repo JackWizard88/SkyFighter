@@ -35,7 +35,11 @@ public class PlayerPlane extends Sprite {
     private Vector2 shipSpeed;
     private int score;
     private int health;
+
+    //objects
     private Propeller propeller;
+    private PilotHead pilotHead;
+    private Vector2 PILOT_POS = new Vector2(getHalfWidth() / 6, getHalfHeight() / 2);
 
     private BitmapFont font;
     private StringBuilder strBuilder;
@@ -94,6 +98,8 @@ public class PlayerPlane extends Sprite {
         soundExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion1.mp3"));
 
         propeller = new Propeller(atlas.findRegion("playerPlanePropeller"), 1, 11, 11, this);
+        pilotHead = new PilotHead(atlas.findRegion("pilotHead"), 2, 6, 12, this, PILOT_POS);
+
     }
 
     public int getScore() {
@@ -118,12 +124,14 @@ public class PlayerPlane extends Sprite {
         hp.resize(worldBounds);
         hpPlane.resize(worldBounds);
         font.getData().setScale(0.05f);
+        pilotHead.resize(worldBounds);
     }
 
     @Override
     public void draw(SpriteBatch batch) {
         update(Gdx.graphics.getDeltaTime());
         propeller.draw(batch);
+        pilotHead.draw(batch);
         super.draw(batch);
     }
 
@@ -144,6 +152,7 @@ public class PlayerPlane extends Sprite {
         checkBounds();
         checkCollisions();
         propeller.update(delta);
+        pilotHead.update(delta);
 
         scoreTimer += delta;
         if (scoreTimer >= 1f) {

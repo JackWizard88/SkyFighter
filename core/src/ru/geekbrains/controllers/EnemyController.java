@@ -41,7 +41,7 @@ public class EnemyController {
             timerSpawn = 0;
             if (gameScreen.getEnemyPool().getSize() < ENEMY_LIMIT) {
                 EnemyPlane enemyPlane = gameScreen.getEnemyPool().obtain();
-                velocity.set(Rnd.nextFloat(-0.02f, -0.1f), 0);
+                velocity.set(Rnd.nextFloat(-0.05f, -0.1f), 0);
                 enemyPlane.set(enemyRegion, getSpawnCoordinates(enemyPlane), velocity, 7, 0.09f, worldBounds, getBulletTurnLength());
             }
         }
@@ -92,6 +92,7 @@ public class EnemyController {
 
     public void drawActiveSprites(SpriteBatch batch) {
         gameScreen.getEnemyPool().drawActiveSprites(batch);
+
     }
 
     private int getBulletTurnLength() {

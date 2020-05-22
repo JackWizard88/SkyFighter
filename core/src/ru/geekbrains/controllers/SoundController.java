@@ -18,7 +18,7 @@ public class SoundController {
         soundEnemyFlying = Gdx.audio.newSound(Gdx.files.internal("sounds/flying2.mp3"));
         soundEnemyShooting = Gdx.audio.newSound(Gdx.files.internal("sounds/shooting_single.mp3"));
         soundEnemyShootingTriple = Gdx.audio.newSound(Gdx.files.internal("sounds/shooting_triple.mp3"));
-        soundHit = Gdx.audio.newSound(Gdx.files.internal("sounds/hit1.mp3"));
+        soundHit = Gdx.audio.newSound(Gdx.files.internal("sounds/hit2.mp3"));
 
     }
 

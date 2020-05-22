@@ -8,7 +8,7 @@ import ru.geekbrains.screen.MenuScreen;
 
 public class ScreenController {
 
-    private TextureAtlas atlas;
+    private static TextureAtlas atlas;
     private final StarFighter game;
     private static MenuScreen menuScreen;
     private static GameScreen gameScreen;
@@ -16,11 +16,15 @@ public class ScreenController {
     private static ScreenController instance;
 
     private ScreenController(StarFighter starFighter) {
-        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+//        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         this.atlas = new TextureAtlas("textures/atlas.atlas");
         this.menuScreen = new MenuScreen(atlas, this);
         this.game = starFighter;
         game.setScreen(menuScreen);
+    }
+
+    public static TextureAtlas getAtlas() {
+        return atlas;
     }
 
     public static ScreenController getInstance(StarFighter starFighter) {
@@ -51,10 +55,12 @@ public class ScreenController {
     }
 
     public void setGameScreen() {
+        Gdx.input.setCursorCatched(true);
         game.setScreen(gameScreen);
     }
 
     public void setMenuScreen() {
+        Gdx.input.setCursorCatched(false);
         game.setScreen(menuScreen);
     }
 
