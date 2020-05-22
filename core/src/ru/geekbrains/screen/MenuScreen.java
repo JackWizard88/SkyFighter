@@ -58,6 +58,8 @@ public class MenuScreen extends BaseScreen {
         batch.end();
     }
 
+
+
     @Override
     public void hide() {
         super.hide();

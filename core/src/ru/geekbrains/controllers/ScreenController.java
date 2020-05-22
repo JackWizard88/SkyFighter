@@ -39,7 +39,7 @@ public class ScreenController {
     }
 
     public void newGameScreen() {
-        gameScreen = GameScreen.getGameScreen(atlas, this);
+        gameScreen = new GameScreen(atlas, this);
         menuScreen.getMenuButtonController().setGameExists(true);
         setGameScreen();
     }
@@ -47,6 +47,7 @@ public class ScreenController {
     public void gameOver() {
         setMenuScreen();
         gameScreen = null;
+        System.gc();
         menuScreen.getMenuButtonController().setGameExists(false);
     }
 

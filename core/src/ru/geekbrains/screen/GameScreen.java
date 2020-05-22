@@ -21,8 +21,6 @@ import ru.geekbrains.sprite.gameObjects.PlayerPlane;
 
 public class GameScreen extends BaseScreen {
 
-    private static GameScreen gameScreen;
-
     //textures and atlas
     private Texture bg;
     private TextureAtlas atlas;
@@ -48,7 +46,7 @@ public class GameScreen extends BaseScreen {
     private final int MIDDLE_CLOUDS_COUNT = 7;
     private final int BACKGROUND_CLOUDS_COUNT = 10;
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    private GameScreen(TextureAtlas atlas, ScreenController controller) {
+    public GameScreen(TextureAtlas atlas, ScreenController controller) {
         super(controller);
         this.atlas = atlas;
         SoundController.getSoundController();
@@ -78,17 +76,6 @@ public class GameScreen extends BaseScreen {
             cloudsBackground[i] = new Cloud(cloudTextureRegion, Layer.BACKGROUND);
         }
 
-    }
-
-    public static GameScreen getGameScreen() {
-        return gameScreen;
-    }
-
-    public static GameScreen getGameScreen(TextureAtlas atlas, ScreenController controller) {
-        if (gameScreen == null) {
-            gameScreen = new GameScreen(atlas, controller);
-        }
-        return gameScreen;
     }
 
     public TextureAtlas getAtlas() {
@@ -235,7 +222,6 @@ public class GameScreen extends BaseScreen {
 
     private void checkHP() {
         if (player.getHealth() <= 0) {
-            gameScreen = null;
             controller.gameOver();
         }
     }
