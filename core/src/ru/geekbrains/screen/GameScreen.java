@@ -23,13 +23,17 @@ public class GameScreen extends BaseScreen {
 
     //textures and atlas
     private Texture bg;
+    private Texture bg2;
     private TextureAtlas atlas;
     private Background background;
+    private Background background2;
+
     private PlayerPlane player;
     private TextureAtlas.AtlasRegion cloudTextureRegion;
 
     //sounds
     private Music windSound;
+    private Music battleMusic;
 
     //pools
     private BulletPool bulletPool;
@@ -49,17 +53,26 @@ public class GameScreen extends BaseScreen {
     public GameScreen(TextureAtlas atlas, ScreenController controller) {
         super(controller);
         this.atlas = atlas;
-        SoundController.getSoundController();
+        //POOLS
         explosionPool = new ExplosionPool();
         bulletPool = new BulletPool();
         enemyPool = new EnemyPool();
+        //controllers
+        SoundController.getSoundController();
         enemyController = new EnemyController(this, worldBounds);
-        bg = new Texture("textures/skyGrey.png");
+        //sound
         windSound = Gdx.audio.newMusic(Gdx.files.internal("sounds/wind.mp3"));
-        windSound.setVolume(0.9f);
+        windSound.setVolume(0.8f);
+        battleMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/battleMusic2.mp3"));
+        battleMusic.setVolume(1f);
+        //background
+        bg = new Texture("textures/skyGrey.png");
         background = new Background(bg);
+        bg2 = new Texture("textures/skyBlue.png");
+        background2 = new Background(bg2);
+        //player
         player = new PlayerPlane(atlas);
-
+        //clouds
         cloudsForeground = new Cloud[FOREGROUND_CLOUDS_COUNT];
         cloudsMiddle = new Cloud[MIDDLE_CLOUDS_COUNT];
         cloudsBackground = new Cloud[BACKGROUND_CLOUDS_COUNT];
@@ -76,10 +89,6 @@ public class GameScreen extends BaseScreen {
             cloudsBackground[i] = new Cloud(cloudTextureRegion, Layer.BACKGROUND);
         }
 
-    }
-
-    public TextureAtlas getAtlas() {
-        return atlas;
     }
 
     public PlayerPlane getPlayer() {
@@ -109,11 +118,14 @@ public class GameScreen extends BaseScreen {
         player.show();
         windSound.play();
         windSound.setLooping(true);
+        battleMusic.play();
+        battleMusic.setLooping(true);
     }
 
     @Override
     public void resize(Rect worldBounds) {
         background.resize(worldBounds);
+        background2.resize(worldBounds);
         for (Cloud cloud: cloudsBackground) {
             cloud.resize(worldBounds);
         }
@@ -132,7 +144,6 @@ public class GameScreen extends BaseScreen {
         super.render(delta);
         update(delta);
         free();
-        enemyController.checkEnemies(delta);
         draw();
         checkHP();
     }
@@ -152,6 +163,9 @@ public class GameScreen extends BaseScreen {
     public void draw() {
         batch.begin();
         background.draw(batch);
+        batch.setColor(1,1,1, player.getScore() / (float) 3000);
+        background2.draw(batch);
+        batch.setColor(1,1,1, 1);
         for (Cloud cloud: cloudsBackground) {
             batch.setColor(0.7f,0.7f,0.7f,1);
             cloud.draw(batch);
@@ -181,6 +195,7 @@ public class GameScreen extends BaseScreen {
         enemyController.hide();
         player.hide();
         windSound.pause();
+        battleMusic.pause();
     }
 
     @Override
@@ -189,6 +204,7 @@ public class GameScreen extends BaseScreen {
         enemyController.dispose();
         player.dispose();
         windSound.dispose();
+        battleMusic.dispose();
         enemyPool.dispose();
         bulletPool.dispose();
         explosionPool.dispose();

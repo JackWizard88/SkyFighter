@@ -178,13 +178,11 @@ public class EnemyPlane extends Sprite {
         isFalling = false;
         isActive = false;
         angle = 0;
-        soundFlying.play(0.8f);
+        soundFlying.play(0.7f);
         fightingPosition.set(Rnd.nextFloat(worldBounds.getRight() - 0.3f, worldBounds.getRight() - getWidth()), Rnd.nextFloat(pos.y - 0.1f, pos.y + 0.1f));
 
         pilotHead.setPilotPos(getHalfWidth() / 2.8f, getHalfHeight() / 3.1f);
         propeller.setShift(getHalfWidth() / 1.75f, 0);
-        pilotHead.resize(worldBounds);
-        propeller.resize(worldBounds);
     }
 
     public boolean isFalling() {

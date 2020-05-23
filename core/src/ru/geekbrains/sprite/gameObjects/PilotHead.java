@@ -20,6 +20,7 @@ public class PilotHead extends Sprite {
 
     public void setPilotPos(float pilotPosX, float pilotPosY) {
         this.pilotPos.set(pilotPosX, pilotPosY);
+        setHeightProportion(0.02f);
     }
 
     @Override
@@ -49,7 +50,6 @@ public class PilotHead extends Sprite {
     }
 
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.02f);
         super.resize(worldBounds);
     }
 }

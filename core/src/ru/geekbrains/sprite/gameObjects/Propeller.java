@@ -1,6 +1,5 @@
 package ru.geekbrains.sprite.gameObjects;
 
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -11,13 +10,11 @@ public class Propeller extends Sprite {
 
     private Sprite owner;
     private Vector2 shift;
-    private int frames;
     private Vector2 origin;
 
     public Propeller(TextureRegion region, int rows, int cols, int frames, Sprite owner) {
         super(region, rows, cols, frames);
         this.owner = owner;
-        this.frames = frames;
         shift = new Vector2();
         origin = new Vector2();
         pos.set(2f, 2f);
@@ -27,6 +24,7 @@ public class Propeller extends Sprite {
         this.shift.set(shiftX, shiftY);
         origin.set(halfWidth, 0);
         shift.add(origin);
+        setHeightProportion(0.05f);
     }
 
     @Override
@@ -34,13 +32,12 @@ public class Propeller extends Sprite {
         super.update(delta);
         this.angle = owner.getAngle();
         this.pos.set(owner.pos).add(shift);
-        frame = (frame + 1) % frames;
+        frame = (frame + 1) % regions.length;
 
     }
 
     @Override
     public void draw(SpriteBatch batch) {
-//        super.draw(batch);
         batch.draw(
                 regions[frame],
                 getLeft(), getBottom(),
@@ -53,7 +50,6 @@ public class Propeller extends Sprite {
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.05f);
         super.resize(worldBounds);
     }
 }

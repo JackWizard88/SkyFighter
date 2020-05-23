@@ -25,7 +25,7 @@ public class EnemyController {
         this.gameScreen = gameScreen;
         this.worldBounds = worldBounds;
         spawnCoordinates = new Vector2();
-        enemyRegion = gameScreen.getAtlas().findRegion("enemyPlaneBody1");
+        enemyRegion = ScreenController.getAtlas().findRegion("enemyPlaneBody1");
         velocity = new Vector2();
     }
 
@@ -83,6 +83,7 @@ public class EnemyController {
     }
 
     public void updateActiveSprites(float delta) {
+        checkEnemies(delta);
         gameScreen.getEnemyPool().updateActiveSprites(delta);
     }
 

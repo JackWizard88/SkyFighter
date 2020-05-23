@@ -10,8 +10,8 @@ public class DesktopLauncher {
 		new LwjglApplication(new StarFighter(), config);
 		config.height = 800;
 		config.width = 1280;
-		config.foregroundFPS = 100;
-		config.vSyncEnabled = false;
+//		config.foregroundFPS = 100;
+//		config.vSyncEnabled = false;
 //		config.resizable = false;
 	}
 }
