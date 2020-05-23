@@ -12,21 +12,27 @@ public class Propeller extends Sprite {
     private Sprite owner;
     private Vector2 shift;
     private int frames;
+    private Vector2 origin;
 
     public Propeller(TextureRegion region, int rows, int cols, int frames, Sprite owner) {
         super(region, rows, cols, frames);
         this.owner = owner;
         this.frames = frames;
         shift = new Vector2();
-
+        origin = new Vector2();
+        pos.set(2f, 2f);
     }
 
+    public void setShift(float shiftX, float shiftY) {
+        this.shift.set(shiftX, shiftY);
+        origin.set(halfWidth, 0);
+        shift.add(origin);
+    }
 
     @Override
     public void update(float delta) {
         super.update(delta);
         this.angle = owner.getAngle();
-        shift.set(owner.getHalfWidth() + getHalfWidth(), - owner.getHalfHeight() / 3);
         this.pos.set(owner.pos).add(shift);
         frame = (frame + 1) % frames;
 
@@ -38,7 +44,7 @@ public class Propeller extends Sprite {
         batch.draw(
                 regions[frame],
                 getLeft(), getBottom(),
-                -owner.getHalfWidth(), getHalfHeight() + owner.getHalfHeight() / 3,
+                -shift.x + origin.x, -shift.y + origin.y + halfHeight,
                 getWidth(), getHeight(),
                 scale, scale,
                 angle

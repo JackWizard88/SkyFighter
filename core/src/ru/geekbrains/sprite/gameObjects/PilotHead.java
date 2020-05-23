@@ -12,9 +12,13 @@ public class PilotHead extends Sprite {
     private Sprite owner;
     private Vector2 pilotPos = new Vector2();
 
-    public PilotHead(TextureRegion region, int rows, int cols, int frames, Sprite owner, Vector2 pilotPos) {
+    public PilotHead(TextureRegion region, int rows, int cols, int frames, Sprite owner) {
         super(region, rows, cols, frames);
         this.owner = owner;
+        pos.set(2f, 2f);
+    }
+
+    public void setPilotPos(Vector2 pilotPos) {
         this.pilotPos.set(pilotPos);
     }
 
@@ -22,7 +26,7 @@ public class PilotHead extends Sprite {
     public void update(float delta) {
         super.update(delta);
         pos.set(owner.pos).add(pilotPos);
-        pos.add(getHalfHeight(), getHalfWidth());
+        pos.add(getHalfWidth(), getHalfHeight());
         this.angle = owner.getAngle();
 
         animateTimer += delta;
@@ -50,8 +54,8 @@ public class PilotHead extends Sprite {
     }
 
     public void resize(Rect worldBounds, Vector2 pilotPos) {
-        setHeightProportion(0.02f);
         this.pilotPos.set(pilotPos);
+        setHeightProportion(0.02f);
         super.resize(worldBounds);
     }
 }

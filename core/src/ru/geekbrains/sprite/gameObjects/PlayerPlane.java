@@ -98,7 +98,10 @@ public class PlayerPlane extends Sprite {
         soundExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion1.mp3"));
 
         propeller = new Propeller(atlas.findRegion("playerPlanePropeller"), 1, 11, 11, this);
-        pilotHead = new PilotHead(atlas.findRegion("pilotHead"), 2, 6, 12, this, PILOT_POS);
+        propeller.setShift(getHalfWidth(), - getHalfHeight() / 3);
+
+        pilotHead = new PilotHead(atlas.findRegion("pilotHead"), 2, 6, 12, this);
+        pilotHead.setPilotPos(PILOT_POS);
 
     }
 
@@ -118,13 +121,14 @@ public class PlayerPlane extends Sprite {
     @Override
     public void resize(Rect worldBounds) {
         setHeightProportion(0.05f);
-        propeller.resize(worldBounds);
         this.worldBounds = worldBounds;
         soundFlying.resume();
         hp.resize(worldBounds);
         hpPlane.resize(worldBounds);
         font.getData().setScale(0.05f);
         pilotHead.resize(worldBounds);
+        propeller.resize(worldBounds);
+        propeller.setShift(getHalfWidth(), -getHalfHeight() / 3);
     }
 
     @Override

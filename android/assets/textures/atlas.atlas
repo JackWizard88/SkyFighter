@@ -6,14 +6,14 @@ filter: Nearest,Nearest
 repeat: none
 Hp
   rotate: false
-  xy: 1604, 461
+  xy: 1790, 645
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 HpPlane
   rotate: false
-  xy: 1790, 645
+  xy: 693, 37
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
@@ -81,6 +81,13 @@ enemyPlaneBody1
   orig: 146, 61
   offset: 0, 0
   index: -1
+enemyPlanePropeller
+  rotate: false
+  xy: 995, 165
+  size: 55, 33
+  orig: 55, 33
+  offset: 0, 0
+  index: -1
 explosion
   rotate: false
   xy: 2, 200
@@ -104,7 +111,7 @@ playerPlaneBody
   index: -1
 playerPlanePropeller
   rotate: false
-  xy: 995, 165
+  xy: 1604, 444
   size: 55, 33
   orig: 55, 33
   offset: 0, 0

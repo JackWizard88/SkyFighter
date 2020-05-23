@@ -49,7 +49,7 @@ public class EnemyController {
 
     private void checkCollisions(EnemyPlane enemyPlane) {
         for (Bullet bullet : gameScreen.getBulletPool().getActiveObjects()) {
-            if (enemyPlane.isMe(bullet.pos) && !enemyPlane.isFalling() && bullet.getOwner() != enemyPlane) {
+            if (enemyPlane.isMe(bullet.pos) && !enemyPlane.isFalling() && bullet.getOwner().getClass() != EnemyPlane.class) {
                 enemyPlane.damage();
                 SoundController.getSoundHit().play();
                 bullet.destroy();
@@ -95,6 +95,7 @@ public class EnemyController {
 
     }
 
+    //уровни сложности
     private int getBulletTurnLength() {
         playerScore = ScreenController.getGameScreen().getPlayer().getScore();
        if (playerScore < 150) {
