@@ -94,9 +94,11 @@ public class PlayerPlane extends Sprite {
         this.health = 10;
 
         //Sounds
-        soundFlying = Gdx.audio.newSound(Gdx.files.internal("sounds/flying1.mp3"));
-        soundShooting = Gdx.audio.newSound(Gdx.files.internal("sounds/shooting1.mp3"));
-        soundExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion1.mp3"));
+        soundFlying = SoundController.getSoundPlayerFlying();
+        soundShooting = SoundController.getSoundPlayerShooting();
+        soundExplosion = SoundController.getSoundPlayerExplosion();
+        idSoundFlying = soundFlying.play(1f);
+        soundFlying.setLooping(idSoundFlying, true);
 
         //components
         propeller = new Propeller(atlas.findRegion("playerPlanePropeller"), 1, 11, 11, this);
@@ -116,15 +118,15 @@ public class PlayerPlane extends Sprite {
     }
 
     public void show() {
-        idSoundFlying = soundFlying.play(0.6f);
-        soundFlying.setLooping(idSoundFlying, true);
+        soundFlying.resume();
+        soundShooting.resume();
+        soundExplosion.resume();
     }
 
     @Override
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
         setHeightProportion(0.05f);
-        soundFlying.resume();
         hp.resize(worldBounds);
         hpPlane.resize(worldBounds);
         font.getData().setScale(0.05f);
@@ -132,7 +134,6 @@ public class PlayerPlane extends Sprite {
         PILOT_POS.set(0, 0);
         pilotHead.resize(worldBounds);
         propeller.resize(worldBounds);
-
     }
 
     @Override
@@ -209,15 +210,15 @@ public class PlayerPlane extends Sprite {
     }
 
     public void hide() {
-        soundFlying.pause();
-        soundShooting.pause();
+        soundFlying.stop();
+        soundShooting.stop();
         soundExplosion.pause();
     }
 
     public void dispose() {
-        soundFlying.dispose();
-        soundExplosion.dispose();
-        soundShooting.dispose();
+        soundFlying.stop();
+        soundShooting.stop();
+        soundExplosion.stop();
     }
 
     private void shoot() {
@@ -281,7 +282,7 @@ public class PlayerPlane extends Sprite {
                     break;
             case (Input.Keys.SPACE):
                 isKeySpacePressed = false;
-                soundShooting.stop();
+                soundShooting.stop(idShooting);
                 timer = 0f;
                 break;
         }

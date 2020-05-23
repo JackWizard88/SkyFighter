@@ -127,6 +127,7 @@ public class EnemyPlane extends Sprite {
         }
 
         pos.mulAdd(v, delta);
+
         pilotHead.update(delta);
         propeller.update(delta);
 
@@ -146,15 +147,15 @@ public class EnemyPlane extends Sprite {
     }
 
     public void hide() {
-        soundShooting.pause();
-        soundFlying.pause();
+        soundShooting.stop();
+        soundFlying.stop();
         soundExplosion.pause();
     }
 
     public void dispose() {
-        soundExplosion.dispose();
-        soundFlying.dispose();
-        soundShooting.dispose();
+        soundFlying.stop();
+        soundShooting.stop();
+        soundExplosion.stop();
     }
 
     public void set(
