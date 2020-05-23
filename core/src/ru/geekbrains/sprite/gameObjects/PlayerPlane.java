@@ -101,7 +101,7 @@ public class PlayerPlane extends Sprite {
         propeller.setShift(getHalfWidth(), - getHalfHeight() / 3);
 
         pilotHead = new PilotHead(atlas.findRegion("pilotHead"), 2, 6, 12, this);
-        pilotHead.setPilotPos(PILOT_POS);
+        pilotHead.setPilotPos(PILOT_POS.x, PILOT_POS.y);
 
     }
 
