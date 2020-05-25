@@ -1,15 +1,13 @@
 package ru.geekbrains.sprite.gameObjects;
 
+import ru.geekbrains.base.Font;
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.controllers.SoundController;
 import ru.geekbrains.math.Rect;
-import ru.geekbrains.sprite.gameObjects.gui.HpGUI;
-import ru.geekbrains.sprite.gameObjects.gui.HpPlaneGUI;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,8 +26,8 @@ public class PlayerPlane extends Sprite {
     private boolean isKeySpacePressed = false;
 
     //GUI
-    private HpGUI hp;
-    private HpPlaneGUI hpPlane;
+    private Font font;
+    private StringBuilder strBuilder;
 
     //plane fields
     private Vector2 shipSpeed;
@@ -41,9 +39,6 @@ public class PlayerPlane extends Sprite {
     private PilotHead pilotHead;
     private Vector2 PILOT_POS;
     private Vector2 PROPELLER_POS;
-
-    private BitmapFont font;
-    private StringBuilder strBuilder;
 
     //sounds
     private Sound soundFlying;
@@ -72,17 +67,15 @@ public class PlayerPlane extends Sprite {
     private final float STABILIZE_ANGLE = 0.3f;
     private final float MAX_ANGLE = 10f;
     private final float FALL_SPEED = 0.01f;
+    private final float MARGIN = 0.01f;
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     public PlayerPlane(TextureAtlas atlas) {
         super(atlas.findRegion("playerPlaneBody"));
 
         //GUI
-        hp = new HpGUI(atlas);
-        hpPlane = new HpPlaneGUI(atlas);
-
         strBuilder = new StringBuilder();
-        font = new BitmapFont(Gdx.files.internal("fonts/font02.fnt"));
+        font = new Font("fonts/font32.fnt",  "fonts/font32.png");
 
         shipSpeed = new Vector2();
         dir = new Vector2();
@@ -127,9 +120,7 @@ public class PlayerPlane extends Sprite {
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
         setHeightProportion(0.05f);
-        hp.resize(worldBounds);
-        hpPlane.resize(worldBounds);
-        font.getData().setScale(0.05f);
+        font.setSize(0.03f);
         PROPELLER_POS.set(halfWidth, -halfHeight / 3);
         PILOT_POS.set(0, 0);
         pilotHead.resize(worldBounds);
@@ -145,14 +136,9 @@ public class PlayerPlane extends Sprite {
     }
 
     public void drawGUI(SpriteBatch batch) {
-        hp.draw(batch);
-        for (int i = 0; i < health; i++) {
-            hpPlane.draw(batch, i);
-        }
-
         strBuilder.setLength(0);
         strBuilder.append("SCORE: ").append(score).append("\nHP: ").append(health);
-        font.draw(batch, strBuilder, 0, 0);
+        font.draw(batch, strBuilder, worldBounds.getLeft() + MARGIN,worldBounds.getTop() - MARGIN);
     }
 
     @Override
@@ -219,6 +205,7 @@ public class PlayerPlane extends Sprite {
         soundFlying.stop();
         soundShooting.stop();
         soundExplosion.stop();
+        font.dispose();
     }
 
     private void shoot() {

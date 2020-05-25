@@ -175,6 +175,8 @@ public class EnemyPlane extends Sprite {
         this.worldBounds = worldBounds;
         BULLET_TURN_COUNTER = turnLength;
 
+        reloadTimer = 0;
+        shootingTurn = 0;
         grav1.setZero();
         isFalling = false;
         isActive = false;
