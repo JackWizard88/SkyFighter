@@ -11,6 +11,7 @@ public class Explosion extends Sprite {
     private final float EXPLOSION_FRAME_RATE = 0.075f;
 
     public Explosion() {
+        pos.set(2f, 2f);
     }
 
     public void set(

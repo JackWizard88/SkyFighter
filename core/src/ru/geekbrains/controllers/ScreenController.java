@@ -8,7 +8,7 @@ import ru.geekbrains.screen.MenuScreen;
 
 public class ScreenController {
 
-    private TextureAtlas atlas;
+    private static TextureAtlas atlas;
     private final StarFighter game;
     private static MenuScreen menuScreen;
     private static GameScreen gameScreen;
@@ -32,6 +32,10 @@ public class ScreenController {
 
     public static ScreenController getInstance() {
         return instance;
+    }
+
+    public static TextureAtlas getAtlas() {
+        return atlas;
     }
 
     public static GameScreen getGameScreen() {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.screen.GameScreen;
 
 public class StartButton extends Button {
 

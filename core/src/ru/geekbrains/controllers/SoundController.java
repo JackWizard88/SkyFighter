@@ -12,13 +12,22 @@ public class SoundController {
     private static Sound soundEnemyShootingTriple;
     private static Sound soundEnemyExplosion;
     private static Sound soundHit;
+    private static Sound soundPlayerFlying;
+    private static Sound soundPlayerShooting;
+    private static Sound soundPlayerExplosion;
 
     private SoundController() {
+
         soundEnemyExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion2.mp3"));
         soundEnemyFlying = Gdx.audio.newSound(Gdx.files.internal("sounds/flying2.mp3"));
         soundEnemyShooting = Gdx.audio.newSound(Gdx.files.internal("sounds/shooting_single.mp3"));
         soundEnemyShootingTriple = Gdx.audio.newSound(Gdx.files.internal("sounds/shooting_triple.mp3"));
-        soundHit = Gdx.audio.newSound(Gdx.files.internal("sounds/hit1.mp3"));
+
+        soundPlayerFlying = Gdx.audio.newSound(Gdx.files.internal("sounds/flying1.mp3"));
+        soundPlayerShooting = Gdx.audio.newSound(Gdx.files.internal("sounds/shooting1.mp3"));
+        soundPlayerExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion1.mp3"));
+
+        soundHit = Gdx.audio.newSound(Gdx.files.internal("sounds/hit2.mp3"));
 
     }
 
@@ -47,12 +56,16 @@ public class SoundController {
         return soundHit;
     }
 
-    public void hide() {
-
+    public static Sound getSoundPlayerFlying() {
+        return soundPlayerFlying;
     }
 
-    public void resume() {
+    public static Sound getSoundPlayerShooting() {
+        return soundPlayerShooting;
+    }
 
+    public static Sound getSoundPlayerExplosion() {
+        return soundPlayerExplosion;
     }
 
     public static void dispose() {
@@ -61,5 +74,8 @@ public class SoundController {
         soundEnemyShooting.dispose();
         soundEnemyShootingTriple.dispose();
         soundHit.dispose();
+        soundPlayerExplosion.dispose();
+        soundPlayerFlying.dispose();
+        soundPlayerShooting.dispose();
     }
 }

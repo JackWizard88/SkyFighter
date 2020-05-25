@@ -6,34 +6,35 @@ import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
 
-public class Propeller extends Sprite {
+public class PilotHead extends Sprite {
 
+    private float animateTimer = 0;
     private Sprite owner;
-    private Vector2 shift;
-    private Vector2 origin;
+    private Vector2 pilotPos = new Vector2();
 
-    public Propeller(TextureRegion region, int rows, int cols, int frames, Sprite owner) {
+    public PilotHead(TextureRegion region, int rows, int cols, int frames, Sprite owner) {
         super(region, rows, cols, frames);
         this.owner = owner;
-        shift = new Vector2();
-        origin = new Vector2();
         pos.set(2f, 2f);
     }
 
-    public void setShift(float shiftX, float shiftY) {
-        this.shift.set(shiftX, shiftY);
-        origin.set(halfWidth, 0);
-        shift.add(origin);
-        setHeightProportion(0.05f);
+    public void setPilotPos(float pilotPosX, float pilotPosY) {
+        this.pilotPos.set(pilotPosX, pilotPosY);
+        setHeightProportion(0.02f);
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
+        pos.set(owner.pos).add(pilotPos);
+        pos.add(getHalfWidth(), getHalfHeight());
         this.angle = owner.getAngle();
-        this.pos.set(owner.pos).add(shift);
-        frame = (frame + 1) % regions.length;
 
+        animateTimer += delta;
+        if (animateTimer >= 0.05f) {
+            animateTimer = 0;
+            frame = (frame + 1) % regions.length;
+        }
     }
 
     @Override
@@ -41,14 +42,13 @@ public class Propeller extends Sprite {
         batch.draw(
                 regions[frame],
                 getLeft(), getBottom(),
-                -shift.x + origin.x, -shift.y + origin.y + halfHeight,
+                -pilotPos.x, -pilotPos.y,
                 getWidth(), getHeight(),
                 scale, scale,
                 angle
         );
     }
 
-    @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
     }

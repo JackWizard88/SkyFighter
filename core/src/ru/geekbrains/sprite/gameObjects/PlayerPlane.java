@@ -35,7 +35,12 @@ public class PlayerPlane extends Sprite {
     private Vector2 shipSpeed;
     private int score;
     private int health;
+
+    //objects
     private Propeller propeller;
+    private PilotHead pilotHead;
+    private Vector2 PILOT_POS;
+    private Vector2 PROPELLER_POS;
 
     private BitmapFont font;
     private StringBuilder strBuilder;
@@ -89,11 +94,19 @@ public class PlayerPlane extends Sprite {
         this.health = 10;
 
         //Sounds
-        soundFlying = Gdx.audio.newSound(Gdx.files.internal("sounds/flying1.mp3"));
-        soundShooting = Gdx.audio.newSound(Gdx.files.internal("sounds/shooting1.mp3"));
-        soundExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion1.mp3"));
+        soundFlying = SoundController.getSoundPlayerFlying();
+        soundShooting = SoundController.getSoundPlayerShooting();
+        soundExplosion = SoundController.getSoundPlayerExplosion();
+        idSoundFlying = soundFlying.play(1f);
+        soundFlying.setLooping(idSoundFlying, true);
 
+        //components
         propeller = new Propeller(atlas.findRegion("playerPlanePropeller"), 1, 11, 11, this);
+        PROPELLER_POS = new Vector2();
+
+        pilotHead = new PilotHead(atlas.findRegion("pilotHead"), 2, 6, 12, this);
+        PILOT_POS = new Vector2();
+
     }
 
     public int getScore() {
@@ -105,25 +118,29 @@ public class PlayerPlane extends Sprite {
     }
 
     public void show() {
-        idSoundFlying = soundFlying.play(0.8f);
-        soundFlying.setLooping(idSoundFlying, true);
+        soundFlying.resume();
+        soundShooting.resume();
+        soundExplosion.resume();
     }
 
     @Override
     public void resize(Rect worldBounds) {
-        setHeightProportion(0.05f);
-        propeller.resize(worldBounds);
         this.worldBounds = worldBounds;
-        soundFlying.resume();
+        setHeightProportion(0.05f);
         hp.resize(worldBounds);
         hpPlane.resize(worldBounds);
         font.getData().setScale(0.05f);
+        PROPELLER_POS.set(halfWidth, -halfHeight / 3);
+        PILOT_POS.set(0, 0);
+        pilotHead.resize(worldBounds);
+        propeller.resize(worldBounds);
     }
 
     @Override
     public void draw(SpriteBatch batch) {
         update(Gdx.graphics.getDeltaTime());
         propeller.draw(batch);
+        pilotHead.draw(batch);
         super.draw(batch);
     }
 
@@ -132,9 +149,10 @@ public class PlayerPlane extends Sprite {
         for (int i = 0; i < health; i++) {
             hpPlane.draw(batch, i);
         }
-//        strBuilder.setLength(0);
-//        strBuilder.append("SCORE: ").append(score).append("\nHP: ").append(health);
-//        font.draw(batch, strBuilder,-0.5f, -0.5f);
+
+        strBuilder.setLength(0);
+        strBuilder.append("SCORE: ").append(score).append("\nHP: ").append(health);
+        font.draw(batch, strBuilder, 0, 0);
     }
 
     @Override
@@ -144,6 +162,9 @@ public class PlayerPlane extends Sprite {
         checkBounds();
         checkCollisions();
         propeller.update(delta);
+        pilotHead.update(delta);
+        propeller.setShift(PROPELLER_POS.x, PROPELLER_POS.y);
+        pilotHead.setPilotPos(PILOT_POS.x, PILOT_POS.y);
 
         scoreTimer += delta;
         if (scoreTimer >= 1f) {
@@ -189,23 +210,23 @@ public class PlayerPlane extends Sprite {
     }
 
     public void hide() {
-        soundFlying.pause();
-        soundShooting.pause();
+        soundFlying.stop();
+        soundShooting.stop();
         soundExplosion.pause();
     }
 
     public void dispose() {
-        soundFlying.dispose();
-        soundExplosion.dispose();
-        soundShooting.dispose();
+        soundFlying.stop();
+        soundShooting.stop();
+        soundExplosion.stop();
     }
 
     private void shoot() {
         Bullet bullet = ScreenController.getGameScreen().getBulletPool().obtain();
-        bulletRegion = ScreenController.getGameScreen().getAtlas().findRegion("bullets");
+        bulletRegion = ScreenController.getAtlas().findRegion("bullets");
         //смещение точки выстрела в зависимости от угла
         bulletPos0.set(pos.x + halfWidth * 0.95f, pos.y + getHeight() / 5 + getHeight() * (float) Math.sin(Math.toRadians(angle)));
-        //поворот аектора направления полета снаряда
+        //поворот вектора направления полета снаряда
         dir.set((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle))).nor();
         bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, angle, dir, 0.003f, worldBounds, 1);
     }
@@ -261,7 +282,7 @@ public class PlayerPlane extends Sprite {
                     break;
             case (Input.Keys.SPACE):
                 isKeySpacePressed = false;
-                soundShooting.stop();
+                soundShooting.stop(idShooting);
                 timer = 0f;
                 break;
         }

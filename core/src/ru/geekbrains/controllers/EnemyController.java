@@ -25,7 +25,7 @@ public class EnemyController {
         this.gameScreen = gameScreen;
         this.worldBounds = worldBounds;
         spawnCoordinates = new Vector2();
-        enemyRegion = gameScreen.getAtlas().findRegion("enemyPlaneBody1");
+        enemyRegion = ScreenController.getAtlas().findRegion("enemyPlaneBody1");
         velocity = new Vector2();
     }
 
@@ -41,7 +41,7 @@ public class EnemyController {
             timerSpawn = 0;
             if (gameScreen.getEnemyPool().getSize() < ENEMY_LIMIT) {
                 EnemyPlane enemyPlane = gameScreen.getEnemyPool().obtain();
-                velocity.set(Rnd.nextFloat(-0.02f, -0.1f), 0);
+                velocity.set(Rnd.nextFloat(-0.05f, -0.1f), 0);
                 enemyPlane.set(enemyRegion, getSpawnCoordinates(enemyPlane), velocity, 7, 0.09f, worldBounds, getBulletTurnLength());
             }
         }
@@ -49,7 +49,7 @@ public class EnemyController {
 
     private void checkCollisions(EnemyPlane enemyPlane) {
         for (Bullet bullet : gameScreen.getBulletPool().getActiveObjects()) {
-            if (enemyPlane.isMe(bullet.pos) && !enemyPlane.isFalling() && bullet.getOwner() != enemyPlane) {
+            if (enemyPlane.isMe(bullet.pos) && !enemyPlane.isFalling() && bullet.getOwner().getClass() != EnemyPlane.class) {
                 enemyPlane.damage();
                 SoundController.getSoundHit().play();
                 bullet.destroy();
@@ -83,6 +83,7 @@ public class EnemyController {
     }
 
     public void updateActiveSprites(float delta) {
+        checkEnemies(delta);
         gameScreen.getEnemyPool().updateActiveSprites(delta);
     }
 
@@ -92,8 +93,10 @@ public class EnemyController {
 
     public void drawActiveSprites(SpriteBatch batch) {
         gameScreen.getEnemyPool().drawActiveSprites(batch);
+
     }
 
+    //уровни сложности
     private int getBulletTurnLength() {
         playerScore = ScreenController.getGameScreen().getPlayer().getScore();
        if (playerScore < 150) {
