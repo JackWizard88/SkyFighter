@@ -46,24 +46,31 @@ public class GameScreen extends BaseScreen {
     public GameScreen(TextureAtlas atlas, ScreenController controller) {
         super(controller);
         this.atlas = atlas;
+      
         //POOLS
         explosionPool = new ExplosionPool();
         bulletPool = new BulletPool();
         enemyPool = new EnemyPool();
+      
         //controllers
         enemyController = new EnemyController(this, worldBounds);
+      
         //sound
         windSound = Gdx.audio.newMusic(Gdx.files.internal("sounds/wind.mp3"));
         windSound.setVolume(0.8f);
+      
         //background
         bg = new Texture("textures/skyGrey.png");
         background = new Background(bg);
         bg2 = new Texture("textures/skyBlue.png");
         background2 = new Background(bg2);
+      
         //player
         player = new PlayerPlane(atlas);
+      
         //clouds
         cloudController = new CloudController(10, 7, 5);
+      
         //sounds
         windSound.setLooping(true);
         windSound.play();
