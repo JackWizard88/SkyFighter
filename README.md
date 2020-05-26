@@ -6,4 +6,4 @@ TODO:
 2. add hint sprite
 3. add bonuses and debuffs
 4. add variaty of enemys + maybe add some bosses ( guess I need LevelController)
-5. revork GUI system
+5. rework GUI system
