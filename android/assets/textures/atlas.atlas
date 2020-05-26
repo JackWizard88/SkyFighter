@@ -1,117 +1,110 @@
 
 atlas.png
-size: 2048,1024
+size: 2048,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-Hp
-  rotate: false
-  xy: 1790, 645
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: -1
-HpPlane
-  rotate: false
-  xy: 693, 37
-  size: 16, 16
-  orig: 16, 16
-  offset: 0, 0
-  index: -1
 bullets
   rotate: false
-  xy: 1995, 994
+  xy: 1104, 46
   size: 32, 6
   orig: 32, 6
   offset: 0, 0
   index: -1
 buttonContinue
   rotate: false
-  xy: 693, 118
-  size: 300, 80
-  orig: 300, 80
+  xy: 1582, 34
+  size: 256, 64
+  orig: 256, 64
   offset: 0, 0
   index: -1
 buttonExit
   rotate: false
-  xy: 391, 36
-  size: 300, 80
-  orig: 300, 80
+  xy: 1582, 166
+  size: 256, 64
+  orig: 256, 64
+  offset: 0, 0
+  index: -1
+buttonMenu
+  rotate: false
+  xy: 1582, 100
+  size: 256, 64
+  orig: 256, 64
   offset: 0, 0
   index: -1
 buttonStart
   rotate: false
-  xy: 391, 118
-  size: 300, 80
-  orig: 300, 80
+  xy: 2, 2
+  size: 256, 64
+  orig: 256, 64
   offset: 0, 0
   index: -1
 cloud1
   rotate: false
-  xy: 1604, 663
+  xy: 1104, 54
   size: 290, 176
   orig: 290, 176
   offset: 0, 0
   index: -1
 cloud2
   rotate: false
-  xy: 2, 36
+  xy: 2, 68
   size: 387, 162
   orig: 387, 162
   offset: 0, 0
   index: -1
 cloud3
   rotate: false
-  xy: 1604, 479
+  xy: 1396, 48
   size: 184, 182
   orig: 184, 182
   offset: 0, 0
   index: -1
 cloud4
   rotate: false
-  xy: 1604, 841
+  xy: 391, 71
   size: 389, 159
   orig: 389, 159
   offset: 0, 0
   index: -1
 enemyPlaneBody1
   rotate: false
-  xy: 693, 55
+  xy: 1840, 169
   size: 146, 61
   orig: 146, 61
   offset: 0, 0
   index: -1
 enemyPlanePropeller
   rotate: false
-  xy: 995, 165
+  xy: 1840, 134
   size: 55, 33
   orig: 55, 33
   offset: 0, 0
   index: -1
 explosion
   rotate: false
-  xy: 2, 200
-  size: 1600, 800
-  orig: 1600, 800
+  xy: 782, 38
+  size: 320, 192
+  orig: 320, 192
   offset: 0, 0
   index: -1
 pilotHead
   rotate: false
-  xy: 2, 2
+  xy: 260, 34
   size: 96, 32
   orig: 96, 32
   offset: 0, 0
   index: -1
 playerPlaneBody
   rotate: false
-  xy: 1896, 809
+  xy: 260, 2
   size: 90, 30
   orig: 90, 30
   offset: 0, 0
   index: -1
 playerPlanePropeller
   rotate: false
-  xy: 1604, 444
+  xy: 1988, 197
   size: 55, 33
   orig: 55, 33
   offset: 0, 0

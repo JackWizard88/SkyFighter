@@ -18,7 +18,7 @@ public class Cloud extends Sprite {
     public Cloud(TextureRegion region, Layer layer) {
         super(region);
         if (layer == Layer.FOREGROUND) {
-            this.scale = Rnd.nextFloat(0.15f, 0.2f);
+            this.scale = Rnd.nextFloat(0.15f, 0.18f);
             this.velocity = Rnd.nextFloat(0.2f, 0.3f);
             pos.set(Rnd.nextFloat(1f, 2f), getRandomYPos());
         }

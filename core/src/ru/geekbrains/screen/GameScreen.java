@@ -22,7 +22,6 @@ public class GameScreen extends BaseScreen {
     //textures and atlas
     private Texture bg;
     private Texture bg2;
-    private TextureAtlas atlas;
     private Background background;
     private Background background2;
 
@@ -45,8 +44,7 @@ public class GameScreen extends BaseScreen {
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public GameScreen(TextureAtlas atlas, ScreenController controller) {
         super(controller);
-        this.atlas = atlas;
-      
+
         //POOLS
         explosionPool = new ExplosionPool();
         bulletPool = new BulletPool();

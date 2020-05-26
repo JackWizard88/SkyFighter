@@ -13,7 +13,6 @@ import ru.geekbrains.sprite.buttons.StartButton;
 public class MenuButtonController {
 
     private ScreenController screenController;
-    private TextureAtlas atlas;
     private ArrayList<Button> buttonList;
     private TextureAtlas.AtlasRegion regionButtonStart;
     private TextureAtlas.AtlasRegion regionButtonExit;
@@ -22,10 +21,9 @@ public class MenuButtonController {
 
     private boolean isGameExists;
 
-    public MenuButtonController(TextureAtlas atlas, ScreenController screenController) {
+    public MenuButtonController(ScreenController screenController) {
         buttonList = new ArrayList<>();
         this.screenController = screenController;
-        this.atlas = atlas;
         isGameExists = false;
         createButtons();
     }
@@ -35,9 +33,9 @@ public class MenuButtonController {
     }
 
     private void createButtons() {
-        regionButtonStart = atlas.findRegion("buttonStart");
-        regionButtonExit = atlas.findRegion("buttonExit");
-        regionButtonResume = atlas.findRegion("buttonContinue");
+        regionButtonStart = ScreenController.getAtlas().findRegion("buttonStart");
+        regionButtonExit = ScreenController.getAtlas().findRegion("buttonExit");
+        regionButtonResume = ScreenController.getAtlas().findRegion("buttonContinue");
         buttonResume = new ResumeButton(regionButtonResume, screenController);
         buttonList.add(new ExitButton(regionButtonExit, screenController));
         buttonList.add(new StartButton(regionButtonStart, screenController));

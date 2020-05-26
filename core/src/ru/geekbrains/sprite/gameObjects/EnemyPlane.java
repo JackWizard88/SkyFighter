@@ -47,6 +47,9 @@ public class EnemyPlane extends Sprite {
     //explosion
     private TextureRegion explosionRegion;
 
+    //collisionBox
+    private Sprite collisionBox;
+
     //status
     private boolean isFalling = false;
     private boolean isActive = false;
@@ -58,6 +61,7 @@ public class EnemyPlane extends Sprite {
 
     public EnemyPlane() {
         regions = new TextureRegion[1];
+        collisionBox = new Sprite();
         v = new Vector2();
         grav1 = new Vector2();
         vertShift = new Vector2();
@@ -84,6 +88,9 @@ public class EnemyPlane extends Sprite {
 
     @Override
     public void update(float delta) {
+
+        collisionBox.pos.set(pos.x , pos.y + getHeight() / 6);
+        collisionBox.setAngle(this.angle);
 
         if (ScreenController.getGameScreen().getPlayer().pos.x < pos.x) {
             gunPosition.set( -getHalfWidth() / 3, getHalfHeight() / 2);
@@ -186,6 +193,8 @@ public class EnemyPlane extends Sprite {
 
         pilotHead.setPilotPos(getHalfWidth() / 2.8f, getHalfHeight() / 3.1f);
         propeller.setShift(getHalfWidth() / 1.75f, 0);
+
+        setCollisionBox();
     }
 
     public boolean isFalling() {
@@ -194,6 +203,10 @@ public class EnemyPlane extends Sprite {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public Rect getCollisionBox() {
+        return collisionBox;
     }
 
     public void damage() {
@@ -208,6 +221,7 @@ public class EnemyPlane extends Sprite {
 
     public void checkHealth() {
         if (health <= 0) {
+            ScreenController.getGameScreen().getPlayer().addKill();
             explode();
             isFalling = true;
             soundExplosion.play(1f);
@@ -248,7 +262,7 @@ public class EnemyPlane extends Sprite {
     private void explode() {
         Explosion explosion = ScreenController.getGameScreen().getExplosionPool().obtain();
         explosionRegion = ScreenController.getAtlas().findRegion("explosion");
-        explosion.set(this, explosionRegion, 2, 5, 9, 0.2f);
+        explosion.set(this, explosionRegion, 3, 5, 12, 0.2f);
     }
 
     private void Rallying(float delta) {
@@ -256,5 +270,10 @@ public class EnemyPlane extends Sprite {
             rallyingDirection.set(fightingPosition).sub(pos).nor();
             pos.mulAdd((rallyingDirection).scl(RALLYING_SPEED), delta);
         } else isActive = true;
+    }
+
+    public void setCollisionBox() {
+        collisionBox.set(this);
+        collisionBox.setHeight(this.getHeight() * 5 / 6);
     }
 }

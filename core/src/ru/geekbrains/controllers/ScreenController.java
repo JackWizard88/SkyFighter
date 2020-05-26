@@ -3,6 +3,7 @@ package ru.geekbrains.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import ru.geekbrains.StarFighter;
+import ru.geekbrains.screen.GameOverScreen;
 import ru.geekbrains.screen.GameScreen;
 import ru.geekbrains.screen.MenuScreen;
 
@@ -12,13 +13,14 @@ public class ScreenController {
     private final StarFighter game;
     private static MenuScreen menuScreen;
     private static GameScreen gameScreen;
+    private static GameOverScreen gameOverScreen;
 
     private static ScreenController instance;
 
     private ScreenController(StarFighter starFighter) {
         Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
         this.atlas = new TextureAtlas("textures/atlas.atlas");
-        this.menuScreen = new MenuScreen(atlas, this);
+        this.menuScreen = new MenuScreen(this);
         this.game = starFighter;
         game.setScreen(menuScreen);
     }
@@ -49,7 +51,8 @@ public class ScreenController {
     }
 
     public void gameOver() {
-        setMenuScreen();
+        setGameOverScreen();
+        gameScreen.dispose();
         gameScreen = null;
         System.gc();
         menuScreen.getMenuButtonController().setGameExists(false);
@@ -61,6 +64,14 @@ public class ScreenController {
 
     public void setMenuScreen() {
         game.setScreen(menuScreen);
+    }
+
+    public void setGameOverScreen() {
+        gameOverScreen = new GameOverScreen(this);
+        gameOverScreen.setPlayerScore(gameScreen.getPlayer().getScore());
+        gameOverScreen.setPlayerShots(gameScreen.getPlayer().getShots());
+        gameOverScreen.setPlayerKills(gameScreen.getPlayer().getKills());
+        game.setScreen(gameOverScreen);
     }
 
 }

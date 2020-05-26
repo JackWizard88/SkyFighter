@@ -16,7 +16,7 @@ public class Bullet extends Sprite {
     private int damage;
     private Sprite owner;
     private final Vector2 grav1 = new Vector2(0, -0.00001f);
-    private final Vector2 correction = new Vector2(0, 0.05f);
+    private final Vector2 correction = new Vector2(0, 0);
 
     public Bullet() {
         v = new Vector2();

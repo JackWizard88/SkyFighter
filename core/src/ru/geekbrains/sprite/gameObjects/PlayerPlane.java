@@ -33,6 +33,8 @@ public class PlayerPlane extends Sprite {
     private Vector2 shipSpeed;
     private int score;
     private int health;
+    private int shots;
+    private int kills;
 
     //objects
     private Propeller propeller;
@@ -75,7 +77,7 @@ public class PlayerPlane extends Sprite {
 
         //GUI
         strBuilder = new StringBuilder();
-        font = new Font("fonts/font32.fnt",  "fonts/font32.png");
+        font = new Font("fonts/font48.fnt",  "fonts/font48.png");
 
         shipSpeed = new Vector2();
         dir = new Vector2();
@@ -90,8 +92,8 @@ public class PlayerPlane extends Sprite {
         soundFlying = SoundController.getSoundPlayerFlying();
         soundShooting = SoundController.getSoundPlayerShooting();
         soundExplosion = SoundController.getSoundPlayerExplosion();
-        idSoundFlying = soundFlying.play(1f);
-        soundFlying.setLooping(idSoundFlying, true);
+
+
 
         //components
         propeller = new Propeller(atlas.findRegion("playerPlanePropeller"), 1, 11, 11, this);
@@ -110,8 +112,21 @@ public class PlayerPlane extends Sprite {
         return health;
     }
 
+    public int getShots() {
+        return shots;
+    }
+
+    public int getKills() {
+        return kills;
+    }
+
+    public void addKill() {
+        this.kills += 1;
+    }
+
     public void show() {
-        soundFlying.resume();
+        idSoundFlying = soundFlying.play(1f);
+        soundFlying.setLooping(idSoundFlying, true);
         soundShooting.resume();
         soundExplosion.resume();
     }
@@ -120,7 +135,7 @@ public class PlayerPlane extends Sprite {
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
         setHeightProportion(0.05f);
-        font.setSize(0.03f);
+        font.setSize(0.02f);
         PROPELLER_POS.set(halfWidth, -halfHeight / 3);
         PILOT_POS.set(0, 0);
         pilotHead.resize(worldBounds);
@@ -137,7 +152,7 @@ public class PlayerPlane extends Sprite {
 
     public void drawGUI(SpriteBatch batch) {
         strBuilder.setLength(0);
-        strBuilder.append("SCORE: ").append(score).append("\nHP: ").append(health);
+        strBuilder.append("СЧЁТ: ").append(score).append("\nЖИЗНИ: ").append(health);
         font.draw(batch, strBuilder, worldBounds.getLeft() + MARGIN,worldBounds.getTop() - MARGIN);
     }
 
@@ -216,8 +231,8 @@ public class PlayerPlane extends Sprite {
         //поворот вектора направления полета снаряда
         dir.set((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle))).nor();
         bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, angle, dir, 0.003f, worldBounds, 1);
+        shots += 1;
     }
-
     @Override
     public boolean keyDown(int keycode) {
 

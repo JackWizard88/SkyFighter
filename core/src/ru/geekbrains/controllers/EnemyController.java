@@ -49,7 +49,7 @@ public class EnemyController {
 
     private void checkCollisions(EnemyPlane enemyPlane) {
         for (Bullet bullet : gameScreen.getBulletPool().getActiveObjects()) {
-            if (enemyPlane.isMe(bullet.pos) && !enemyPlane.isFalling() && bullet.getOwner().getClass() != EnemyPlane.class) {
+            if (enemyPlane.getCollisionBox().isMe(bullet.pos) && !enemyPlane.isFalling() && bullet.getOwner().getClass() != EnemyPlane.class) {
                 enemyPlane.damage();
                 SoundController.getSoundHit().play();
                 bullet.destroy();
