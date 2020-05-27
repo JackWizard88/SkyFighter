@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
-
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.base.Font;
 import ru.geekbrains.controllers.ScreenController;
@@ -19,10 +18,6 @@ public class GameOverScreen extends BaseScreen {
     //Buttons
     private TextureAtlas.AtlasRegion regionButtonMenu;
     private Button buttonMenu;
-
-    //Backgrounds
-    private Background background;
-    private Texture bg;
 
     //DATA
     private int playerScore;
@@ -41,7 +36,7 @@ public class GameOverScreen extends BaseScreen {
     private StringBuilder strBText3 = new StringBuilder();
     private StringBuilder strBText4 = new StringBuilder();
 
-    private final float MARGIN = 0.2f;
+    private final float MARGIN = 0.1f;
 
 
     public GameOverScreen(ScreenController controller) {
@@ -81,17 +76,17 @@ public class GameOverScreen extends BaseScreen {
     public void draw() {
         batch.begin();
 
-        font1.draw(batch, strBHeader1, worldBounds.pos.x - MARGIN,worldBounds.getTop() - 2 *MARGIN / 2, Align.center);
-        font2.draw(batch, strBText1, worldBounds.pos.x + MARGIN,worldBounds.getTop() - 2 * MARGIN / 2, Align.center);
+        font1.draw(batch, strBHeader1, worldBounds.pos.x,worldBounds.getTop() - 2 * MARGIN, Align.right);
+        font2.draw(batch, strBText1, worldBounds.pos.x + MARGIN,worldBounds.getTop() - 2 * MARGIN, Align.left);
 
-        font1.draw(batch, strBHeader2, worldBounds.pos.x - MARGIN,worldBounds.getTop() - 3 * MARGIN / 2, Align.center);
-        font2.draw(batch, strBText2, worldBounds.pos.x + MARGIN,worldBounds.getTop() - 3 * MARGIN / 2, Align.center);
+        font1.draw(batch, strBHeader2, worldBounds.pos.x,worldBounds.getTop() - 3 * MARGIN, Align.right);
+        font2.draw(batch, strBText2, worldBounds.pos.x + MARGIN,worldBounds.getTop() - 3 * MARGIN, Align.left);
 
-        font1.draw(batch, strBHeader3, worldBounds.pos.x - MARGIN,worldBounds.getTop() - 4 * MARGIN / 2, Align.center);
-        font2.draw(batch, strBText3, worldBounds.pos.x + MARGIN,worldBounds.getTop() - 4 * MARGIN / 2, Align.center);
+        font1.draw(batch, strBHeader3, worldBounds.pos.x,worldBounds.getTop() - 4 * MARGIN, Align.right);
+        font2.draw(batch, strBText3, worldBounds.pos.x + MARGIN,worldBounds.getTop() - 4 * MARGIN, Align.left);
 
-        font1.draw(batch, strBHeader4, worldBounds.pos.x - MARGIN,worldBounds.getTop() - 5 * MARGIN / 2, Align.center);
-        font2.draw(batch, strBText4, worldBounds.pos.x + MARGIN,worldBounds.getTop() - 5 * MARGIN / 2, Align.center);
+        font1.draw(batch, strBHeader4, worldBounds.pos.x,worldBounds.getTop() - 5 * MARGIN, Align.right);
+        font2.draw(batch, strBText4, worldBounds.pos.x + MARGIN,worldBounds.getTop() - 5 * MARGIN, Align.left);
 
         buttonMenu.draw(batch);
 
@@ -166,7 +161,7 @@ public class GameOverScreen extends BaseScreen {
         strBText4.setLength(0);
         if (playerShots == 0) {
             accuracy = 0;
-        } else accuracy = (int) Math.round((playerKills * 7 / (float) playerShots) * 100);
+        } else accuracy = Math.round((playerKills * 7 / (float) playerShots) * 100);
         strBText4.append(accuracy).append(" %");
     }
 }

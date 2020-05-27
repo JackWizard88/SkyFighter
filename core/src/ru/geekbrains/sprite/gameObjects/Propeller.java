@@ -33,7 +33,6 @@ public class Propeller extends Sprite {
         this.angle = owner.getAngle();
         this.pos.set(owner.pos).add(shift);
         frame = (frame + 1) % regions.length;
-
     }
 
     @Override
