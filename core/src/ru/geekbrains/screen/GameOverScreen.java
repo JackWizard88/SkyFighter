@@ -1,6 +1,8 @@
 package ru.geekbrains.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -36,6 +38,8 @@ public class GameOverScreen extends BaseScreen {
     private StringBuilder strBText3 = new StringBuilder();
     private StringBuilder strBText4 = new StringBuilder();
 
+    private Music music;
+
     private final float MARGIN = 0.1f;
 
 
@@ -47,6 +51,9 @@ public class GameOverScreen extends BaseScreen {
 
         font1 = new Font("fonts/font48.fnt",  "fonts/font48.png");
         font2 = new Font("fonts/font48w.fnt",  "fonts/font48w.png");
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/scoreScreenMusic.mp3"));
+        music.setLooping(true);
     }
 
     public void setPlayerScore(int playerScore) {
@@ -65,6 +72,7 @@ public class GameOverScreen extends BaseScreen {
     public void show() {
         super.show();
         setText();
+        music.play();
     }
 
     @Override
@@ -77,16 +85,16 @@ public class GameOverScreen extends BaseScreen {
         batch.begin();
 
         font1.draw(batch, strBHeader1, worldBounds.pos.x,worldBounds.getTop() - 2 * MARGIN, Align.right);
-        font2.draw(batch, strBText1, worldBounds.pos.x + MARGIN,worldBounds.getTop() - 2 * MARGIN, Align.left);
+        font2.draw(batch, strBText1, worldBounds.pos.x + MARGIN / 2,worldBounds.getTop() - 2 * MARGIN, Align.left);
 
         font1.draw(batch, strBHeader2, worldBounds.pos.x,worldBounds.getTop() - 3 * MARGIN, Align.right);
-        font2.draw(batch, strBText2, worldBounds.pos.x + MARGIN,worldBounds.getTop() - 3 * MARGIN, Align.left);
+        font2.draw(batch, strBText2, worldBounds.pos.x + MARGIN / 2,worldBounds.getTop() - 3 * MARGIN, Align.left);
 
         font1.draw(batch, strBHeader3, worldBounds.pos.x,worldBounds.getTop() - 4 * MARGIN, Align.right);
-        font2.draw(batch, strBText3, worldBounds.pos.x + MARGIN,worldBounds.getTop() - 4 * MARGIN, Align.left);
+        font2.draw(batch, strBText3, worldBounds.pos.x + MARGIN / 2,worldBounds.getTop() - 4 * MARGIN, Align.left);
 
         font1.draw(batch, strBHeader4, worldBounds.pos.x,worldBounds.getTop() - 5 * MARGIN, Align.right);
-        font2.draw(batch, strBText4, worldBounds.pos.x + MARGIN,worldBounds.getTop() - 5 * MARGIN, Align.left);
+        font2.draw(batch, strBText4, worldBounds.pos.x + MARGIN / 2,worldBounds.getTop() - 5 * MARGIN, Align.left);
 
         buttonMenu.draw(batch);
 
@@ -109,11 +117,13 @@ public class GameOverScreen extends BaseScreen {
     @Override
     public void hide() {
         super.hide();
+        music.stop();
     }
 
     @Override
     public void dispose() {
         super.dispose();
+        music.dispose();
     }
 
     @Override

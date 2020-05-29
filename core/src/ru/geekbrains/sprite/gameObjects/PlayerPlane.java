@@ -38,8 +38,8 @@ public class PlayerPlane extends Sprite {
     //боезапас и система перегрева
     private int ammo;
     private float OVERHEAT_CAPACITY = 1f;
-    private float OVERHEAT_STEP = 0.01f;
-    private float OVERHEAT_COOLDOWN_STEP = 0.1f;
+    private float OVERHEAT_STEP = 0.02f;
+    private float OVERHEAT_COOLDOWN_STEP = 0.15f;
     private float overheat;
     private boolean isOverheated = false;
     private float overheatTimer = 0;
@@ -202,8 +202,9 @@ public class PlayerPlane extends Sprite {
                 shoot();
                 overheat += OVERHEAT_STEP;
                 if (overheat > OVERHEAT_CAPACITY) {
-                    overheat = OVERHEAT_CAPACITY;
                     soundShooting.stop(idShooting);
+                    SoundController.getSoundPlayerCooldown().play();
+                    overheat = OVERHEAT_CAPACITY;
                     isOverheated = true;
                 }
                 timer = 0f;

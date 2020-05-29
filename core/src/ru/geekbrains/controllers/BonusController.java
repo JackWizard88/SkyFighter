@@ -5,6 +5,7 @@ import ru.geekbrains.math.Rect;
 import ru.geekbrains.math.Rnd;
 import ru.geekbrains.screen.GameScreen;
 import ru.geekbrains.sprite.gameObjects.Bonus;
+import ru.geekbrains.sprite.gameObjects.Bullet;
 
 public class BonusController {
 
@@ -36,6 +37,16 @@ public class BonusController {
             if (!gameScreen.getPlayer().isOutside(bonus)) {
                 bonus.giveBonus();
                 bonus.destroy();
+            }
+        }
+
+        for (Bonus bonus : gameScreen.getBonusPool().getActiveObjects()) {
+            for (Bullet bullet : gameScreen.getBulletPool().getActiveObjects()) {
+                if (bonus.isMe(bullet.pos) && bullet.getOwner() == gameScreen.getPlayer()) {
+                    bullet.destroy();
+                    bonus.explode();
+                    bonus.destroy();
+                }
             }
         }
     }

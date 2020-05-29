@@ -15,6 +15,9 @@ public class SoundController {
     private static Sound soundPlayerFlying;
     private static Sound soundPlayerShooting;
     private static Sound soundPlayerExplosion;
+    private static Sound soundPlayerReload;
+    private static Sound soundPlayerRepair;
+    private static Sound soundPlayerCooldown;
 
     private SoundController() {
 
@@ -26,6 +29,9 @@ public class SoundController {
         soundPlayerFlying = Gdx.audio.newSound(Gdx.files.internal("sounds/flying1.mp3"));
         soundPlayerShooting = Gdx.audio.newSound(Gdx.files.internal("sounds/shooting1.mp3"));
         soundPlayerExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion1.mp3"));
+        soundPlayerReload = Gdx.audio.newSound(Gdx.files.internal("sounds/reload.mp3"));
+        soundPlayerRepair = Gdx.audio.newSound(Gdx.files.internal("sounds/repair.mp3"));
+        soundPlayerCooldown = Gdx.audio.newSound(Gdx.files.internal("sounds/cooldown.mp3"));
 
         soundHit = Gdx.audio.newSound(Gdx.files.internal("sounds/hit2.mp3"));
 
@@ -68,6 +74,18 @@ public class SoundController {
         return soundPlayerExplosion;
     }
 
+    public static Sound getSoundPlayerReload() {
+        return soundPlayerReload;
+    }
+
+    public static Sound getSoundPlayerRepair() {
+        return soundPlayerRepair;
+    }
+
+    public static Sound getSoundPlayerCooldown() {
+        return soundPlayerCooldown;
+    }
+
     public static void dispose() {
         soundEnemyExplosion.dispose();
         soundEnemyFlying.dispose();
@@ -77,5 +95,8 @@ public class SoundController {
         soundPlayerExplosion.dispose();
         soundPlayerFlying.dispose();
         soundPlayerShooting.dispose();
+        soundPlayerReload.dispose();
+        soundPlayerRepair.dispose();
+        soundPlayerCooldown.dispose();
     }
 }

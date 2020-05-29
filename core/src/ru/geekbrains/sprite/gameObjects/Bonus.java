@@ -1,9 +1,11 @@
 package ru.geekbrains.sprite.gameObjects;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.controllers.ScreenController;
+import ru.geekbrains.controllers.SoundController;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.math.Rnd;
 
@@ -14,6 +16,7 @@ public class Bonus extends Sprite {
     }
 
     private Rect worldBounds;
+    private TextureRegion explosionRegion;
 
     private Vector2 velocity;
     private BonusType bonusType;
@@ -22,10 +25,15 @@ public class Bonus extends Sprite {
     private final int AMOUNT_AMMO = 50;
     private final int AMOUNT_HEALTH = 3;
 
+    private Sound soundReload;
+    private Sound soundRepair;
+
     public Bonus() {
         velocity = new Vector2();
         spawnCoordinates = new Vector2();
         regions = new TextureRegion[1];
+        soundReload = SoundController.getSoundPlayerReload();
+        soundRepair = SoundController.getSoundPlayerRepair();
     }
 
     public void set(Rect worldBounds) {
@@ -51,9 +59,11 @@ public class Bonus extends Sprite {
         switch (bonusType) {
             case boxMedkit:
                 ScreenController.getGameScreen().getPlayer().addHealth(AMOUNT_HEALTH);
+                soundRepair.play();
                 break;
             case boxAmmo:
                 ScreenController.getGameScreen().getPlayer().addAmmo(AMOUNT_AMMO);
+                soundReload.play();
                 break;
         }
     }
@@ -81,6 +91,13 @@ public class Bonus extends Sprite {
         if (pos.x + halfWidth < worldBounds.getLeft() || pos.y + halfHeight < worldBounds.getBottom()) {
             destroy();
         }
+    }
+
+    public void explode() {
+        Explosion explosion = ScreenController.getGameScreen().getExplosionPool().obtain();
+        explosionRegion = ScreenController.getAtlas().findRegion("explosion");
+        explosion.set(this, explosionRegion, 3, 5, 12, 0.1f);
+        SoundController.getSoundEnemyExplosion().play();
     }
 
 }
