@@ -26,8 +26,7 @@ public class PlayerPlane extends Sprite {
     private boolean isKeySpacePressed = false;
 
     //GUI
-    private Font font;
-    private StringBuilder strBuilder;
+    private GUI gui;
 
     //plane fields
     private Vector2 shipSpeed;
@@ -35,6 +34,15 @@ public class PlayerPlane extends Sprite {
     private int health;
     private int shots;
     private int kills;
+
+    //боезапас и система перегрева
+    private int ammo;
+    private float OVERHEAT_CAPACITY = 1f;
+    private float OVERHEAT_STEP = 0.01f;
+    private float OVERHEAT_COOLDOWN_STEP = 0.1f;
+    private float overheat;
+    private boolean isOverheated = false;
+    private float overheatTimer = 0;
 
     //objects
     private Propeller propeller;
@@ -58,42 +66,40 @@ public class PlayerPlane extends Sprite {
     private float scoreTimer = 0f;
 
     //constants
+    private final int MAX_HEALTH = 10;
     private final float SHIP_MAXSPEED = 0.5f;
     private final float SHIP_SPEED_STEP_BACK = 0.02f;
     private final float SHIP_SPEED_STEP_FORWARD = 0.01f;
     private final float SHIP_SPEED_STEP_UP = 0.015f;
     private final float SHIP_SPEED_STEP_DOWN = 0.025f;
-    private final float SHIP_BREAK =  0.005f;
+    private final float SHIP_BREAK =  0.01f;
     private final float SHIP_SPEED_UP = 0.3f;
     private final float SHIP_SPEED_DOWN = -0.75f;
     private final float STABILIZE_ANGLE = 0.3f;
     private final float MAX_ANGLE = 10f;
     private final float FALL_SPEED = 0.01f;
-    private final float MARGIN = 0.01f;
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     public PlayerPlane(TextureAtlas atlas) {
         super(atlas.findRegion("playerPlaneBody"));
 
-        //GUI
-        strBuilder = new StringBuilder();
-        font = new Font("fonts/font48.fnt",  "fonts/font48.png");
+        this.gui = new GUI(this);
 
         shipSpeed = new Vector2();
         dir = new Vector2();
         bulletPos0 = new Vector2();
 
-
         pos.set(-0.5f, 0);
         this.score = 0;
         this.health = 10;
+        this.overheat = 0;
+        this.ammo = 500;
 
         //Sounds
         soundFlying = SoundController.getSoundPlayerFlying();
         soundShooting = SoundController.getSoundPlayerShooting();
         soundExplosion = SoundController.getSoundPlayerExplosion();
-
-
+//        soundShootingEmpty = SoundController.get
 
         //components
         propeller = new Propeller(atlas.findRegion("playerPlanePropeller"), 1, 11, 11, this);
@@ -120,6 +126,18 @@ public class PlayerPlane extends Sprite {
         return kills;
     }
 
+    public int getAmmo() {
+        return ammo;
+    }
+
+    public float getOverheat() {
+        return overheat;
+    }
+
+    public boolean isOverheated() {
+        return isOverheated;
+    }
+
     public void addKill() {
         this.kills += 1;
     }
@@ -135,11 +153,11 @@ public class PlayerPlane extends Sprite {
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
         setHeightProportion(0.05f);
-        font.setSize(0.02f);
         PROPELLER_POS.set(halfWidth, -halfHeight / 3);
         PILOT_POS.set(0, 0);
         pilotHead.resize(worldBounds);
         propeller.resize(worldBounds);
+        gui.resize(worldBounds);
     }
 
     @Override
@@ -151,13 +169,12 @@ public class PlayerPlane extends Sprite {
     }
 
     public void drawGUI(SpriteBatch batch) {
-        strBuilder.setLength(0);
-        strBuilder.append("СЧЁТ: ").append(score).append("\nЖИЗНИ: ").append(health);
-        font.draw(batch, strBuilder, worldBounds.getLeft() + MARGIN,worldBounds.getTop() - MARGIN);
+        gui.draw(batch);
     }
 
     @Override
     public void update(float delta) {
+        gui.update(delta);
         checkShooting(delta);
         planeControl(delta);
         checkBounds();
@@ -179,14 +196,28 @@ public class PlayerPlane extends Sprite {
 
     private void checkShooting(float delta) {
 
-        if (isKeySpacePressed) {
+        if (isKeySpacePressed && overheat < OVERHEAT_CAPACITY) {
             timer += delta;
             if (timer >= 0.1f) {
                 shoot();
+                overheat += OVERHEAT_STEP;
+                if (overheat > OVERHEAT_CAPACITY) {
+                    overheat = OVERHEAT_CAPACITY;
+                    soundShooting.stop(idShooting);
+                    isOverheated = true;
+                }
                 timer = 0f;
             }
+        } else if (overheat > 0 && !isOverheated) {
+            overheat -= OVERHEAT_COOLDOWN_STEP * delta;
+            if (overheat < 0) overheat = 0;
+        } else if (isOverheated) {
+            overheatTimer += delta;
+            if (overheatTimer >= 3f) {
+                overheatTimer = 0;
+                isOverheated = false;
+            }
         }
-
     }
 
     private void checkCollisions() {
@@ -220,19 +251,23 @@ public class PlayerPlane extends Sprite {
         soundFlying.stop();
         soundShooting.stop();
         soundExplosion.stop();
-        font.dispose();
+        gui.dispose();
     }
 
     private void shoot() {
-        Bullet bullet = ScreenController.getGameScreen().getBulletPool().obtain();
-        bulletRegion = ScreenController.getAtlas().findRegion("bullets");
-        //смещение точки выстрела в зависимости от угла
-        bulletPos0.set(pos.x + halfWidth * 0.95f, pos.y + getHeight() / 5 + getHeight() * (float) Math.sin(Math.toRadians(angle)));
-        //поворот вектора направления полета снаряда
-        dir.set((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle))).nor();
-        bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, angle, dir, 0.003f, worldBounds, 1);
-        shots += 1;
+        if (ammo > 0) {
+            ammo -= 1;
+            shots += 1;
+            Bullet bullet = ScreenController.getGameScreen().getBulletPool().obtain();
+            bulletRegion = ScreenController.getAtlas().findRegion("bullets");
+            //смещение точки выстрела в зависимости от угла
+            bulletPos0.set(pos.x + halfWidth * 0.95f, pos.y + getHeight() / 5 + getHeight() * (float) Math.sin(Math.toRadians(angle)));
+            //поворот вектора направления полета снаряда
+            dir.set((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle))).nor();
+            bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, angle, dir, 0.003f, worldBounds, 1);
+        } else soundShooting.stop(idShooting);
     }
+
     @Override
     public boolean keyDown(int keycode) {
 
@@ -255,8 +290,14 @@ public class PlayerPlane extends Sprite {
                 break;
             case (Input.Keys.SPACE):
                 isKeySpacePressed = true;
-                idShooting = soundShooting.play();
-                soundShooting.setLooping(idShooting, true);
+                if (ammo > 0 && overheat < OVERHEAT_CAPACITY) {
+                    idShooting = soundShooting.play();
+                    soundShooting.setLooping(idShooting, true);
+                } else if (overheat == OVERHEAT_CAPACITY) {
+                    //звук бойка без патронов
+                } else if (ammo == 0) {
+                    //нет звука потому что перегрелся
+                }
                 break;
         }
         return false;
@@ -372,5 +413,14 @@ public class PlayerPlane extends Sprite {
     public void addScore(int amount) {
         this.score += amount;
         System.out.println(score);
+    }
+
+    public void addHealth(int amount) {
+        this.health +=amount;
+        if (health > MAX_HEALTH) health = MAX_HEALTH;
+    }
+
+    public void addAmmo(int amount) {
+        this.ammo += amount;
     }
 }

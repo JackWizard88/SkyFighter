@@ -1,110 +1,138 @@
 
 atlas.png
-size: 2048,256
+size: 1024,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+boxAmmo
+  rotate: false
+  xy: 2, 2
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+boxMedkit
+  rotate: false
+  xy: 970, 167
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
 bullets
   rotate: false
-  xy: 1104, 46
+  xy: 988, 240
   size: 32, 6
   orig: 32, 6
   offset: 0, 0
   index: -1
 buttonContinue
   rotate: false
-  xy: 1582, 34
+  xy: 324, 116
   size: 256, 64
   orig: 256, 64
   offset: 0, 0
   index: -1
 buttonExit
   rotate: false
-  xy: 1582, 166
+  xy: 582, 182
   size: 256, 64
   orig: 256, 64
   offset: 0, 0
   index: -1
 buttonMenu
   rotate: false
-  xy: 1582, 100
+  xy: 582, 116
   size: 256, 64
   orig: 256, 64
   offset: 0, 0
   index: -1
 buttonStart
   rotate: false
-  xy: 2, 2
+  xy: 324, 182
   size: 256, 64
   orig: 256, 64
   offset: 0, 0
   index: -1
 cloud1
   rotate: false
-  xy: 1104, 54
-  size: 290, 176
-  orig: 290, 176
+  xy: 840, 119
+  size: 128, 64
+  orig: 128, 64
   offset: 0, 0
   index: -1
 cloud2
   rotate: false
-  xy: 2, 68
-  size: 387, 162
-  orig: 387, 162
+  xy: 714, 50
+  size: 120, 64
+  orig: 120, 64
   offset: 0, 0
   index: -1
 cloud3
   rotate: false
-  xy: 1396, 48
-  size: 184, 182
-  orig: 184, 182
+  xy: 324, 50
+  size: 128, 64
+  orig: 128, 64
   offset: 0, 0
   index: -1
 cloud4
   rotate: false
-  xy: 391, 71
-  size: 389, 159
-  orig: 389, 159
+  xy: 454, 50
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+cloud5
+  rotate: false
+  xy: 584, 50
+  size: 128, 64
+  orig: 128, 64
   offset: 0, 0
   index: -1
 enemyPlaneBody1
   rotate: false
-  xy: 1840, 169
+  xy: 840, 185
   size: 146, 61
   orig: 146, 61
   offset: 0, 0
   index: -1
 enemyPlanePropeller
   rotate: false
-  xy: 1840, 134
+  xy: 258, 19
   size: 55, 33
   orig: 55, 33
   offset: 0, 0
   index: -1
 explosion
   rotate: false
-  xy: 782, 38
+  xy: 2, 54
   size: 320, 192
   orig: 320, 192
   offset: 0, 0
   index: -1
+overheatBar
+  rotate: false
+  xy: 192, 20
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
 pilotHead
   rotate: false
-  xy: 260, 34
+  xy: 2, 20
   size: 96, 32
   orig: 96, 32
   offset: 0, 0
   index: -1
 playerPlaneBody
   rotate: false
-  xy: 260, 2
+  xy: 100, 22
   size: 90, 30
   orig: 90, 30
   offset: 0, 0
   index: -1
 playerPlanePropeller
   rotate: false
-  xy: 1988, 197
+  xy: 315, 15
   size: 55, 33
   orig: 55, 33
   offset: 0, 0

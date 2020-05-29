@@ -32,6 +32,10 @@ public class Sprite extends Rect {
         setWidth(height * aspect);
     }
 
+    public void setFrame(int frame) {
+        this.frame = frame;
+    }
+
     public void update(float delta) {
 
     }

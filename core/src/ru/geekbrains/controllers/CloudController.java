@@ -50,7 +50,7 @@ public class CloudController {
     }
 
     private TextureAtlas.AtlasRegion getRandomCloudTexture() {
-        String path = "cloud" + (int)((Math.random() * 4) + 1);
+        String path = "cloud" + (int)((Math.random() * 5) + 1);
         return new TextureAtlas.AtlasRegion(ScreenController.getAtlas().findRegion(path));
     }
 
