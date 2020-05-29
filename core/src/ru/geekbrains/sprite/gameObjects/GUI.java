@@ -1,6 +1,7 @@
 package ru.geekbrains.sprite.gameObjects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
 
 import ru.geekbrains.base.Font;
 import ru.geekbrains.base.Sprite;
@@ -13,6 +14,7 @@ public class GUI extends Sprite {
     private Rect worldBounds;
     private Font font;
     private StringBuilder strBuilder;
+    private StringBuilder strBuilderOverheat;
     private Sprite overheatStatus;
     private Sprite overheatFrame;
 
@@ -21,6 +23,7 @@ public class GUI extends Sprite {
     public GUI(PlayerPlane player) {
         this.player = player;
         strBuilder = new StringBuilder();
+        strBuilderOverheat = new StringBuilder();
         font = new Font("fonts/font48.fnt",  "fonts/font48.png");
         font.setSize(0.02f);
 
@@ -55,6 +58,10 @@ public class GUI extends Sprite {
         strBuilder.setLength(0);
         strBuilder.append("СЧЁТ: ").append(player.getScore()).append("\nЖИЗНИ: ").append(player.getHealth()).append("\nБОЕЗАПАС: ").append(player.getAmmo());
         font.draw(batch, strBuilder, worldBounds.getLeft() + MARGIN,worldBounds.getTop() - MARGIN);
+
+        strBuilderOverheat.setLength(0);
+        strBuilderOverheat.append("Перегрев пулемета");
+        font.draw(batch, strBuilderOverheat, overheatFrame.getRight() + MARGIN, overheatFrame.getTop(), Align.topLeft);
         overheatFrame.draw(batch);
         overheatStatus.draw(batch);
     }

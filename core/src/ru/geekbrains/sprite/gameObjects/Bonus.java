@@ -18,7 +18,7 @@ public class Bonus extends Sprite {
     private Vector2 velocity;
     private BonusType bonusType;
     private Vector2 spawnCoordinates;
-    private final float gravity = -0.075f;
+    private final float gravity = -0.09f;
     private final int AMOUNT_AMMO = 50;
     private final int AMOUNT_HEALTH = 3;
 
@@ -30,12 +30,12 @@ public class Bonus extends Sprite {
 
     public void set(Rect worldBounds) {
 
-        switch ((int) Math.round(Math.random() + 1)) {
-            case 1:
+        switch ((int) Math.round(Math.random())) {
+            case 0:
                 this.regions[0] = ScreenController.getAtlas().findRegion("boxAmmo");
                 this.bonusType = BonusType.boxAmmo;
                 break;
-            case 2:
+            case 1:
                 this.regions[0] = ScreenController.getAtlas().findRegion("boxMedkit");
                 this.bonusType = BonusType.boxMedkit;
                 break;
@@ -60,7 +60,7 @@ public class Bonus extends Sprite {
 
 
     private Vector2 getSpawnCoordinates(Rect worldBounds) {
-        spawnCoordinates.x = Rnd.nextFloat(worldBounds.getLeft() + worldBounds.getHalfHeight() / 2 + halfWidth, worldBounds.getRight() - halfWidth);
+        spawnCoordinates.x = Rnd.nextFloat(worldBounds.getLeft() + worldBounds.getHalfHeight() * 3 / 4, worldBounds.getRight() - halfWidth);
         spawnCoordinates.y = worldBounds.getTop() + halfHeight;
         return spawnCoordinates;
     }

@@ -13,7 +13,6 @@ public class BonusController {
     private final int BOX_LIMIT = 1;
     private Rect worldBounds;
     private float timerSpawn = 0;
-    private int playerScore;
 
     public BonusController(GameScreen gameScreen, Rect worldBounds) {
         this.gameScreen = gameScreen;
