@@ -78,9 +78,8 @@ public class Bonus extends Sprite {
         }
     }
 
-
     private Vector2 getSpawnCoordinates(Rect worldBounds) {
-        spawnCoordinates.x = Rnd.nextFloat(worldBounds.getLeft() + worldBounds.getHalfHeight() * 3 / 4, worldBounds.getRight() - halfWidth);
+        spawnCoordinates.x = Rnd.nextFloat(worldBounds.pos.x, worldBounds.getRight());
         spawnCoordinates.y = worldBounds.getTop() + halfHeight;
         return spawnCoordinates;
     }

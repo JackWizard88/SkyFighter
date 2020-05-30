@@ -2,7 +2,6 @@ package ru.geekbrains.sprite.gameObjects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
-
 import ru.geekbrains.base.Font;
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.controllers.ScreenController;
@@ -18,6 +17,8 @@ public class GUI extends Sprite {
     private Sprite overheatStatus;
     private Sprite overheatFrame;
 
+    private float animateTimer = 0;
+
     private final float MARGIN = 0.01f;
 
     public GUI(PlayerPlane player) {
@@ -28,16 +29,14 @@ public class GUI extends Sprite {
         font.setSize(0.02f);
 
         overheatStatus = new Sprite(ScreenController.getAtlas().findRegion("overheatBar"), 2, 1, 2);
-        overheatStatus.setFrame(1);
-        overheatFrame = new Sprite(ScreenController.getAtlas().findRegion("overheatBar"), 2, 1, 2);
-        overheatFrame.setFrame(0);
+        overheatFrame = new Sprite(ScreenController.getAtlas().findRegion("overheatBarFrame"), 1, 1, 1);
 
     }
 
     @Override
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
-        overheatStatus.setHeightProportion(0.02f);
+        overheatStatus.setHeightProportion(0.025f);
         overheatFrame.setHeightProportion(0.025f);
         overheatFrame.setWidth(0.3f);
         overheatStatus.setLeft(worldBounds.getLeft() + MARGIN);
@@ -48,9 +47,13 @@ public class GUI extends Sprite {
 
     @Override
     public void update(float delta) {
-        overheatStatus.setWidth(player.getOverheat() * (overheatFrame.getWidth() - MARGIN));
-        overheatStatus.setLeft(overheatFrame.getLeft() + 0.005f);
-        overheatStatus.setBottom(overheatFrame.getBottom() + 0.002f);
+        overheatStatus.setWidth(player.getOverheat() * overheatFrame.getWidth());
+        overheatStatus.setLeft(overheatFrame.getLeft());
+        overheatStatus.setBottom(overheatFrame.getBottom());
+
+        if (ScreenController.getGameScreen().getPlayer().isOverheated()) {
+            overHeatBarBlink(delta);
+        } else overheatStatus.setFrame(0);
     }
 
     @Override
@@ -68,5 +71,13 @@ public class GUI extends Sprite {
 
     public void dispose() {
         font.dispose();
+    }
+
+    private void overHeatBarBlink(float delta) {
+        animateTimer += delta;
+        if (animateTimer >= 0.2f) {
+            overheatStatus.setFrame((overheatStatus.getFrame() + 1) % overheatStatus.getRegions().length);
+            animateTimer = 0;
+        }
     }
 }

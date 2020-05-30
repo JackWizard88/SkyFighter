@@ -13,21 +13,21 @@ boxAmmo
   index: -1
 boxMedkit
   rotate: false
-  xy: 2, 2
+  xy: 970, 175
   size: 16, 16
   orig: 16, 16
   offset: 0, 0
   index: -1
 boxRepair
   rotate: false
-  xy: 372, 24
+  xy: 436, 24
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 bullets
   rotate: false
-  xy: 2, 20
+  xy: 2, 2
   size: 32, 6
   orig: 32, 6
   offset: 0, 0
@@ -104,7 +104,7 @@ enemyPlaneBody1
   index: -1
 enemyPlanePropeller
   rotate: false
-  xy: 258, 27
+  xy: 322, 23
   size: 55, 33
   orig: 55, 33
   offset: 0, 0
@@ -118,28 +118,35 @@ explosion
   index: -1
 overheatBar
   rotate: false
-  xy: 192, 28
-  size: 64, 32
-  orig: 64, 32
+  xy: 2, 28
+  size: 128, 32
+  orig: 128, 32
+  offset: 0, 0
+  index: -1
+overheatBarFrame
+  rotate: false
+  xy: 2, 10
+  size: 128, 16
+  orig: 128, 16
   offset: 0, 0
   index: -1
 pilotHead
   rotate: false
-  xy: 2, 28
+  xy: 132, 28
   size: 96, 32
   orig: 96, 32
   offset: 0, 0
   index: -1
 playerPlaneBody
   rotate: false
-  xy: 100, 30
+  xy: 230, 30
   size: 90, 30
   orig: 90, 30
   offset: 0, 0
   index: -1
 playerPlanePropeller
   rotate: false
-  xy: 315, 23
+  xy: 379, 23
   size: 55, 33
   orig: 55, 33
   offset: 0, 0
