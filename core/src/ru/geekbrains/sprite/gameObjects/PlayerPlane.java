@@ -1,6 +1,5 @@
 package ru.geekbrains.sprite.gameObjects;
 
-import ru.geekbrains.base.Font;
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.controllers.SoundController;
@@ -40,6 +39,8 @@ public class PlayerPlane extends Sprite {
     private float OVERHEAT_CAPACITY = 1f;
     private float OVERHEAT_STEP = 0.02f;
     private float OVERHEAT_COOLDOWN_STEP = 0.15f;
+    private int MAX_HEALTH = 10;
+    private int MAX_AMMO = 500;
     private float overheat;
     private boolean isOverheated = false;
     private float overheatTimer = 0;
@@ -66,7 +67,6 @@ public class PlayerPlane extends Sprite {
     private float scoreTimer = 0f;
 
     //constants
-    private final int MAX_HEALTH = 10;
     private final float SHIP_MAXSPEED = 0.5f;
     private final float SHIP_SPEED_STEP_BACK = 0.02f;
     private final float SHIP_SPEED_STEP_FORWARD = 0.01f;
@@ -385,7 +385,6 @@ public class PlayerPlane extends Sprite {
 
         pos.mulAdd(shipSpeed, delta);
 
-
     }
 
     private void checkBounds() {
@@ -423,5 +422,6 @@ public class PlayerPlane extends Sprite {
 
     public void addAmmo(int amount) {
         this.ammo += amount;
+        if (ammo > MAX_AMMO) ammo = MAX_AMMO;
     }
 }

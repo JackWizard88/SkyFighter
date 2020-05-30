@@ -161,6 +161,7 @@ public class GameScreen extends BaseScreen {
     public void hide() {
         super.hide();
         enemyController.hide();
+        bonusController.hide();
         player.hide();
         windSound.stop();
     }

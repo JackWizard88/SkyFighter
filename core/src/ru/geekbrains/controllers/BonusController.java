@@ -34,10 +34,7 @@ public class BonusController {
 
     private void checkCollisions() {
         for (Bonus bonus : gameScreen.getBonusPool().getActiveObjects()) {
-            if (!gameScreen.getPlayer().isOutside(bonus)) {
-                bonus.giveBonus();
-                bonus.destroy();
-            }
+            bonus.checkCollisions();
         }
 
         for (Bonus bonus : gameScreen.getBonusPool().getActiveObjects()) {
@@ -55,6 +52,12 @@ public class BonusController {
         this.worldBounds = worldBounds;
         for (Bonus bonus : gameScreen.getBonusPool().getActiveObjects()) {
             bonus.resize(worldBounds);
+        }
+    }
+
+    public void hide() {
+        for (Bonus bonus : gameScreen.getBonusPool().getActiveObjects()) {
+            bonus.hide();
         }
     }
 

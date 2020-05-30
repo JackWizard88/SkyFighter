@@ -27,6 +27,8 @@ public class Bonus extends Sprite {
 
     private Sound soundReload;
     private Sound soundRepair;
+    private long idSoundReload;
+    private long idSoundRepair;
 
     public Bonus() {
         velocity = new Vector2();
@@ -44,7 +46,7 @@ public class Bonus extends Sprite {
                 this.bonusType = BonusType.boxAmmo;
                 break;
             case 1:
-                this.regions[0] = ScreenController.getAtlas().findRegion("boxMedkit");
+                this.regions[0] = ScreenController.getAtlas().findRegion("boxRepair");
                 this.bonusType = BonusType.boxMedkit;
                 break;
         }
@@ -54,17 +56,25 @@ public class Bonus extends Sprite {
         this.pos.set(getSpawnCoordinates(worldBounds));
     }
 
-    public void giveBonus() {
+    public void checkCollisions() {
 
-        switch (bonusType) {
-            case boxMedkit:
-                ScreenController.getGameScreen().getPlayer().addHealth(AMOUNT_HEALTH);
-                soundRepair.play();
-                break;
-            case boxAmmo:
-                ScreenController.getGameScreen().getPlayer().addAmmo(AMOUNT_AMMO);
-                soundReload.play();
-                break;
+        if (!ScreenController.getGameScreen().getPlayer().isOutside(this)) {
+            switch (bonusType) {
+                case boxMedkit:
+                    if (ScreenController.getGameScreen().getPlayer().getHealth() < 10) {
+                        ScreenController.getGameScreen().getPlayer().addHealth(AMOUNT_HEALTH);
+                        idSoundRepair = soundRepair.play();
+                        destroy();
+                    }
+                    break;
+                case boxAmmo:
+                    if (ScreenController.getGameScreen().getPlayer().getAmmo() < 500) {
+                        ScreenController.getGameScreen().getPlayer().addAmmo(AMOUNT_AMMO);
+                        idSoundReload = soundReload.play();
+                        destroy();
+                    }
+                    break;
+            }
         }
     }
 
@@ -85,6 +95,11 @@ public class Bonus extends Sprite {
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
         setHeightProportion(0.05f);
+    }
+
+    public void hide() {
+        soundRepair.stop(idSoundRepair);
+        soundReload.stop(idSoundReload);
     }
 
     public void checkBounds() {
