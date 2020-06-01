@@ -26,6 +26,7 @@ public class Explosion extends Sprite {
         this.regions = Regions.split(region, rows, cols, frames);
         this.owner = owner;
         frame = 0;
+        pos.set(owner.pos);
         setHeightProportion(height);
     }
 

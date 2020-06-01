@@ -3,7 +3,6 @@ package ru.geekbrains.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.controllers.MenuButtonController;
 import ru.geekbrains.controllers.ScreenController;
@@ -15,17 +14,15 @@ import ru.geekbrains.sprite.gameObjects.Background;
 public class MenuScreen extends BaseScreen {
 
     private Texture bg;
-    private TextureAtlas atlas;
 
     private MenuButtonController menuButtonController;
     private Music menuMusic;
 
     private Background background;
 
-    public MenuScreen(TextureAtlas atlas, ScreenController controller) {
+    public MenuScreen(ScreenController controller) {
         super(controller);
-        this.atlas = atlas;
-        menuButtonController = new MenuButtonController(atlas, controller);
+        menuButtonController = new MenuButtonController(controller);
         bg = new Texture("textures/backgroundMenu2.jpg");
         background = new Background(bg);
         menuMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/menuMusic.mp3"));
@@ -63,7 +60,7 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void hide() {
         super.hide();
-        menuMusic.pause();
+        menuMusic.stop();
     }
 
     @Override

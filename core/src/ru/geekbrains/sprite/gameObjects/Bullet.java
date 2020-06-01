@@ -16,7 +16,6 @@ public class Bullet extends Sprite {
     private int damage;
     private Sprite owner;
     private final Vector2 grav1 = new Vector2(0, -0.00001f);
-    private final Vector2 correction = new Vector2(0, 0.05f);
 
     public Bullet() {
         v = new Vector2();
@@ -54,13 +53,14 @@ public class Bullet extends Sprite {
         this.owner = owner;
         this.pos.set(pos0);
         this.angle = angle;
-        this.dir.set(dir).add(correction);
+        this.dir.set(dir);
         setHeightProportion(height);
         this.worldBounds = worldBounds;
         this.damage = damage;
         grav.setZero();
         v.set(dir.scl(velocity));
 
+        //цвет трассера в зависимости от владельца
         if (owner == ScreenController.getGameScreen().getPlayer()) {
             frame = 0;
         } else {
@@ -83,7 +83,7 @@ public class Bullet extends Sprite {
         this.regions[0] = region;
         this.pos.set(pos0);
         this.angle = angle;
-        this.dir.set(dir).add(correction);
+        this.dir.set(dir);
         setHeightProportion(height);
         this.worldBounds = worldBounds;
         this.damage = damage;

@@ -6,11 +6,14 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+
+import ru.geekbrains.controllers.BonusController;
 import ru.geekbrains.controllers.CloudController;
 import ru.geekbrains.controllers.EnemyController;
 import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.pool.BonusPool;
 import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.pool.EnemyPool;
 import ru.geekbrains.pool.ExplosionPool;
@@ -22,12 +25,10 @@ public class GameScreen extends BaseScreen {
     //textures and atlas
     private Texture bg;
     private Texture bg2;
-    private TextureAtlas atlas;
     private Background background;
     private Background background2;
 
     private PlayerPlane player;
-
 
     //sounds
     private Music windSound;
@@ -36,24 +37,26 @@ public class GameScreen extends BaseScreen {
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
     private ExplosionPool explosionPool;
+    private BonusPool bonusPool;
 
     //controllers
     private EnemyController enemyController;
-    //clouds
+    private BonusController bonusController;
     private CloudController cloudController;
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     public GameScreen(TextureAtlas atlas, ScreenController controller) {
         super(controller);
-        this.atlas = atlas;
-      
+
         //POOLS
         explosionPool = new ExplosionPool();
         bulletPool = new BulletPool();
         enemyPool = new EnemyPool();
+        bonusPool = new BonusPool();
       
         //controllers
         enemyController = new EnemyController(this, worldBounds);
+        bonusController = new BonusController(this, worldBounds);
       
         //sound
         windSound = Gdx.audio.newMusic(Gdx.files.internal("sounds/wind.mp3"));
@@ -92,6 +95,9 @@ public class GameScreen extends BaseScreen {
         return explosionPool;
     }
 
+    public BonusPool getBonusPool() {
+        return bonusPool;
+    }
 
     @Override
     public void show() {
@@ -106,8 +112,8 @@ public class GameScreen extends BaseScreen {
         background2.resize(worldBounds);
         cloudController.resize(worldBounds);
         enemyController.resize(worldBounds);
+        bonusController.resize(worldBounds);
         player.resize(worldBounds);
-
     }
 
     @Override
@@ -123,12 +129,14 @@ public class GameScreen extends BaseScreen {
         bulletPool.updateActiveSprites(delta);
         enemyController.updateActiveSprites(delta);
         explosionPool.updateActiveSprites(delta);
+        bonusController.updateActiveSprites(delta);
     }
 
     private void free() {
         bulletPool.freeAllDestroyed();
         enemyController.freeAllDestroyed();
         explosionPool.freeAllDestroyed();
+        bonusController.freeAllDestroyed();
     }
 
     public void draw() {
@@ -140,6 +148,7 @@ public class GameScreen extends BaseScreen {
         cloudController.drawBackgroundClouds(batch);
         cloudController.drawMiddleClouds(batch);
         enemyController.drawActiveSprites(batch);
+        bonusController.drawActiveSprites(batch);
         player.draw(batch);
         bulletPool.drawActiveSprites(batch);
         explosionPool.drawActiveSprites(batch);
@@ -152,6 +161,7 @@ public class GameScreen extends BaseScreen {
     public void hide() {
         super.hide();
         enemyController.hide();
+        bonusController.hide();
         player.hide();
         windSound.stop();
     }

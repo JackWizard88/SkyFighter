@@ -32,6 +32,18 @@ public class Sprite extends Rect {
         setWidth(height * aspect);
     }
 
+    public void setFrame(int frame) {
+        this.frame = frame;
+    }
+
+    public int getFrame() {
+        return frame;
+    }
+
+    public TextureRegion[] getRegions() {
+        return regions;
+    }
+
     public void update(float delta) {
 
     }
