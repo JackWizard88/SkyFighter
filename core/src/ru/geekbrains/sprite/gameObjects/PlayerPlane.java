@@ -91,9 +91,9 @@ public class PlayerPlane extends Sprite {
 
         pos.set(-0.5f, 0);
         this.score = 0;
-        this.health = 10;
+        this.health = MAX_HEALTH;
         this.overheat = 0;
-        this.ammo = 500;
+        this.ammo = MAX_AMMO;
 
         //Sounds
         soundFlying = SoundController.getSoundPlayerFlying();
