@@ -40,10 +40,6 @@ public class BaseScreen implements Screen, InputProcessor {
         touch = new Vector2();
     }
 
-    public float getAspect() {
-        return aspect;
-    }
-
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);

@@ -11,7 +11,7 @@ public class BonusController {
 
     private GameScreen gameScreen;
 
-    private final int BOX_LIMIT = 1;
+    private final int BOX_LIMIT = 2;
     private Rect worldBounds;
     private float timerSpawn = 0;
 
@@ -23,7 +23,7 @@ public class BonusController {
     public void checkBonuses(float delta) {
         //спаунер бонуса в случайной координате по таймеру
         timerSpawn += delta;
-        if (timerSpawn >= Rnd.nextFloat(10f, 25f)) {
+        if (gameScreen.getPlayer().getScore() > 100 && timerSpawn >= Rnd.nextFloat(7f, 15f)) {
             timerSpawn = 0;
             if (gameScreen.getBonusPool().getSize() < BOX_LIMIT) {
                 Bonus bonus = gameScreen.getBonusPool().obtain();

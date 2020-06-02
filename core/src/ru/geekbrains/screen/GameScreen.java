@@ -147,8 +147,8 @@ public class GameScreen extends BaseScreen {
         batch.setColor(1,1,1, 1);
         cloudController.drawBackgroundClouds(batch);
         cloudController.drawMiddleClouds(batch);
-        enemyController.drawActiveSprites(batch);
         bonusController.drawActiveSprites(batch);
+        enemyController.drawActiveSprites(batch);
         player.draw(batch);
         bulletPool.drawActiveSprites(batch);
         explosionPool.drawActiveSprites(batch);

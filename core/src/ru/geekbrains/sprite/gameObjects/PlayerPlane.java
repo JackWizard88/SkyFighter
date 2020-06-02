@@ -68,11 +68,11 @@ public class PlayerPlane extends Sprite {
 
     //constants
     private final float SHIP_MAXSPEED = 0.5f;
-    private final float SHIP_SPEED_STEP_BACK = 0.02f;
+    private final float SHIP_SPEED_STEP_BACK = 0.015f;
     private final float SHIP_SPEED_STEP_FORWARD = 0.01f;
     private final float SHIP_SPEED_STEP_UP = 0.015f;
-    private final float SHIP_SPEED_STEP_DOWN = 0.025f;
-    private final float SHIP_BREAK =  0.01f;
+    private final float SHIP_SPEED_STEP_DOWN = 0.02f;
+    private final float SHIP_BREAK =  0.015f;
     private final float SHIP_SPEED_UP = 0.3f;
     private final float SHIP_SPEED_DOWN = -0.75f;
     private final float STABILIZE_ANGLE = 0.3f;
@@ -216,6 +216,7 @@ public class PlayerPlane extends Sprite {
             overheatTimer += delta;
             if (overheatTimer >= 3f) {
                 overheatTimer = 0;
+                overheat = 0.5f;
                 isOverheated = false;
             }
         }
