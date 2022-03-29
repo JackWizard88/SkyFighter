@@ -20,6 +20,8 @@ public class EnemyController {
     private Vector2 velocity;
     private float timerSpawn = 0;
     private int playerScore;
+    private static float ENEMY_SPAWN_TIMER = Rnd.nextFloat(2f, 4f);
+    private static int ENEMY_BULLET_TURN_LENGTH = 3;
 
     public EnemyController(GameScreen gameScreen, Rect worldBounds) {
         this.gameScreen = gameScreen;
@@ -37,12 +39,12 @@ public class EnemyController {
 
         //спаунер врагов в случайной координате по таймеру
         timerSpawn += delta;
-        if (timerSpawn >= Rnd.nextFloat(2f, 4f)) {
+        if (timerSpawn >= ENEMY_SPAWN_TIMER) {
             timerSpawn = 0;
             if (gameScreen.getEnemyPool().getSize() < ENEMY_LIMIT) {
                 EnemyPlane enemyPlane = gameScreen.getEnemyPool().obtain();
                 velocity.set(Rnd.nextFloat(-0.05f, -0.1f), 0);
-                enemyPlane.set(enemyRegion, getSpawnCoordinates(enemyPlane), velocity, 7, 0.09f, worldBounds, getBulletTurnLength());
+                enemyPlane.set(enemyRegion, getSpawnCoordinates(enemyPlane), velocity, 7, 0.09f, worldBounds, ENEMY_BULLET_TURN_LENGTH);
             }
         }
     }
@@ -97,23 +99,21 @@ public class EnemyController {
     }
 
     //уровни сложности
-    private int getBulletTurnLength() {
+    public void checkStageLevel() {
         playerScore = ScreenController.getGameScreen().getPlayer().getScore();
-       if (playerScore < 150) {
-           return 3;
-       } else if (playerScore >= 150 && playerScore < 300) {
-           return 4;
+       if (playerScore >= 150 && playerScore < 300) {
+           ENEMY_BULLET_TURN_LENGTH = 4;
        } else if (playerScore >= 300 && playerScore < 500) {
            ENEMY_LIMIT = 4;
-           return 5;
+           ENEMY_BULLET_TURN_LENGTH = 5;
        } else if (playerScore >= 500 && playerScore < 700) {
-           return 6;
+           ENEMY_BULLET_TURN_LENGTH = 6;
        } else if (playerScore >= 700) {
            ENEMY_LIMIT = 5;
-           return 7;
+           ENEMY_BULLET_TURN_LENGTH = 7;
        } else if (playerScore >= 1000) {
            ENEMY_LIMIT = 6;
-           return 8;
-       } else return 1;
+           ENEMY_BULLET_TURN_LENGTH = 8;
+       }
     }
 }

@@ -3,7 +3,6 @@ package ru.geekbrains.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
@@ -13,7 +12,6 @@ import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.sprite.buttons.Button;
 import ru.geekbrains.sprite.buttons.MenuButton;
-import ru.geekbrains.sprite.gameObjects.Background;
 
 public class GameOverScreen extends BaseScreen {
 

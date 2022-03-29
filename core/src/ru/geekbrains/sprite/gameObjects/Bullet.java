@@ -9,11 +9,11 @@ import ru.geekbrains.utils.Regions;
 
 public class Bullet extends Sprite {
 
+    private static int damage;
     private Rect worldBounds;
     private Vector2 v;
     private Vector2 dir;
     private Vector2 grav;
-    private int damage;
     private Sprite owner;
     private final Vector2 grav1 = new Vector2(0, -0.00001f);
 
@@ -91,7 +91,7 @@ public class Bullet extends Sprite {
         v.set(dir.scl(velocity));
     }
 
-    public int getDamage() {
+    public static int getDamage() {
         return damage;
     }
 

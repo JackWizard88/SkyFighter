@@ -12,7 +12,7 @@ import ru.geekbrains.math.Rnd;
 public class Bonus extends Sprite {
 
     public enum BonusType {
-        boxAmmo, boxMedkit;
+        boxAmmo, boxRepair;
     }
 
     private Rect worldBounds;
@@ -47,7 +47,7 @@ public class Bonus extends Sprite {
                 break;
             case 1:
                 this.regions[0] = ScreenController.getAtlas().findRegion("boxRepair");
-                this.bonusType = BonusType.boxMedkit;
+                this.bonusType = BonusType.boxRepair;
                 break;
         }
 
@@ -60,15 +60,15 @@ public class Bonus extends Sprite {
 
         if (!ScreenController.getGameScreen().getPlayer().isOutside(this)) {
             switch (bonusType) {
-                case boxMedkit:
-                    if (ScreenController.getGameScreen().getPlayer().getHealth() < 10) {
+                case boxRepair:
+                    if (ScreenController.getGameScreen().getPlayer().getHealth() < ScreenController.getGameScreen().getPlayer().getMAX_HEALTH()) {
                         ScreenController.getGameScreen().getPlayer().addHealth(AMOUNT_HEALTH);
                         idSoundRepair = soundRepair.play();
                         destroy();
                     }
                     break;
                 case boxAmmo:
-                    if (ScreenController.getGameScreen().getPlayer().getAmmo() < 500) {
+                    if (ScreenController.getGameScreen().getPlayer().getAmmo() < ScreenController.getGameScreen().getPlayer().getMAX_AMMO()) {
                         ScreenController.getGameScreen().getPlayer().addAmmo(AMOUNT_AMMO);
                         idSoundReload = soundReload.play();
                         destroy();

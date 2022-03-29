@@ -1,7 +1,6 @@
 package ru.geekbrains;
 
 import com.badlogic.gdx.Game;
-
 import ru.geekbrains.controllers.ScreenController;
 
 

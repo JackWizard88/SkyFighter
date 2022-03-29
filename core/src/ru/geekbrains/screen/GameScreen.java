@@ -130,6 +130,7 @@ public class GameScreen extends BaseScreen {
         enemyController.updateActiveSprites(delta);
         explosionPool.updateActiveSprites(delta);
         bonusController.updateActiveSprites(delta);
+        enemyController.checkStageLevel();
     }
 
     private void free() {

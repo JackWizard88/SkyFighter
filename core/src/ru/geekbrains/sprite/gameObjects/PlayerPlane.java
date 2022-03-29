@@ -34,13 +34,14 @@ public class PlayerPlane extends Sprite {
     private int shots;
     private int kills;
 
-    //боезапас и система перегрева
+    //боезапас, здоровье и система перегрева
     private int ammo;
     private float OVERHEAT_CAPACITY = 1f;
     private float OVERHEAT_STEP = 0.02f;
     private float OVERHEAT_COOLDOWN_STEP = 0.15f;
     private int MAX_HEALTH = 10;
     private int MAX_AMMO = 500;
+    private int BULLET_DAMAGE = 1;
     private float overheat;
     private boolean isOverheated = false;
     private float overheatTimer = 0;
@@ -99,7 +100,7 @@ public class PlayerPlane extends Sprite {
         soundFlying = SoundController.getSoundPlayerFlying();
         soundShooting = SoundController.getSoundPlayerShooting();
         soundExplosion = SoundController.getSoundPlayerExplosion();
-//        soundShootingEmpty = SoundController.get
+//        soundShootingEmpty = SoundController.getSoundPlayerNoAmmo();
 
         //components
         propeller = new Propeller(atlas.findRegion("playerPlanePropeller"), 1, 11, 11, this);
@@ -108,6 +109,38 @@ public class PlayerPlane extends Sprite {
         pilotHead = new PilotHead(atlas.findRegion("pilotHead"), 2, 6, 12, this);
         PILOT_POS = new Vector2();
 
+    }
+
+    public Vector2 getShipSpeed() {
+        return shipSpeed;
+    }
+
+    public boolean isKeyUpPressed() {
+        return isKeyUpPressed;
+    }
+
+    public boolean isKeyDownPressed() {
+        return isKeyDownPressed;
+    }
+
+    public boolean isKeyLeftPressed() {
+        return isKeyLeftPressed;
+    }
+
+    public boolean isKeyRightPressed() {
+        return isKeyRightPressed;
+    }
+
+    public boolean isKeySpacePressed() {
+        return isKeySpacePressed;
+    }
+
+    public int getMAX_HEALTH() {
+        return MAX_HEALTH;
+    }
+
+    public int getMAX_AMMO() {
+        return MAX_AMMO;
     }
 
     public int getScore() {
@@ -188,7 +221,6 @@ public class PlayerPlane extends Sprite {
         if (scoreTimer >= 1f) {
             this.score += 1;
             scoreTimer = 0;
-            System.out.println(score);
         }
 
         soundFlying.setPitch(idSoundFlying, 1 - (shipSpeed.x + shipSpeed.y)/6);
@@ -198,7 +230,7 @@ public class PlayerPlane extends Sprite {
 
         if (isKeySpacePressed && overheat < OVERHEAT_CAPACITY) {
             timer += delta;
-            if (timer >= 0.1f) {
+            if (timer >= 0.15f) {
                 shoot();
                 overheat += OVERHEAT_STEP;
                 if (overheat > OVERHEAT_CAPACITY) {
@@ -266,7 +298,7 @@ public class PlayerPlane extends Sprite {
             bulletPos0.set(pos.x + halfWidth * 0.95f, pos.y + getHeight() / 5 + getHeight() * (float) Math.sin(Math.toRadians(angle)));
             //поворот вектора направления полета снаряда
             dir.set((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle))).nor();
-            bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, angle, dir, 0.003f, worldBounds, 1);
+            bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, angle, dir, 0.003f, worldBounds, BULLET_DAMAGE);
         } else soundShooting.stop(idShooting);
     }
 
@@ -296,9 +328,9 @@ public class PlayerPlane extends Sprite {
                     idShooting = soundShooting.play();
                     soundShooting.setLooping(idShooting, true);
                 } else if (overheat == OVERHEAT_CAPACITY) {
-                    //звук бойка без патронов
-                } else if (ammo == 0) {
                     //нет звука потому что перегрелся
+                } else if (ammo == 0) {
+                    //звук бойка без патронов
                 }
                 break;
         }
@@ -382,7 +414,7 @@ public class PlayerPlane extends Sprite {
             shipSpeed.x -= SHIP_BREAK;
         }
 
-        if (shipSpeed.len() < SHIP_BREAK) shipSpeed.set(0,0f);
+        if (shipSpeed.len() < 0.1 * SHIP_BREAK) shipSpeed.set(0,0f);
 
         pos.mulAdd(shipSpeed, delta);
 
@@ -413,7 +445,6 @@ public class PlayerPlane extends Sprite {
 
     public void addScore(int amount) {
         this.score += amount;
-        System.out.println(score);
     }
 
     public void addHealth(int amount) {

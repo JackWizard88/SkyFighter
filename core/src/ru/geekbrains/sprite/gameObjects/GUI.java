@@ -13,9 +13,9 @@ public class GUI extends Sprite {
     private Rect worldBounds;
     private Font font;
     private StringBuilder strBuilder;
-    private StringBuilder strBuilderOverheat;
     private Sprite overheatStatus;
     private Sprite overheatFrame;
+    private boolean DEBUG = false;
 
     private float animateTimer = 0;
 
@@ -24,7 +24,6 @@ public class GUI extends Sprite {
     public GUI(PlayerPlane player) {
         this.player = player;
         strBuilder = new StringBuilder();
-        strBuilderOverheat = new StringBuilder();
         font = new Font("fonts/font48.fnt",  "fonts/font48.png");
         font.setSize(0.02f);
 
@@ -62,9 +61,33 @@ public class GUI extends Sprite {
         strBuilder.append("СЧЁТ: ").append(player.getScore()).append("\nЖИЗНИ: ").append(player.getHealth()).append("\nБОЕЗАПАС: ").append(player.getAmmo());
         font.draw(batch, strBuilder, worldBounds.getLeft() + MARGIN,worldBounds.getTop() - MARGIN);
 
-        strBuilderOverheat.setLength(0);
-        strBuilderOverheat.append("Перегрев пулемета");
-        font.draw(batch, strBuilderOverheat, overheatFrame.getRight() + MARGIN, overheatFrame.getTop(), Align.topLeft);
+        strBuilder.setLength(0);
+        strBuilder.append("Перегрев пулемета");
+        font.draw(batch, strBuilder, overheatFrame.getRight() + MARGIN, overheatFrame.getTop(), Align.topLeft);
+
+        //debug gui
+        if (DEBUG) {
+            strBuilder.setLength(0);
+            strBuilder.append("UP: ").append(player.isKeyUpPressed());
+            font.draw(batch, strBuilder, worldBounds.getLeft() + MARGIN , overheatFrame.getTop() + 24 * MARGIN, Align.topLeft);
+            strBuilder.setLength(0);
+            strBuilder.append("DOWN: ").append(player.isKeyDownPressed());
+            font.draw(batch, strBuilder, worldBounds.getLeft() + MARGIN , overheatFrame.getTop() + 20 * MARGIN, Align.topLeft);
+            strBuilder.setLength(0);
+            strBuilder.append("LEFT: ").append(player.isKeyLeftPressed());
+            font.draw(batch, strBuilder, worldBounds.getLeft() + MARGIN , overheatFrame.getTop() + 16 * MARGIN, Align.topLeft);
+            strBuilder.setLength(0);
+            strBuilder.append("RIGHT: ").append(player.isKeyRightPressed());
+            font.draw(batch, strBuilder, worldBounds.getLeft() + MARGIN , overheatFrame.getTop() + 12 * MARGIN, Align.topLeft);
+            strBuilder.setLength(0);
+            strBuilder.append("SPACE: ").append(player.isKeySpacePressed());
+            font.draw(batch, strBuilder, worldBounds.getLeft() + MARGIN , overheatFrame.getTop() + 8 * MARGIN, Align.topLeft);
+            strBuilder.setLength(0);
+            strBuilder.append("SPEED: ").append(player.getShipSpeed());
+            font.draw(batch, strBuilder, worldBounds.getLeft() + 20 * MARGIN , overheatFrame.getTop() + 8 * MARGIN, Align.topLeft);
+        }
+
+
         overheatFrame.draw(batch);
         overheatStatus.draw(batch);
     }

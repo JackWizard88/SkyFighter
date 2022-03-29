@@ -15,7 +15,6 @@ import ru.geekbrains.math.Rect;
 public class BaseScreen implements Screen, InputProcessor {
 
     protected SpriteBatch batch;
-
     protected ScreenController controller;
 
     private Rect screenBounds;

@@ -12,7 +12,7 @@ import ru.geekbrains.math.Rnd;
 
 public class EnemyPlane extends Sprite {
 
-    private final int SCORE = 3;
+    private final int SCORE = 5;
     private final double MAX_ANGLE = 1f;
     private final float STABILAZE_ANGLE = 0.2f;
     private Vector2 gunPosition;
@@ -210,7 +210,7 @@ public class EnemyPlane extends Sprite {
     }
 
     public void damage() {
-        this.health -= 1;
+        this.health -= Bullet.getDamage();
         checkHealth();
     }
 
