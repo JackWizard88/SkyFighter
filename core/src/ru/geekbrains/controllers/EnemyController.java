@@ -41,6 +41,7 @@ public class EnemyController {
         timerSpawn += delta;
         if (timerSpawn >= ENEMY_SPAWN_TIMER) {
             timerSpawn = 0;
+            checkStageLevel();
             if (gameScreen.getEnemyPool().getSize() < ENEMY_LIMIT) {
                 EnemyPlane enemyPlane = gameScreen.getEnemyPool().obtain();
                 velocity.set(Rnd.nextFloat(-0.05f, -0.1f), 0);

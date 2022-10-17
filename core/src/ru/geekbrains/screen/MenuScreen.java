@@ -2,11 +2,13 @@ package ru.geekbrains.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.controllers.MenuButtonController;
 import ru.geekbrains.controllers.ScreenController;
-import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.sprite.gameObjects.Background;
 
@@ -37,6 +39,7 @@ public class MenuScreen extends BaseScreen {
         super.show();
         menuMusic.play();
         menuMusic.setLooping(true);
+        Controllers.addListener(this);
     }
 
     @Override
@@ -54,8 +57,6 @@ public class MenuScreen extends BaseScreen {
         menuButtonController.draw(batch);
         batch.end();
     }
-
-
 
     @Override
     public void hide() {
@@ -82,4 +83,14 @@ public class MenuScreen extends BaseScreen {
         return false;
     }
 
+    @Override
+    public boolean buttonDown(Controller controller, int buttonCode) {
+
+//        if (buttonCode == XBox360Pad.BUTTON_A) {
+//            screenController.newGameScreen();
+//        }
+//        if (buttonCode == XBox360Pad.BUTTON_Y) System.exit(1);
+
+        return false;
+    }
 }

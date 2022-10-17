@@ -3,6 +3,9 @@ package ru.geekbrains.base;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.ControllerListener;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix3;
@@ -12,10 +15,10 @@ import ru.geekbrains.controllers.ScreenController;
 import ru.geekbrains.math.MatrixUtils;
 import ru.geekbrains.math.Rect;
 
-public class BaseScreen implements Screen, InputProcessor {
+public class BaseScreen implements Screen, InputProcessor, ControllerListener {
 
     protected SpriteBatch batch;
-    protected ScreenController controller;
+    protected ScreenController screenController;
 
     private Rect screenBounds;
     protected Rect worldBounds;
@@ -28,8 +31,8 @@ public class BaseScreen implements Screen, InputProcessor {
 
     private float aspect;
 
-    public BaseScreen(ScreenController controller) {
-        this.controller = controller;
+    public BaseScreen(ScreenController screenController) {
+        this.screenController = screenController;
         batch = new SpriteBatch();
         screenBounds = new Rect();
         worldBounds = new Rect();
@@ -41,6 +44,7 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
+        Controllers.addListener(this);
         Gdx.input.setInputProcessor(this);
     }
 
@@ -55,9 +59,7 @@ public class BaseScreen implements Screen, InputProcessor {
         screenBounds.setSize(width, height);
         screenBounds.setLeft(0);
         screenBounds.setBottom(0);
-
         aspect = width / (float) height;
-
         worldBounds.setHeight(1f);
         worldBounds.setWidth(1f * aspect);
         MatrixUtils.calcTransitionMatrix(worldToGl, worldBounds, glBounds);
@@ -140,7 +142,30 @@ public class BaseScreen implements Screen, InputProcessor {
     }
 
     @Override
-    public boolean scrolled(int amount) {
+    public boolean scrolled(float amountX, float amountY) {
+        return false;
+    }
+
+    @Override
+    public void connected(Controller controller) {
+    }
+
+    @Override
+    public void disconnected(Controller controller) {
+    }
+
+    @Override
+    public boolean buttonDown(Controller controller, int buttonCode) {
+        return false;
+    }
+
+    @Override
+    public boolean buttonUp(Controller controller, int buttonCode) {
+        return false;
+    }
+
+    @Override
+    public boolean axisMoved(Controller controller, int axisCode, float value) {
         return false;
     }
 }

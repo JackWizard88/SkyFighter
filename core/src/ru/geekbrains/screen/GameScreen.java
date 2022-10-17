@@ -3,15 +3,16 @@ package ru.geekbrains.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-
+import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.controllers.BonusController;
 import ru.geekbrains.controllers.CloudController;
 import ru.geekbrains.controllers.EnemyController;
 import ru.geekbrains.controllers.ScreenController;
-import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BonusPool;
 import ru.geekbrains.pool.BulletPool;
@@ -104,6 +105,7 @@ public class GameScreen extends BaseScreen {
         super.show();
         player.show();
         windSound.play();
+        Controllers.addListener(this);
     }
 
     @Override
@@ -130,7 +132,6 @@ public class GameScreen extends BaseScreen {
         enemyController.updateActiveSprites(delta);
         explosionPool.updateActiveSprites(delta);
         bonusController.updateActiveSprites(delta);
-        enemyController.checkStageLevel();
     }
 
     private void free() {
@@ -192,20 +193,34 @@ public class GameScreen extends BaseScreen {
     public boolean keyDown(int keycode) {
         player.keyDown(keycode);
         if (keycode == Input.Keys.ESCAPE) {
-            controller.setMenuScreen();
+            screenController.setMenuScreen();
         }
-        return false;
+        return super.keyDown(keycode);
     }
 
     @Override
     public boolean keyUp(int keycode) {
         player.keyUp(keycode);
-        return false;
+        return super.keyUp(keycode);
     }
 
     private void checkHP() {
         if (player.getHealth() <= 0) {
-            controller.gameOver();
+            screenController.gameOver();
         }
     }
+
+    @Override
+    public boolean buttonDown(Controller controller, int buttonCode) {
+        player.buttonDown(controller, buttonCode);
+//        if (buttonCode == XBox360Pad.BUTTON_START) screenController.setMenuScreen();
+        return false;
+    }
+
+    @Override
+    public boolean buttonUp(Controller controller, int buttonCode) {
+        player.buttonUp(controller, buttonCode);
+        return false;
+    }
+
 }

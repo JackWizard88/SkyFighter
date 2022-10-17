@@ -3,6 +3,8 @@ package ru.geekbrains.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
@@ -71,6 +73,7 @@ public class GameOverScreen extends BaseScreen {
         super.show();
         setText();
         music.play();
+        Controllers.addListener(this);
     }
 
     @Override
@@ -127,7 +130,7 @@ public class GameOverScreen extends BaseScreen {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE) {
-            controller.setMenuScreen();
+            screenController.setMenuScreen();
         }
         return super.keyDown(keycode);
     }
@@ -144,6 +147,12 @@ public class GameOverScreen extends BaseScreen {
         return super.touchUp(touch, pointer, button);
     }
 
+    @Override
+    public boolean buttonDown(Controller controller, int buttonCode) {
+//            if (buttonCode == XBox360Pad.BUTTON_A) super.screenController.setMenuScreen();
+        return false;
+    }
+
     private void setText() {
         strBHeader1.setLength(0);
         strBHeader1.append("Очков получено: ");
@@ -152,7 +161,7 @@ public class GameOverScreen extends BaseScreen {
         strBText1.append(playerScore);
 
         strBHeader2.setLength(0);
-        strBHeader2.append("Сбито самолетов: ");
+        strBHeader2.append("Самолетов сбито: ");
 
         strBText2.setLength(0);
         strBText2.append(playerKills);
@@ -169,7 +178,7 @@ public class GameOverScreen extends BaseScreen {
         strBText4.setLength(0);
         if (playerShots == 0) {
             accuracy = 0;
-        } else accuracy = Math.round((playerKills * 7 / (float) playerShots) * 100);
+        } else accuracy = Math.round((playerKills * 7 / (float) playerShots) * 100); // 7 = ХП врага... костыль
         strBText4.append(accuracy).append(" %");
     }
 }

@@ -1,5 +1,6 @@
 package ru.geekbrains.sprite.gameObjects;
 
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
 import ru.geekbrains.base.Font;
@@ -85,13 +86,16 @@ public class GUI extends Sprite {
             strBuilder.setLength(0);
             strBuilder.append("SPEED: ").append(player.getShipSpeed());
             font.draw(batch, strBuilder, worldBounds.getLeft() + 20 * MARGIN , overheatFrame.getTop() + 8 * MARGIN, Align.topLeft);
-        }
+            strBuilder.setLength(0);
+            strBuilder.append("HasController: ").append(Controllers.getCurrent().isConnected());
+            font.draw(batch, strBuilder, worldBounds.getLeft() + 22 * MARGIN , overheatFrame.getTop() + 12 * MARGIN, Align.topLeft);
+            strBuilder.setLength(0);
 
+        }
 
         overheatFrame.draw(batch);
         overheatStatus.draw(batch);
     }
-
     public void dispose() {
         font.dispose();
     }

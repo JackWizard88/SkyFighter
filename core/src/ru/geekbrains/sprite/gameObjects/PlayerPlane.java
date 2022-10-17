@@ -1,18 +1,22 @@
 package ru.geekbrains.sprite.gameObjects;
 
-import ru.geekbrains.base.Sprite;
-import ru.geekbrains.controllers.ScreenController;
-import ru.geekbrains.controllers.SoundController;
-import ru.geekbrains.math.Rect;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.ControllerListener;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import ru.geekbrains.base.Sprite;
+import ru.geekbrains.controllers.ScreenController;
+import ru.geekbrains.controllers.SoundController;
+import ru.geekbrains.controls.XBox360Pad;
+import ru.geekbrains.math.Rect;
 
-public class PlayerPlane extends Sprite {
+public class PlayerPlane extends Sprite implements ControllerListener {
 
     //worldBounds
     private Rect worldBounds;
@@ -100,7 +104,7 @@ public class PlayerPlane extends Sprite {
         soundFlying = SoundController.getSoundPlayerFlying();
         soundShooting = SoundController.getSoundPlayerShooting();
         soundExplosion = SoundController.getSoundPlayerExplosion();
-//        soundShootingEmpty = SoundController.getSoundPlayerNoAmmo();
+//TODO        soundShootingEmpty = SoundController.getSoundPlayerNoAmmo();
 
         //components
         propeller = new Propeller(atlas.findRegion("playerPlanePropeller"), 1, 11, 11, this);
@@ -272,6 +276,7 @@ public class PlayerPlane extends Sprite {
     }
 
     private void damage() {
+        Controllers.getCurrent().startVibration(300, 1f);
         this.health -= 1;
     }
 
@@ -291,7 +296,6 @@ public class PlayerPlane extends Sprite {
     private void shoot() {
         if (ammo > 0) {
             ammo -= 1;
-            shots += 1;
             Bullet bullet = ScreenController.getGameScreen().getBulletPool().obtain();
             bulletRegion = ScreenController.getAtlas().findRegion("bullets");
             //смещение точки выстрела в зависимости от угла
@@ -299,69 +303,85 @@ public class PlayerPlane extends Sprite {
             //поворот вектора направления полета снаряда
             dir.set((float) Math.cos(Math.toRadians(angle)), (float) Math.sin(Math.toRadians(angle))).nor();
             bullet.set(this, bulletRegion, 3, 1, 3, bulletPos0, bulletV, angle, dir, 0.003f, worldBounds, BULLET_DAMAGE);
+            shots += 1;
         } else soundShooting.stop(idShooting);
     }
 
     @Override
     public boolean keyDown(int keycode) {
 
-        switch (keycode) {
-            case (Input.Keys.UP):
-            case (Input.Keys.W):
-                isKeyUpPressed = true;
-                break;
-            case (Input.Keys.DOWN):
-            case (Input.Keys.S):
-                isKeyDownPressed = true;
-                break;
-            case (Input.Keys.LEFT):
-            case (Input.Keys.A):
-                isKeyLeftPressed = true;
-                break;
-            case (Input.Keys.RIGHT):
-            case (Input.Keys.D):
-                isKeyRightPressed = true;
-                break;
-            case (Input.Keys.SPACE):
-                isKeySpacePressed = true;
-                if (ammo > 0 && overheat < OVERHEAT_CAPACITY) {
-                    idShooting = soundShooting.play();
-                    soundShooting.setLooping(idShooting, true);
-                } else if (overheat == OVERHEAT_CAPACITY) {
-                    //нет звука потому что перегрелся
-                } else if (ammo == 0) {
-                    //звук бойка без патронов
-                }
-                break;
+        if (!Controllers.getCurrent().isConnected()) {
+            switch (keycode) {
+                case (Input.Keys.UP):
+                case (Input.Keys.W):
+                    isKeyUpPressed = true;
+                    break;
+                case (Input.Keys.DOWN):
+                case (Input.Keys.S):
+                    isKeyDownPressed = true;
+                    break;
+                case (Input.Keys.LEFT):
+                case (Input.Keys.A):
+                    isKeyLeftPressed = true;
+                    break;
+                case (Input.Keys.RIGHT):
+                case (Input.Keys.D):
+                    isKeyRightPressed = true;
+                    break;
+                case (Input.Keys.SPACE):
+                    isKeySpacePressed = true;
+                    activateShootingSound();
+                    break;
+            }
         }
+
         return false;
+    }
+
+    private void activateShootingSound() {
+        if (ammo > 0 && overheat < OVERHEAT_CAPACITY) {
+            idShooting = soundShooting.play();
+            Controllers.getCurrent().startVibration(10000, 0.5f);
+            soundShooting.setLooping(idShooting, true);
+        } else if (overheat == OVERHEAT_CAPACITY) {
+            //нет звука потому что перегрелся
+        } else if (ammo == 0) {
+            //звук бойка без патронов
+        }
+    }
+
+    private void stopShootingSound() {
+        soundShooting.stop();
+        Controllers.getCurrent().cancelVibration();
+        timer = 0f;
     }
 
     @Override
     public boolean keyUp(int keycode) {
 
-        switch (keycode) {
-            case (Input.Keys.UP):
-            case (Input.Keys.W):
+        if (!Controllers.getCurrent().isConnected()) {
+            switch (keycode) {
+                case (Input.Keys.UP):
+                case (Input.Keys.W):
                     isKeyUpPressed = false;
                     break;
-            case (Input.Keys.DOWN):
-            case (Input.Keys.S):
+                case (Input.Keys.DOWN):
+                case (Input.Keys.S):
                     isKeyDownPressed = false;
                     break;
-            case (Input.Keys.LEFT):
-            case (Input.Keys.A):
+                case (Input.Keys.LEFT):
+                case (Input.Keys.A):
                     isKeyLeftPressed = false;
                     break;
-            case (Input.Keys.RIGHT):
-            case (Input.Keys.D):
+                case (Input.Keys.RIGHT):
+                case (Input.Keys.D):
                     isKeyRightPressed = false;
                     break;
-            case (Input.Keys.SPACE):
-                isKeySpacePressed = false;
-                soundShooting.stop(idShooting);
-                timer = 0f;
-                break;
+                case (Input.Keys.SPACE):
+                    isKeySpacePressed = false;
+                    stopShootingSound();
+                    break;
+            }
         }
 
         return false;
@@ -420,6 +440,44 @@ public class PlayerPlane extends Sprite {
 
     }
 
+    @Override
+    public boolean buttonDown(Controller controller, int buttonCode) {
+
+        if (controller.isConnected()) {
+            if (buttonCode == XBox360Pad.BUTTON_UP) isKeyUpPressed = true;
+            if (buttonCode == XBox360Pad.BUTTON_DOWN) isKeyDownPressed = true;
+            if (buttonCode == XBox360Pad.BUTTON_LEFT) isKeyLeftPressed = true;
+            if (buttonCode == XBox360Pad.BUTTON_RIGHT) isKeyRightPressed = true;
+            if (buttonCode == XBox360Pad.BUTTON_A) {
+                isKeySpacePressed = true;
+                activateShootingSound();
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean buttonUp(Controller controller, int buttonCode) {
+
+        if (controller.isConnected()) {
+            if (buttonCode == XBox360Pad.BUTTON_UP) isKeyUpPressed = false;
+            if (buttonCode == XBox360Pad.BUTTON_DOWN) isKeyDownPressed = false;
+            if (buttonCode == XBox360Pad.BUTTON_LEFT) isKeyLeftPressed = false;
+            if (buttonCode == XBox360Pad.BUTTON_RIGHT) isKeyRightPressed = false;
+            if (buttonCode == XBox360Pad.BUTTON_A) {
+                isKeySpacePressed = false;
+                stopShootingSound();
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean axisMoved(Controller controller, int axisCode, float value) { return false; }
+
+
     private void checkBounds() {
 
         if (pos.x < worldBounds.getLeft() + halfWidth) {
@@ -456,4 +514,13 @@ public class PlayerPlane extends Sprite {
         this.ammo += amount;
         if (ammo > MAX_AMMO) ammo = MAX_AMMO;
     }
+
+    @Override
+    public void connected(Controller controller) {
+    }
+
+    @Override
+    public void disconnected(Controller controller) {
+    }
+
 }
